@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Calculadora de Custos de Impressão 3D | Adriano Zini</title>
   <meta name="author" content="Adriano Zini">
   <meta name="copyright" content="© 2026 Adriano Zini. Todos os direitos reservados.">
@@ -36,45 +36,45 @@
       --c-prf: #10b981;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body {
       background-color: var(--bg);
       color: var(--text-main);
       font-family: var(--font-main);
       min-height: 100vh;
-      padding: 20px 14px;
+      padding: 16px 12px;
       line-height: 1.5;
     }
     .container { max-width: 1120px; margin: 0 auto; }
 
     header {
       display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
-      gap: 14px; margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid var(--card-border);
+      gap: 12px; margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--card-border);
     }
     .logo-area h1 {
-      font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em;
+      font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em;
       background: linear-gradient(135deg, #38bdf8, #818cf8);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       display: flex; align-items: center; gap: 8px;
     }
-    .logo-area p { color: var(--text-muted); font-size: 0.85rem; }
+    .logo-area p { color: var(--text-muted); font-size: 0.82rem; }
     .author-badge {
       display: inline-block;
-      margin-top: 4px;
-      font-size: 0.78rem;
+      margin-top: 3px;
+      font-size: 0.75rem;
       color: #38bdf8;
       font-weight: 700;
       letter-spacing: 0.02em;
     }
 
-    .top-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .top-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
     .nav-toggle-group {
-      display: flex background: var(--card-bg); padding: 4px; border-radius: 12px; border: 1px solid var(--card-border);
+      display: flex; background: var(--card-bg); padding: 3px; border-radius: 12px; border: 1px solid var(--card-border);
     }
     .ctrl-btn {
-      background: transparent; color: var(--text-muted); border: none; padding: 7px 12px;
-      font-size: 0.82rem; font-weight: 700; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;
-      display: flex; align-items: center; gap: 5px;
+      background: transparent; color: var(--text-muted); border: none; padding: 7px 11px;
+      font-size: 0.8rem; font-weight: 700; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;
+      display: flex; align-items: center; gap: 4px; min-height: 38px;
     }
     .ctrl-btn.active-lang {
       background: #0284c7; color: #ffffff; box-shadow: 0 0 10px rgba(2, 132, 199, 0.4);
@@ -86,132 +86,39 @@
       background: var(--primary); color: #0b1120; box-shadow: 0 0 10px var(--primary-glow);
     }
 
-    /* Feedback Button & Modal */
-    .btn-feedback {
-      background: linear-gradient(135deg, #8b5cf6, #6366f1);
-      color: #ffffff;
-      border: none;
-      padding: 7px 13px;
-      font-size: 0.82rem;
+    /* Modal / Action Buttons in Top Bar */
+    .btn-top-action {
+      background: rgba(139, 92, 246, 0.18);
+      color: #c084fc;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      padding: 7px 12px;
+      font-size: 0.8rem;
       font-weight: 700;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       transition: all 0.2s ease;
-      box-shadow: 0 0 12px rgba(139, 92, 246, 0.35);
+      min-height: 38px;
     }
-    .btn-feedback:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.5);
+    .btn-top-action:hover {
+      background: rgba(139, 92, 246, 0.3);
+      color: #ffffff;
     }
-
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(11, 17, 32, 0.85);
-      backdrop-filter: blur(6px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      padding: 16px;
-    }
-    .modal-overlay.active {
-      display: flex;
+    .btn-top-faq {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.35);
     }
 
-    .modal-content {
-      background: var(--card-bg);
-      border: 1px solid var(--primary);
-      border-radius: 20px;
-      width: 100%;
-      max-width: 640px;
-      max-height: 90vh;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
-      overflow: hidden;
-      animation: modalFadeIn 0.25s ease-out;
-    }
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .modal-header {
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--card-border);
-      background: rgba(11, 19, 36, 0.7);
-    }
-    .modal-header h3 {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .btn-close-modal {
-      background: rgba(239, 68, 68, 0.15);
-      border: none;
-      color: var(--danger);
-      font-size: 1.2rem;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      transition: all 0.2s;
-    }
-    .btn-close-modal:hover {
-      background: var(--danger);
-      color: white;
-    }
-
-    .modal-body {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0;
-      min-height: 480px;
-      background: #ffffff;
-    }
-    .modal-body iframe {
-      width: 100%;
-      height: 520px;
-      border: none;
-      display: block;
-    }
-
-    .modal-footer {
-      padding: 12px 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px solid var(--card-border);
-      background: rgba(11, 19, 36, 0.8);
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-    .modal-footer a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
+    /* Cards */
     .section-card {
       background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
-      padding: 20px; margin-bottom: 18px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      padding: 18px; margin-bottom: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
     }
     .section-title {
-      font-size: 1.05rem; font-weight: 700; color: #e2e8f0; margin-bottom: 14px;
+      font-size: 1rem; font-weight: 700; color: #e2e8f0; margin-bottom: 14px;
       display: flex; justify-content: space-between; align-items: center;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 8px;
     }
@@ -220,7 +127,7 @@
       padding: 3px 8px; border-radius: 6px; font-weight: 600;
     }
 
-    .form-group { margin-bottom: 12px; }
+    .form-group { margin-bottom: 14px; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
 
@@ -228,16 +135,27 @@
       .form-row, .form-row-3 { grid-template-columns: 1fr; }
     }
 
+    /* Labels & Interactive Hints */
     label {
-      display: flex; align-items: center; gap: 5px;
-      font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 5px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 0.84rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;
     }
-    label .field-icon { font-size: 0.95rem; }
+    .label-left { display: flex; align-items: center; gap: 6px; }
+    .hint-btn {
+      background: rgba(56, 189, 248, 0.15); color: var(--primary); border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 50%; width: 22px; height: 22px; font-size: 0.7rem; font-weight: 800;
+      cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .hint-btn:active, .hint-btn:hover {
+      background: var(--primary); color: #0b1120;
+    }
 
+    /* Big Inputs optimized for Smartphones */
     input, select {
       width: 100%; background: var(--input-bg); border: 1px solid var(--input-border);
-      color: var(--text-main); padding: 10px 12px; border-radius: 8px; font-size: 0.95rem;
-      font-family: inherit; outline: none; transition: border-color 0.2s;
+      color: var(--text-main); padding: 12px 14px; border-radius: 10px; font-size: 16px;
+      font-family: inherit; outline: none; transition: border-color 0.2s; min-height: 48px;
     }
     input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
     input[type="number"] { font-family: var(--font-mono); }
@@ -247,16 +165,15 @@
       display: flex; gap: 8px; margin-bottom: 12px;
     }
     .method-pill {
-      flex: 1; padding: 9px 12px; border-radius: 10px; cursor: pointer; text-align: center;
+      flex: 1; padding: 10px 12px; border-radius: 10px; cursor: pointer; text-align: center;
       font-size: 0.82rem; font-weight: 700; border: 1px solid var(--card-border);
       background: rgba(11, 19, 36, 0.6); color: var(--text-muted); transition: all 0.2s ease;
-      display: flex; align-items: center; justify-content: center; gap: 6px;
+      display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px;
     }
     .method-pill.active {
       border-color: #38bdf8; background: rgba(56, 189, 248, 0.15); color: #38bdf8;
       box-shadow: 0 0 12px var(--primary-glow);
     }
-
     .formula-callout {
       padding: 10px 14px; border-radius: 10px; font-size: 0.78rem; line-height: 1.45;
       background: rgba(11, 19, 36, 0.8); border-left: 3px solid #38bdf8; margin-top: 8px; color: #cbd5e1;
@@ -278,26 +195,13 @@
     .brand-snapmaker { background: rgba(168, 85, 247, 0.18); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
     .brand-custom { background: rgba(148, 163, 184, 0.18); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.4); }
 
-    /* Visual Filament Swatch */
-    .color-swatch-wrapper {
-      display: flex; align-items: center; gap: 8px;
-    }
-    input[type="color"] {
-      -webkit-appearance: none; border: 1px solid var(--input-border);
-      width: 36px; height: 36px; border-radius: 8px; cursor: pointer; padding: 2px;
-      background: var(--input-bg);
-    }
-    input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-    input[type="color"]::-webkit-color-swatch { border: none; border-radius: 6px; }
-
-    /* MODO RÁPIDO & STATUS CARDS */
-    #quick-mode-container { max-width: 680px; margin: 10px auto; }
-    .quick-card {
-      background: linear-gradient(180deg, #151f32 0%, #0d1524 100%);
-      border: 1px solid #38bdf8; border-radius: 20px; padding: 24px; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+    /* Easy Mode Customizer Accordion */
+    .custom-pill-link {
+      font-size: 0.76rem; color: var(--primary); background: transparent; border: none;
+      cursor: pointer; text-decoration: underline; padding: 0; font-weight: 600;
     }
 
-    /* Cards de Status com Gradientes */
+    /* Status Cards */
     .status-cards-grid {
       display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;
     }
@@ -320,28 +224,25 @@
       font-size: 1.35rem; font-weight: 800; font-family: var(--font-mono); margin-top: 3px;
     }
 
-    .quick-price-hero {
+    .hero-price-card {
       background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(99, 102, 241, 0.15) 100%);
-      border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 14px; padding: 18px; text-align: center;
-      margin-bottom: 18px;
+      border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 16px; padding: 18px; text-align: center;
+      margin-bottom: 16px;
     }
-    .quick-price-hero .s-lbl {
+    .hero-price-card .s-lbl {
       font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: var(--primary); letter-spacing: 0.08em;
     }
-    .quick-price-val {
-      font-size: 2.9rem; font-weight: 800; color: var(--primary); font-family: var(--font-mono); line-height: 1.1; margin: 6px 0;
+    .hero-price-val {
+      font-size: 3rem; font-weight: 800; color: var(--primary); font-family: var(--font-mono); line-height: 1.1; margin: 6px 0;
     }
-    .quick-price-sub {
-      font-size: 0.82rem; color: var(--accent); font-weight: 600;
+    .hero-price-sub {
+      font-size: 0.85rem; color: var(--accent); font-weight: 700;
     }
 
-    /* Cost Distribution Visual Progress Bar */
-    .distribution-bar-wrapper {
-      margin-top: 14px; margin-bottom: 14px;
-    }
+    /* Distribution Bar */
+    .distribution-bar-wrapper { margin: 14px 0; }
     .distribution-header {
-      display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: var(--text-muted);
-      margin-bottom: 6px;
+      display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;
     }
     .distribution-bar {
       height: 10px; border-radius: 6px; overflow: hidden; display: flex; background: rgba(255, 255, 255, 0.05);
@@ -353,26 +254,103 @@
     .seg-mac { background: var(--c-mac); }
     .seg-lab { background: var(--c-lab); }
     .seg-prf { background: var(--c-prf); }
-
     .distribution-legend {
       display: flex; flex-wrap: wrap; gap: 8px 12px; margin-top: 8px; font-size: 0.72rem; color: #cbd5e1;
     }
     .leg-item { display: flex; align-items: center; gap: 5px; }
     .leg-dot { width: 8px; height: 8px; border-radius: 50%; }
 
-    /* MODO PRO */
+    /* Actions */
+    .btn-group-actions { display: flex; flex-direction: column; gap: 10px; }
+    .btn-whatsapp-action {
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      color: white; border: none; padding: 14px; border-radius: 12px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.35); transition: all 0.2s; min-height: 50px;
+    }
+    .btn-main-action {
+      background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 13px;
+      border-radius: 12px; font-size: 0.95rem; font-weight: 700; cursor: pointer; width: 100%;
+      display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; min-height: 48px;
+    }
+    .btn-secondary-action {
+      background: #24344d; color: #f8fafc; border: none; padding: 12px; border-radius: 12px;
+      font-size: 0.88rem; font-weight: 600; cursor: pointer; width: 100%; min-height: 46px;
+    }
+
+    /* Modal Overlays (Feedback, FAQ, Hint) */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(11, 17, 32, 0.85); backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center; z-index: 9999; padding: 14px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-content {
+      background: var(--card-bg); border: 1px solid var(--primary); border-radius: 20px;
+      width: 100%; max-width: 620px; max-height: 90vh; display: flex; flex-direction: column;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6); overflow: hidden;
+      animation: modalFadeIn 0.25s ease-out;
+    }
+    @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+    .modal-header {
+      padding: 16px 18px; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--card-border); background: rgba(11, 19, 36, 0.7);
+    }
+    .modal-header h3 { font-size: 1.05rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+    .btn-close-modal {
+      background: rgba(239, 68, 68, 0.15); border: none; color: var(--danger); font-size: 1.2rem;
+      width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+    }
+    .modal-body { flex: 1; overflow-y: auto; padding: 18px; }
+    .modal-footer {
+      padding: 12px 18px; display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--card-border); background: rgba(11, 19, 36, 0.8); font-size: 0.75rem; color: var(--text-muted);
+    }
+
+    /* Accordion FAQ */
+    .faq-item {
+      background: rgba(11, 19, 36, 0.6); border: 1px solid var(--card-border); border-radius: 10px;
+      margin-bottom: 10px; overflow: hidden;
+    }
+    .faq-question {
+      padding: 14px 16px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex;
+      justify-content: space-between; align-items: center; color: #f1f5f9;
+    }
+    .faq-answer {
+      padding: 0 16px 14px 16px; font-size: 0.84rem; color: #94a3b8; line-height: 1.55; display: none;
+      border-top: 1px dashed rgba(255, 255, 255, 0.06); padding-top: 10px;
+    }
+    .faq-item.open .faq-answer { display: block; }
+    .faq-item.open .faq-question { color: var(--primary); }
+
+    /* Hint Bottom Sheet */
+    .hint-sheet-content {
+      background: #151f32; border: 1px solid var(--primary); border-radius: 20px;
+      padding: 22px; max-width: 480px; width: 100%; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Swatch */
+    .color-swatch-wrapper { display: flex; align-items: center; gap: 8px; }
+    input[type="color"] {
+      -webkit-appearance: none; border: 1px solid var(--input-border);
+      width: 40px; height: 40px; border-radius: 8px; cursor: pointer; padding: 2px; background: var(--input-bg);
+    }
+    input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+    input[type="color"]::-webkit-color-swatch { border: none; border-radius: 6px; }
+
+    /* Pro Mode Grid */
     .pro-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
     @media (min-width: 960px) { .pro-grid { grid-template-columns: 1.35fr 1fr; } }
     .filament-item, .extra-item {
       background: rgba(11, 19, 36, 0.6); border: 1px solid var(--card-border); border-radius: 10px; padding: 12px; margin-bottom: 10px;
     }
     .btn-remove {
-      background: rgba(239, 68, 68, 0.15); color: var(--danger); border: none; border-radius: 6px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer; font-weight: 600;
+      background: rgba(239, 68, 68, 0.15); color: var(--danger); border: none; border-radius: 6px; padding: 5px 10px; font-size: 0.75rem; cursor: pointer; font-weight: 600;
     }
     .btn-add {
-      background: rgba(56, 189, 248, 0.12); color: var(--primary); border: 1px dashed var(--primary); width: 100%; padding: 10px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; margin-top: 6px;
+      background: rgba(56, 189, 248, 0.12); color: var(--primary); border: 1px dashed var(--primary); width: 100%; padding: 12px; border-radius: 10px; font-size: 0.88rem; font-weight: 700; cursor: pointer; margin-top: 6px;
     }
-
     .results-card {
       position: sticky; top: 20px; background: linear-gradient(180deg, #151f32 0%, #0d1524 100%);
       border: 1px solid #3b82f6; border-radius: 16px; padding: 22px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
@@ -385,34 +363,11 @@
       font-weight: 700; color: #f1f5f9; border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); padding: 9px 0; margin-top: 4px;
     }
 
-    .btn-group-actions { display: flex; flex-direction: column; gap: 8px; }
-
-    .btn-whatsapp-action {
-      background: linear-gradient(135deg, #25d366, #128c7e);
-      color: white; border: none; padding: 13px; border-radius: 10px; font-size: 0.95rem; font-weight: 700;
-      cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
-      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.35); transition: all 0.2s;
-    }
-    .btn-whatsapp-action:hover {
-      transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
-    }
-
-    .btn-main-action {
-      background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 11px;
-      border-radius: 10px; font-size: 0.9rem; font-weight: 700; cursor: pointer; width: 100%;
-      display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;
-    }
-
-    .btn-secondary-action {
-      background: #24344d; color: #f8fafc; border: none; padding: 10px; border-radius: 10px;
-      font-size: 0.85rem; font-weight: 600; cursor: pointer; width: 100%;
-    }
-
     .toast {
       position: fixed; bottom: 24px; right: 24px; background: #10b981; color: white; padding: 12px 20px;
-      border-radius: 10px; font-weight: 700; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); display: none; z-index: 1000;
+      border-radius: 10px; font-weight: 700; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); display: none; z-index: 10000;
     }
-    .helper-text { font-size: 0.72rem; color: #64748b; margin-top: 3px; }
+    .helper-text { font-size: 0.74rem; color: #64748b; margin-top: 4px; }
     .hidden { display: none !important; }
   </style>
 </head>
@@ -433,10 +388,11 @@
           <button id="btn-lang-pt" class="ctrl-btn active-lang" onclick="setLanguage('pt')">🇧🇷 Português</button>
         </div>
 
-        <!-- Modo -->
+        <!-- 3 Modos: Fácil (Padrão) | Rápido | Completo -->
         <div class="nav-toggle-group">
-          <button id="mode-quick-btn" class="ctrl-btn active-mode" onclick="switchMode('quick')"><span id="t-mode-quick">⚡ Modo Rápido</span></button>
-          <button id="mode-pro-btn" class="ctrl-btn" onclick="switchMode('pro')"><span id="t-mode-pro">🛠️ Modo Completo</span></button>
+          <button id="mode-easy-btn" class="ctrl-btn active-mode" onclick="switchMode('easy')"><span id="t-mode-easy">🌱 Modo Fácil</span></button>
+          <button id="mode-quick-btn" class="ctrl-btn" onclick="switchMode('quick')"><span id="t-mode-quick">⚡ Rápido</span></button>
+          <button id="mode-pro-btn" class="ctrl-btn" onclick="switchMode('pro')"><span id="t-mode-pro">🛠️ Completo</span></button>
         </div>
 
         <!-- Moeda -->
@@ -445,25 +401,165 @@
           <button id="btn-brl" class="ctrl-btn active-curr" onclick="setCurrency('BRL')">🇧🇷 BRL (R$)</button>
         </div>
 
-        <!-- Botão Feedback -->
-        <button class="btn-feedback" onclick="openFeedbackModal()">
-          <span id="t-btn-feedback-nav">💡 Feedback / Sugestões</span>
+        <!-- Guia/FAQ e Feedback -->
+        <button class="btn-top-action btn-top-faq" onclick="openFaqModal()">
+          <span>📚</span> <span id="t-btn-faq-nav">Guia & FAQ</span>
+        </button>
+        <button class="btn-top-action" onclick="openFeedbackModal()">
+          <span>💡</span> <span id="t-btn-feedback-nav">Feedback</span>
         </button>
       </div>
     </header>
 
-    <!-- MODO RÁPIDO -->
-    <div id="quick-mode-container">
-      <div class="quick-card">
+    <!-- ========================================== -->
+    <!-- 1. MODO FÁCIL (EASY MODE - DEFAULT NOVO) -->
+    <!-- ========================================== -->
+    <div id="easy-mode-container">
+      <div class="section-card" style="max-width: 680px; margin: 0 auto; border-color: #10b981;">
         
-        <!-- Preço Sugerido Hero -->
-        <div class="quick-price-hero">
-          <div class="s-lbl" id="t-q-price-label">Preço Sugerido de Venda</div>
-          <div class="quick-price-val" id="quick-final-price">R$ 0.00</div>
-          <div class="quick-price-sub" id="quick-profit-tag">+ R$ 0.00 de Lucro Estimado</div>
+        <!-- Preço Hero -->
+        <div class="hero-price-card">
+          <div class="s-lbl" id="t-e-price-label">Preço Sugerido de Venda</div>
+          <div class="hero-price-val" id="easy-final-price">R$ 0.00</div>
+          <div class="hero-price-sub" id="easy-profit-tag">+ R$ 0.00 de Lucro Real Garantido</div>
         </div>
 
-        <!-- Mini Cards de Custo e Lucro -->
+        <!-- Mini Cards: Custo vs Lucro Real -->
+        <div class="status-cards-grid">
+          <div class="status-card card-cost">
+            <div class="s-lbl" id="t-e-cost-label">Custo Real de Produção</div>
+            <div class="s-val" id="easy-cost-val" style="color: #cbd5e1;">R$ 0.00</div>
+          </div>
+          <div class="status-card card-profit">
+            <div class="s-lbl"><span id="t-e-profit-label">Lucro Limpo</span> (<span id="easy-margin-pct" style="color: #10b981;">30%</span>)</div>
+            <div class="s-val" id="easy-profit-val" style="color: #10b981;">R$ 0.00</div>
+          </div>
+        </div>
+
+        <!-- Barra Visual de Distribuição Fácil -->
+        <div class="distribution-bar-wrapper">
+          <div class="distribution-header">
+            <span id="t-e-dist-title">📊 Para onde vai o valor da peça:</span>
+            <span id="easy-dist-summary">Custo vs Lucro</span>
+          </div>
+          <div class="distribution-bar">
+            <div class="dist-segment seg-mat" id="e-bar-mat" style="width: 45%;" title="Material"></div>
+            <div class="dist-segment seg-nrg" id="e-bar-nrg" style="width: 10%;" title="Energia"></div>
+            <div class="dist-segment seg-mac" id="e-bar-mac" style="width: 15%;" title="Máquina"></div>
+            <div class="dist-segment seg-prf" id="e-bar-prf" style="width: 30%;" title="Lucro Real"></div>
+          </div>
+          <div class="distribution-legend">
+            <div class="leg-item"><span class="leg-dot" style="background: var(--c-mat);"></span><span id="t-leg-mat-e">Material</span> (<span id="e-pct-mat">0%</span>)</div>
+            <div class="leg-item"><span class="leg-dot" style="background: var(--c-nrg);"></span><span id="t-leg-nrg-e">Energia</span> (<span id="e-pct-nrg">0%</span>)</div>
+            <div class="leg-item"><span class="leg-dot" style="background: var(--c-mac);"></span><span id="t-leg-mac-e">Máquina/Bico</span> (<span id="e-pct-mac">0%</span>)</div>
+            <div class="leg-item"><span class="leg-dot" style="background: var(--c-prf);"></span><span id="t-leg-prf-e">Lucro</span> (<span id="e-pct-prf">0%</span>)</div>
+          </div>
+        </div>
+
+        <!-- 1. Impressora (Seleção Fácil) -->
+        <div class="form-group">
+          <label>
+            <span class="label-left"><span class="field-icon">🖨️</span> <span id="t-e-lbl-printer">Sua Impressora 3D</span></span>
+            <button class="hint-btn" onclick="showHint('printer')" title="Ajuda">ℹ️</button>
+          </label>
+          <select id="easy-printer-select" onchange="syncEasyPrinter(this.value)">
+            <option value="bambu-p1s" selected>🟢 Bambu Lab P1S / P1P (135W)</option>
+            <option value="bambu-a1">🟢 Bambu Lab A1 (95W)</option>
+            <option value="bambu-a1mini">🟢 Bambu Lab A1 Mini (85W)</option>
+            <option value="bambu-x1c">🟢 Bambu Lab X1-Carbon (145W)</option>
+            <option value="creality-ender">🔵 Creality Ender 3 Series (120W)</option>
+            <option value="creality-k1">🔵 Creality K1 / K1 Max (160W)</option>
+            <option value="anycubic-kobra">🔷 Anycubic Kobra Series (125W)</option>
+            <option value="prusa-mk">🟧 Prusa MK3S+ / MK4 (95W)</option>
+            <option value="snapmaker-u1">🟣 Snapmaker U1 / Voron (160W)</option>
+            <option value="custom">⚙️ Outra / Personalizada</option>
+          </select>
+        </div>
+
+        <!-- 2. Peso em Gramas -->
+        <div class="form-group">
+          <label>
+            <span class="label-left"><span class="field-icon">⚖️</span> <span id="t-e-lbl-weight">Peso Total da Peça (Gramas)</span></span>
+            <button class="hint-btn" onclick="showHint('weight')" title="Ajuda">ℹ️</button>
+          </label>
+          <input type="number" id="easy-weight" value="85" min="1" oninput="syncEasyAndCalculate()">
+          <div class="helper-text" id="t-e-weight-helper">Peso líquido estimado pelo fatiador (incluindo suportes).</div>
+        </div>
+
+        <!-- 3. Tempo de Impressão -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>
+              <span class="label-left"><span class="field-icon">⏱️</span> <span id="t-e-lbl-hours">Tempo (Horas)</span></span>
+              <button class="hint-btn" onclick="showHint('time')" title="Ajuda">ℹ️</button>
+            </label>
+            <input type="number" id="easy-hours" value="3" min="0" oninput="syncEasyAndCalculate()">
+          </div>
+          <div class="form-group">
+            <label>
+              <span class="label-left"><span class="field-icon">⏱️</span> <span id="t-e-lbl-minutes">Tempo (Minutos)</span></span>
+            </label>
+            <input type="number" id="easy-minutes" value="15" min="0" max="59" oninput="syncEasyAndCalculate()">
+          </div>
+        </div>
+
+        <!-- 4. Custos Extras (Embalagem, LEDs, etc.) -->
+        <div class="form-group">
+          <label>
+            <span class="label-left"><span class="field-icon">📦</span> <span id="t-e-lbl-extras">Custos Extras / Embalagem / LEDs</span> (<span class="currency-sym">R$</span>)</span>
+            <button class="hint-btn" onclick="showHint('extras')" title="Ajuda">ℹ️</button>
+          </label>
+          <input type="number" id="easy-extras" value="0" min="0" step="0.5" oninput="syncEasyAndCalculate()">
+        </div>
+
+        <!-- 5. Margem de Lucro Real -->
+        <div class="form-group">
+          <label>
+            <span class="label-left"><span class="field-icon">🚀</span> <span id="t-e-lbl-margin">Margem de Lucro Real (%)</span></span>
+            <button class="hint-btn" onclick="showHint('margin')" title="Ajuda">ℹ️</button>
+          </label>
+          <input type="number" id="easy-margin" value="30" min="0" max="99" oninput="syncEasyAndCalculate()">
+          <div class="helper-text" id="t-e-margin-helper">Garante que essa porcentagem exata do valor de venda seja lucro livre.</div>
+        </div>
+
+        <!-- Linha Discreta para Ajustar Preço Base do Filamento -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin: 10px 0 16px 0; padding: 8px 12px; background: rgba(11,19,36,0.5); border-radius: 8px;">
+          <span style="font-size: 0.78rem; color: var(--text-muted);">
+            🧵 <span id="t-e-mat-note">Filamento Base:</span> <strong id="easy-mat-price-display">R$ 100,00/kg</strong>
+          </span>
+          <button class="custom-pill-link" onclick="promptCustomMatPrice()">
+            ✏️ <span id="t-e-btn-custom-mat">Alterar Preço/kg</span>
+          </button>
+        </div>
+
+        <!-- Botões de Ação em Tamanho Mobile -->
+        <div class="btn-group-actions">
+          <button class="btn-whatsapp-action" onclick="shareOnWhatsApp('easy')">
+            <span id="t-btn-wa-e">💬 Enviar Orçamento no WhatsApp</span>
+          </button>
+          <button class="btn-main-action" onclick="copyEasyQuote()">
+            <span id="t-btn-copy-e">📋 Copiar Orçamento Formatado</span>
+          </button>
+          <button class="btn-secondary-action" onclick="switchMode('pro')">
+            <span id="t-btn-pro-e">🛠️ Mudar para o Modo Completo (Avançado)</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 2. MODO RÁPIDO (QUICK MODE) -->
+    <!-- ========================================== -->
+    <div id="quick-mode-container" class="hidden">
+      <div class="section-card" style="max-width: 680px; margin: 0 auto;">
+        
+        <div class="hero-price-card">
+          <div class="s-lbl" id="t-q-price-label">Preço Sugerido de Venda</div>
+          <div class="hero-price-val" id="quick-final-price">R$ 0.00</div>
+          <div class="hero-price-sub" id="quick-profit-tag">+ R$ 0.00 de Lucro Estimado</div>
+        </div>
+
         <div class="status-cards-grid">
           <div class="status-card card-cost">
             <div class="s-lbl" id="t-q-cost-label">Custo Estimado</div>
@@ -475,9 +571,11 @@
           </div>
         </div>
 
-        <!-- Alternador Visual de Método de Lucro: Margem vs Markup -->
         <div class="form-group">
-          <label><span class="field-icon">⚖️</span> <span id="t-lbl-method-q">Método de Precificação:</span></label>
+          <label>
+            <span class="label-left"><span class="field-icon">⚖️</span> <span id="t-lbl-method-q">Método de Precificação:</span></span>
+            <button class="hint-btn" onclick="showHint('method')" title="Ajuda">ℹ️</button>
+          </label>
           <div class="method-toggle-container">
             <div class="method-pill active" id="q-pill-margin" onclick="setPricingMethod('margin')">
               <span>🎯</span> <span id="t-pill-margin-q">Margem Real s/ Venda</span>
@@ -491,29 +589,11 @@
           </div>
         </div>
 
-        <!-- Barra Visual de Distribuição de Custos (Modo Rápido) -->
-        <div class="distribution-bar-wrapper">
-          <div class="distribution-header">
-            <span id="t-q-dist-title">📊 Distribuição do Valor:</span>
-            <span id="quick-dist-summary">Custo vs Lucro</span>
-          </div>
-          <div class="distribution-bar">
-            <div class="dist-segment seg-mat" id="q-bar-mat" style="width: 40%;" title="Material"></div>
-            <div class="dist-segment seg-nrg" id="q-bar-nrg" style="width: 10%;" title="Energia"></div>
-            <div class="dist-segment seg-mac" id="q-bar-mac" style="width: 10%;" title="Máquina"></div>
-            <div class="dist-segment seg-prf" id="q-bar-prf" style="width: 40%;" title="Lucro"></div>
-          </div>
-          <div class="distribution-legend">
-            <div class="leg-item"><span class="leg-dot" style="background: var(--c-mat);"></span><span id="t-leg-mat">Material</span> (<span id="q-pct-mat">0%</span>)</div>
-            <div class="leg-item"><span class="leg-dot" style="background: var(--c-nrg);"></span><span id="t-leg-nrg">Energia</span> (<span id="q-pct-nrg">0%</span>)</div>
-            <div class="leg-item"><span class="leg-dot" style="background: var(--c-mac);"></span><span id="t-leg-mac">Máquina/Bico</span> (<span id="q-pct-mac">0%</span>)</div>
-            <div class="leg-item"><span class="leg-dot" style="background: var(--c-prf);"></span><span id="t-leg-prf">Lucro</span> (<span id="q-pct-prf">0%</span>)</div>
-          </div>
-        </div>
-
-        <!-- Campos Rápidos -->
         <div class="form-group">
-          <label><span class="field-icon">🧵</span> <span id="t-q-mat-label">Material do Filamento</span></label>
+          <label>
+            <span class="label-left"><span class="field-icon">🧵</span> <span id="t-q-mat-label">Material do Filamento</span></span>
+            <button class="hint-btn" onclick="showHint('materials')" title="Ajuda">ℹ️</button>
+          </label>
           <select id="quick-material" onchange="syncQuickAndCalculate()">
             <option value="PLA" id="opt-q-pla" selected>PLA / PLA Meta (Padrão)</option>
             <option value="PETG">PETG</option>
@@ -523,18 +603,21 @@
         </div>
 
         <div class="form-group">
-          <label><span class="field-icon">⚖️</span> <span id="t-q-weight-label">Peso Total da Peça + Suportes (Gramas)</span></label>
+          <label>
+            <span class="label-left"><span class="field-icon">⚖️</span> <span id="t-q-weight-label">Peso Total da Peça + Suportes (Gramas)</span></span>
+            <button class="hint-btn" onclick="showHint('weight')" title="Ajuda">ℹ️</button>
+          </label>
           <input type="number" id="quick-weight" value="85" min="1" oninput="syncQuickAndCalculate()">
           <div class="helper-text" id="t-q-weight-helper">Insira o peso final indicado no seu fatiador.</div>
         </div>
 
         <div class="form-row">
           <div class="form-group">
-            <label><span class="field-icon">⏱️</span> <span id="t-q-hours-label">Tempo (Horas)</span></label>
+            <label><span class="label-left"><span class="field-icon">⏱️</span> <span id="t-q-hours-label">Tempo (Horas)</span></span></label>
             <input type="number" id="quick-hours" value="3" min="0" oninput="syncQuickAndCalculate()">
           </div>
           <div class="form-group">
-            <label><span class="field-icon">⏱️</span> <span id="t-q-min-label">Tempo (Minutos)</span></label>
+            <label><span class="label-left"><span class="field-icon">⏱️</span> <span id="t-q-min-label">Tempo (Minutos)</span></span></label>
             <input type="number" id="quick-minutes" value="15" min="0" max="59" oninput="syncQuickAndCalculate()">
           </div>
         </div>
@@ -546,19 +629,17 @@
           <button class="btn-main-action" onclick="copyQuickQuote()">
             <span id="t-btn-copy-q">📋 Copiar Texto do Orçamento</span>
           </button>
-          <button class="btn-secondary-action" onclick="switchMode('pro')">
-            <span id="t-btn-pro-q">⚙️ Abrir Ajustes Avançados</span>
-          </button>
         </div>
       </div>
     </div>
 
-    <!-- MODO PRO -->
+    <!-- ========================================== -->
+    <!-- 3. MODO COMPLETO (PRO MODE) -->
+    <!-- ========================================== -->
     <div id="pro-mode-container" class="hidden">
       <div class="pro-grid">
         <div class="inputs-column">
           
-          <!-- Secao 1: Identificacao -->
           <div class="section-card">
             <div class="section-title">
               <span>📋 <span id="t-sec-proj">Identificação do Projeto</span></span>
@@ -566,17 +647,16 @@
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label><span class="field-icon">🏷️</span> <span id="t-lbl-projname">Nome do Projeto / Peça</span></label>
+                <label><span class="label-left"><span class="field-icon">🏷️</span> <span id="t-lbl-projname">Nome do Projeto / Peça</span></span></label>
                 <input type="text" id="project-name" placeholder="Ex: Suporte Articulado V2" value="Projeto Sob Encomenda">
               </div>
               <div class="form-group">
-                <label><span class="field-icon">👤</span> <span id="t-lbl-clientname">Cliente / Referência</span></label>
+                <label><span class="label-left"><span class="field-icon">👤</span> <span id="t-lbl-clientname">Cliente / Referência</span></span></label>
                 <input type="text" id="client-name" placeholder="Ex: Pedido #102">
               </div>
             </div>
           </div>
 
-          <!-- Secao 2: Filamentos -->
           <div class="section-card">
             <div class="section-title">
               <span>🧵 <span id="t-sec-fil">Filamentos & Cores (Multimaterial)</span></span>
@@ -586,7 +666,6 @@
             <button type="button" class="btn-add" id="t-btn-add-fil" onclick="addFilament()">+ Adicionar Outra Cor / Filamento (AMS / Multimaterial)</button>
           </div>
 
-          <!-- Secao 3: Maquina & Energia -->
           <div class="section-card">
             <div class="section-title">
               <span>🖨️ <span id="t-sec-mach">Impressora & Consumo Elétrico</span></span>
@@ -594,7 +673,10 @@
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label><span class="field-icon">🏷️</span> <span id="t-lbl-printer">Modelo da Impressora</span></label>
+                <label>
+                  <span class="label-left"><span class="field-icon">🏷️</span> <span id="t-lbl-printer">Modelo da Impressora</span></span>
+                  <button class="hint-btn" onclick="showHint('printer')" title="Ajuda">ℹ️</button>
+                </label>
                 <select id="printer-select" onchange="applyPrinterPreset()">
                   <option value="95" data-brand="bambu" data-cost-gbp="349" data-cost-brl="2800">🟢 Bambu Lab A1 (95W)</option>
                   <option value="85" data-brand="bambu" data-cost-gbp="269" data-cost-brl="2200">🟢 Bambu Lab A1 Mini (85W)</option>
@@ -607,48 +689,52 @@
                   <option value="160" data-brand="snapmaker" data-cost-gbp="950" data-cost-brl="7500">🟣 Snapmaker U1 / Multitool (160W)</option>
                   <option value="custom" data-brand="custom" id="opt-printer-custom" data-cost-gbp="500" data-cost-brl="4000">⚙️ Personalizado / Outro</option>
                 </select>
-                <!-- Selo da Fabricante -->
                 <div class="brand-badge-container">
                   <span id="printer-brand-badge" class="brand-badge brand-bambu">🟢 Bambu Lab</span>
                   <span style="font-size: 0.75rem; color: var(--text-muted);" id="t-brand-note">Perfil de consumo calibrado</span>
                 </div>
               </div>
               <div class="form-group">
-                <label><span class="field-icon">⚡</span> <span id="t-lbl-watts">Potência Média Contínua (Watts)</span></label>
+                <label><span class="label-left"><span class="field-icon">⚡</span> <span id="t-lbl-watts">Potência Média Contínua (Watts)</span></span></label>
                 <input type="number" id="printer-watts" value="135" oninput="calculate()">
               </div>
             </div>
 
             <div class="form-row-3">
               <div class="form-group">
-                <label><span class="field-icon">⏱️</span> <span id="t-lbl-thours">Tempo (Horas)</span></label>
+                <label><span class="label-left"><span class="field-icon">⏱️</span> <span id="t-lbl-thours">Tempo (Horas)</span></span></label>
                 <input type="number" id="time-hours" min="0" value="3" oninput="calculate()">
               </div>
               <div class="form-group">
-                <label><span class="field-icon">⏱️</span> <span id="t-lbl-tmins">Tempo (Minutos)</span></label>
+                <label><span class="label-left"><span class="field-icon">⏱️</span> <span id="t-lbl-tmins">Tempo (Minutos)</span></span></label>
                 <input type="number" id="time-minutes" min="0" max="59" value="15" oninput="calculate()">
               </div>
               <div class="form-group">
-                <label><span class="field-icon">🔌</span> <span id="t-lbl-kwh">Custo Energia</span> (<span class="currency-sym">R$</span>/kWh)</label>
+                <label><span class="label-left"><span class="field-icon">🔌</span> <span id="t-lbl-kwh">Custo Energia</span> (<span class="currency-sym">R$</span>/kWh)</span></label>
                 <input type="number" id="kwh-rate" step="0.01" value="0.85" oninput="calculate()">
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label><span class="field-icon">🖨️</span> <span id="t-lbl-printercost">Valor da Máquina</span> (<span class="currency-sym">R$</span>)</label>
+                <label>
+                  <span class="label-left"><span class="field-icon">🖨️</span> <span id="t-lbl-printercost">Valor da Máquina</span> (<span class="currency-sym">R$</span>)</span>
+                  <button class="hint-btn" onclick="showHint('depreciation')" title="Ajuda">ℹ️</button>
+                </label>
                 <input type="number" id="printer-cost" value="4800" oninput="calculate()">
                 <div class="helper-text" id="t-help-printer">Amortização estimada em 3.000 horas úteis.</div>
               </div>
               <div class="form-group">
-                <label><span class="field-icon">🛠️</span> <span id="t-lbl-nozzlecost">Valor Bico Reserva</span> (<span class="currency-sym">R$</span>)</label>
+                <label>
+                  <span class="label-left"><span class="field-icon">🛠️</span> <span id="t-lbl-nozzlecost">Valor Bico Reserva</span> (<span class="currency-sym">R$</span>)</span>
+                  <button class="hint-btn" onclick="showHint('nozzle')" title="Ajuda">ℹ️</button>
+                </label>
                 <input type="number" id="nozzle-cost" value="80" oninput="calculate()">
                 <div class="helper-text" id="t-help-nozzle">Desgaste calculado para troca a cada 2.000 horas.</div>
               </div>
             </div>
           </div>
 
-          <!-- Secao 4: Extras -->
           <div class="section-card">
             <div class="section-title">
               <span>📦 <span id="t-sec-extras">Acessórios Extras & Embalagens</span></span>
@@ -658,7 +744,6 @@
             <button type="button" class="btn-add" id="t-btn-add-extra" onclick="addExtra()">+ Adicionar Acessório / Embalagem / Peça</button>
           </div>
 
-          <!-- Secao 5: Mao de Obra -->
           <div class="section-card">
             <div class="section-title">
               <span>👷 <span id="t-sec-labor">Mão de Obra & Pós-processamento</span></span>
@@ -666,34 +751,32 @@
             </div>
             <div class="form-row-3">
               <div class="form-group">
-                <label><span class="field-icon">💻</span> <span id="t-lbl-preptime">Fatiamento/Setup (Horas)</span></label>
+                <label><span class="label-left"><span class="field-icon">💻</span> <span id="t-lbl-preptime">Fatiamento/Setup (Horas)</span></span></label>
                 <input type="number" id="labor-prep-time" step="0.1" value="0" min="0" oninput="calculate()">
               </div>
               <div class="form-group">
-                <label><span class="field-icon">🔧</span> <span id="t-lbl-posttime">Pós-Processamento (Horas)</span></label>
+                <label><span class="label-left"><span class="field-icon">🔧</span> <span id="t-lbl-posttime">Pós-Processamento (Horas)</span></span></label>
                 <input type="number" id="labor-post-time" step="0.1" value="0" min="0" oninput="calculate()">
               </div>
               <div class="form-group">
-                <label><span class="field-icon">💰</span> <span id="t-lbl-laborrate">Valor Hora</span> (<span class="currency-sym">R$</span>)</label>
+                <label><span class="label-left"><span class="field-icon">💰</span> <span id="t-lbl-laborrate">Valor Hora</span> (<span class="currency-sym">R$</span>)</span></label>
                 <input type="number" id="labor-rate" step="0.5" value="0" min="0" oninput="calculate()">
               </div>
             </div>
             <div class="form-group">
-              <label><span class="field-icon">💵</span> <span id="t-lbl-laborfixed">Taxa Fixa Avulsa de Serviço / Projeto</span> (<span class="currency-sym">R$</span>)</label>
+              <label><span class="label-left"><span class="field-icon">💵</span> <span id="t-lbl-laborfixed">Taxa Fixa Avulsa de Serviço / Projeto</span> (<span class="currency-sym">R$</span>)</span></label>
               <input type="number" id="labor-fixed" value="0" min="0" oninput="calculate()">
             </div>
           </div>
 
-          <!-- Secao 6: Margens Comerciais & Método -->
           <div class="section-card">
             <div class="section-title">
               <span>📈 <span id="t-sec-comm">Margens, Método de Lucro & Taxas</span></span>
               <span class="badge" id="t-badge-comm">Comercial</span>
             </div>
 
-            <!-- Alternador de Método Pro -->
             <div class="form-group">
-              <label><span class="field-icon">⚖️</span> <span id="t-lbl-method-pro">Fórmula de Formação do Preço:</span></label>
+              <label><span class="label-left"><span class="field-icon">⚖️</span> <span id="t-lbl-method-pro">Fórmula de Formação do Preço:</span></span></label>
               <div class="method-toggle-container">
                 <div class="method-pill active" id="p-pill-margin" onclick="setPricingMethod('margin')">
                   <span>🎯</span> <span id="t-pill-margin-pro">Margem Real s/ Preço de Venda</span>
@@ -709,53 +792,31 @@
 
             <div class="form-row-3">
               <div class="form-group">
-                <label><span class="field-icon">🚀</span> <span id="t-lbl-margin">Margem de Lucro (%)</span></label>
+                <label><span class="label-left"><span class="field-icon">🚀</span> <span id="t-lbl-margin">Margem de Lucro (%)</span></span></label>
                 <input type="number" id="profit-margin" min="0" max="99" value="30" oninput="calculate()">
               </div>
               <div class="form-group">
-                <label><span class="field-icon">⚠️</span> <span id="t-lbl-fail">Taxa Risco / Falha (%)</span></label>
+                <label><span class="label-left"><span class="field-icon">⚠️</span> <span id="t-lbl-fail">Taxa Risco / Falha (%)</span></span></label>
                 <input type="number" id="failure-rate" min="0" max="100" value="0" oninput="calculate()">
               </div>
               <div class="form-group">
-                <label><span class="field-icon">💳</span> <span id="t-lbl-fee">Taxa Plataforma (%)</span></label>
+                <label><span class="label-left"><span class="field-icon">💳</span> <span id="t-lbl-fee">Taxa Plataforma (%)</span></span></label>
                 <input type="number" id="platform-fee" min="0" max="50" value="0" oninput="calculate()">
               </div>
             </div>
             <div class="form-group">
-              <label><span class="field-icon">🛡️</span> <span id="t-lbl-minorder">Preço Mínimo de Pedido</span> (<span class="currency-sym">R$</span>)</label>
+              <label><span class="label-left"><span class="field-icon">🛡️</span> <span id="t-lbl-minorder">Preço Mínimo de Pedido</span> (<span class="currency-sym">R$</span>)</span></label>
               <input type="number" id="min-order-price" value="25" min="0" oninput="calculate()">
             </div>
           </div>
         </div>
 
-        <!-- PAINEL DIREITA PRO -->
         <div class="results-column">
           <div class="results-card">
             <div style="text-align:center; padding: 14px 10px; background: rgba(11, 19, 36, 0.7); border-radius: 12px; margin-bottom: 16px; border: 1px solid rgba(56, 189, 248, 0.3);">
               <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;" id="t-pro-price-label">Preço Sugerido de Venda</div>
               <div style="font-size: 2.5rem; font-weight: 800; color: var(--primary); font-family: var(--font-mono); margin: 4px 0;" id="res-final-price">R$ 0.00</div>
               <div style="font-size: 0.82rem; color: #10b981; font-weight: 600;" id="res-profit-tag">+ R$ 0.00 de Lucro</div>
-            </div>
-
-            <!-- Barra Visual de Distribuição de Custos (Modo Completo) -->
-            <div class="distribution-bar-wrapper">
-              <div class="distribution-header">
-                <span id="t-pro-dist-title">📊 Composição Financeira:</span>
-              </div>
-              <div class="distribution-bar">
-                <div class="dist-segment seg-mat" id="p-bar-mat" style="width: 35%;" title="Material"></div>
-                <div class="dist-segment seg-nrg" id="p-bar-nrg" style="width: 10%;" title="Energia"></div>
-                <div class="dist-segment seg-mac" id="p-bar-mac" style="width: 10%;" title="Máquina"></div>
-                <div class="dist-segment seg-lab" id="p-bar-lab" style="width: 5%;" title="Mão de Obra"></div>
-                <div class="dist-segment seg-prf" id="p-bar-prf" style="width: 40%;" title="Lucro"></div>
-              </div>
-              <div class="distribution-legend">
-                <div class="leg-item"><span class="leg-dot" style="background: var(--c-mat);"></span><span id="t-leg-mat-p">Material</span> (<span id="p-pct-mat">0%</span>)</div>
-                <div class="leg-item"><span class="leg-dot" style="background: var(--c-nrg);"></span><span id="t-leg-nrg-p">Energia</span> (<span id="p-pct-nrg">0%</span>)</div>
-                <div class="leg-item"><span class="leg-dot" style="background: var(--c-mac);"></span><span id="t-leg-mac-p">Máq/Bico</span> (<span id="p-pct-mac">0%</span>)</div>
-                <div class="leg-item"><span class="leg-dot" style="background: var(--c-lab);"></span><span id="t-leg-lab-p">Extras/Mo</span> (<span id="p-pct-lab">0%</span>)</div>
-                <div class="leg-item"><span class="leg-dot" style="background: var(--c-prf);"></span><span id="t-leg-prf-p">Lucro</span> (<span id="p-pct-prf">0%</span>)</div>
-              </div>
             </div>
 
             <ul class="breakdown-list">
@@ -818,25 +879,25 @@
     </div>
 
     <!-- RODAPÉ DE DIREITOS E AVISO LEGAL -->
-    <footer style="margin-top: 40px; padding: 24px 16px; border-top: 1px solid var(--card-border); text-align: center; color: var(--text-muted); font-size: 0.8rem; line-height: 1.6;">
-      <p style="font-weight: 700; color: #e2e8f0; font-size: 0.9rem; margin-bottom: 6px;" id="t-ft-copyright">
+    <footer style="margin-top: 36px; padding: 22px 14px; border-top: 1px solid var(--card-border); text-align: center; color: var(--text-muted); font-size: 0.8rem; line-height: 1.6;">
+      <p style="font-weight: 700; color: #e2e8f0; font-size: 0.88rem; margin-bottom: 6px;" id="t-ft-copyright">
         © 2026 3D Print Cost Pro — Calculadora criada por Adriano Zini. Todos os direitos reservados.
       </p>
-      <p style="max-width: 800px; margin: 0 auto; color: #64748b; font-size: 0.75rem;" id="t-ft-disclaimer">
+      <p style="max-width: 800px; margin: 0 auto; color: #64748b; font-size: 0.74rem;" id="t-ft-disclaimer">
         <strong>AVISO DE USO E PROPRIEDADE INTELECTUAL:</strong> Este software, código-fonte e algoritmos de cálculo foram desenvolvidos exclusivamente por Adriano Zini. É expressamente proibida a cópia integral ou parcial, reprodução, redistribuição, engenharia reversa, comercialização ou disponibilização deste código ou de suas interfaces em qualquer meio sem autorização expressa e prévia por escrito do autor.
       </p>
     </footer>
   </div>
 
   <!-- MODAL DE FEEDBACK GOOGLE FORMS -->
-  <div id="feedback-modal-overlay" class="modal-overlay" onclick="handleOverlayClick(event)">
+  <div id="feedback-modal-overlay" class="modal-overlay" onclick="handleOverlayClick(event, 'feedback-modal-overlay')">
     <div class="modal-content">
       <div class="modal-header">
         <h3 id="t-modal-title">💡 Enviar Feedback & Sugestões</h3>
-        <button class="btn-close-modal" onclick="closeFeedbackModal()" title="Fechar">✕</button>
+        <button class="btn-close-modal" onclick="closeModal('feedback-modal-overlay')" title="Fechar">✕</button>
       </div>
-      <div class="modal-body">
-        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfc1wOBdfYRnoLDNsvPy-l12M3_5VNSJOM3LYUOrg8hNmDa_A/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Carregando formulário...</iframe>
+      <div class="modal-body" style="padding:0; background:#fff;">
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfc1wOBdfYRnoLDNsvPy-l12M3_5VNSJOM3LYUOrg8hNmDa_A/viewform?embedded=true" frameborder="0" style="width:100%; height:500px;">Carregando...</iframe>
       </div>
       <div class="modal-footer">
         <span id="t-modal-secure">🔒 Seus dados e sugestões vão direto para o desenvolvedor.</span>
@@ -845,15 +906,46 @@
     </div>
   </div>
 
+  <!-- MODAL FAQ / GUIA DIDÁTICO -->
+  <div id="faq-modal-overlay" class="modal-overlay" onclick="handleOverlayClick(event, 'faq-modal-overlay')">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="t-faq-modal-title">📚 Guia & Glossário de Impressão 3D</h3>
+        <button class="btn-close-modal" onclick="closeModal('faq-modal-overlay')" title="Fechar">✕</button>
+      </div>
+      <div class="modal-body" id="faq-modal-body">
+        <!-- Itens inseridos dinamicamente por idioma -->
+      </div>
+      <div class="modal-footer">
+        <span id="t-faq-footer-note">Desenvolvido para orçamentos precisos e seguros.</span>
+        <button class="btn-main-action" style="width:auto; padding:6px 14px; min-height:36px; font-size:0.8rem;" onclick="closeModal('faq-modal-overlay')">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE HINTS / EXPLICAÇÃO DE CAMPOS -->
+  <div id="hint-modal-overlay" class="modal-overlay" onclick="handleOverlayClick(event, 'hint-modal-overlay')">
+    <div class="hint-sheet-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h4 id="hint-title" style="font-size:1.05rem; font-weight:800; color:var(--primary); display:flex; align-items:center; gap:8px;">💡 Ajuda</h4>
+        <button class="btn-close-modal" onclick="closeModal('hint-modal-overlay')">✕</button>
+      </div>
+      <div id="hint-desc" style="font-size:0.88rem; color:#cbd5e1; line-height:1.6; margin-bottom:14px;"></div>
+      <div id="hint-tip" style="padding:10px 12px; background:rgba(56,189,248,0.12); border-left:3px solid var(--primary); border-radius:8px; font-size:0.8rem; color:#94a3b8;"></div>
+    </div>
+  </div>
+
   <div id="toast" class="toast">Orçamento copiado com sucesso!</div>
 
   <script>
-    const STORAGE_KEY = 'calc3d_user_data_v4';
+    const STORAGE_KEY = 'calc3d_user_data_v5';
 
     let currentLang = 'pt';
     let currentCurrency = 'BRL';
-    let currentMode = 'quick';
-    let currentPricingMethod = 'margin';
+    let currentMode = 'easy'; // DEFAULT É O MODO FÁCIL!
+    let currentPricingMethod = 'margin'; // Margem real s/ venda
+
+    let customEasyMatPrice = null; // Preço/kg customizado no Modo Fácil
 
     const BRANDS = {
       bambu: { name: 'Bambu Lab', badgeClass: 'brand-bambu', icon: '🟢' },
@@ -864,12 +956,176 @@
       custom: { name: 'Custom / Other', badgeClass: 'brand-custom', icon: '⚙️' }
     };
 
+    const HINTS = {
+      pt: {
+        weight: {
+          title: '⚖️ Peso Total (Gramas)',
+          desc: 'É a quantidade total de filamento que sua impressora vai gastar para produzir a peça, incluindo as paredes, preenchimento (infill) e suportes.',
+          tip: '📌 <strong>Onde achar:</strong> No Bambu Studio, Orca Slicer ou Cura, clique em "Fatiar" (Slice) e veja o peso em gramas (g) indicado no sumário da tela.'
+        },
+        time: {
+          title: '⏱️ Tempo de Impressão',
+          desc: 'A duração exata que a máquina levará imprimindo. Esse tempo define o custo de energia elétrica e a depreciação (desgaste da máquina e do bico).',
+          tip: '📌 <strong>Dica:</strong> Em peças de mais de 10 horas, lembre-se de conferir se a mesa está bem limpa para evitar descolamentos durante a noite.'
+        },
+        extras: {
+          title: '📦 Custos Extras / Embalagens',
+          desc: 'Qualquer item adicional físico necessário para entregar a peça: caixa de papelão, plástico bolha, etiquetas, LEDs, baterias, ímãs de neodímio ou parafusos.',
+          tip: '📌 <strong>Dica:</strong> Se você gasta R$ 3,00 de caixa e R$ 1,00 de fita/plástico, coloque R$ 4,00 aqui para nunca pagar embalagem do seu próprio bolso.'
+        },
+        margin: {
+          title: '🚀 Margem de Lucro Real (%)',
+          desc: 'A porcentagem exata do valor de venda final que fica limpo no seu bolso após pagar o filamento, energia, desgaste e extras.',
+          tip: '📌 <strong>Como funciona:</strong> Se o custo for R$ 40 e você escolher 30%, o preço vai para R$ 57,14 e seu lucro será exatamente R$ 17,14 (30% de 57,14).'
+        },
+        printer: {
+          title: '🖨️ Escolha da Impressora 3D',
+          desc: 'Cada modelo tem uma potência média diferente. A Bambu P1S/X1C consome ~135W a 145W, enquanto uma A1 Mini consome ~85W.',
+          tip: '📌 <strong>Automatizado:</strong> O sistema já calibra a energia e o desgaste ideal por hora automaticamente de acordo com o modelo selecionado.'
+        },
+        depreciation: {
+          title: '🖨️ Depreciação de Máquina',
+          desc: 'Reserva financeira por hora útil para que, ao fim de 3.000 horas de uso, você tenha o dinheiro necessário para comprar uma máquina nova.',
+          tip: '📌 <strong>Fórmula:</strong> Valor da máquina dividido por 3.000 horas úteis de trabalho.'
+        },
+        nozzle: {
+          title: '🛠️ Desgaste do Bico (Nozzle 2.000h)',
+          desc: 'Reserva para reposição periódica do hotend/bico de impressão a cada 2.000 horas trabalhadas.',
+          tip: '📌 <strong>Cálculo:</strong> Diluição de R$ 80 (£12) a cada 2.000 horas trabalhadas.'
+        },
+        method: {
+          title: '⚖️ Margem Real vs. Markup',
+          desc: 'A <strong>Margem Real</strong> divide pelo fator (1 - Margem%), garantindo que a % escolhida seja real sobre o total recebido. O <strong>Markup</strong> apenas multiplica um percentual sobre o custo.',
+          tip: '📌 <strong>Recomendação:</strong> Use sempre a Margem Real para garantir que se oferecer um desconto de 20%, ainda preserve seu lucro.'
+        },
+        materials: {
+          title: '🧵 Tipos de Material',
+          desc: 'PLA é ideal para protótipos e decorativos; PETG para peças mecânicas e externas; ABS para alta temperatura; TPU para flexíveis.',
+          tip: '📌 <strong>Dica:</strong> Materiais técnicos consomem um pouco mais de energia por exigirem mesa a 80-100°C.'
+        }
+      },
+      en: {
+        weight: {
+          title: '⚖️ Total Weight (Grams)',
+          desc: 'The total amount of filament your printer uses to produce the object, including walls, infill, and supports.',
+          tip: '📌 <strong>Where to find:</strong> In Bambu Studio, Orca Slicer, or Cura, click "Slice" and read the estimated grams (g) displayed.'
+        },
+        time: {
+          title: '⏱️ Print Time',
+          desc: 'Total printing duration. Determines electricity costs, machine depreciation, and nozzle wear per job.',
+          tip: '📌 <strong>Tip:</strong> Always add 10-15 minutes if you are using auto-leveling, bed calibration, or vibration compensation.'
+        },
+        extras: {
+          title: '📦 Extra Accessories & Packaging',
+          desc: 'Any physical add-on: cardboard box, bubble wrap, postal labels, LEDs, batteries, magnets, or screws.',
+          tip: '📌 <strong>Tip:</strong> Putting exact packaging costs here prevents logistics from eroding your profit margins.'
+        },
+        margin: {
+          title: '🚀 Effective Profit Margin (%)',
+          desc: 'The exact percentage of the final retail price that ends up cleanly in your pocket as profit.',
+          tip: '📌 <strong>Formula:</strong> Price = Cost / (1 - Margin/100). If cost is £40 and margin is 30%, retail price is £57.14, profit is £17.14.'
+        },
+        printer: {
+          title: '🖨️ 3D Printer Model',
+          desc: 'Each model operates at different continuous wattage. Bambu P1S runs at ~135W, while A1 Mini runs at ~85W.',
+          tip: '📌 <strong>Automated:</strong> The system pre-calibrates average power draw and hourly amortization automatically.'
+        },
+        depreciation: {
+          title: '🖨️ Machine Depreciation',
+          desc: 'Hourly cost allocation so that after 3,000 working hours, you have accumulated funds to purchase a brand new printer.',
+          tip: '📌 <strong>Formula:</strong> Printer purchase price divided by 3,000 estimated lifetime hours.'
+        },
+        nozzle: {
+          title: '🛠️ Nozzle Wear (2,000h replacement)',
+          desc: 'Hourly wear allocation to replace hotends/nozzles every 2,000 hours of continuous printing.',
+          tip: '📌 <strong>Calculation:</strong> £12 / R$ 80 amortized over 2,000 printing hours.'
+        },
+        method: {
+          title: '⚖️ True Margin vs. Markup',
+          desc: '<strong>True Margin</strong> divides by (1 - Margin%), ensuring the selected % is genuinely preserved in sales revenue. <strong>Markup</strong> only adds a multiplier on top of cost.',
+          tip: '📌 <strong>Recommendation:</strong> Always use True Margin to avoid undercharging.'
+        },
+        materials: {
+          title: '🧵 Filament Types',
+          desc: 'PLA is best for general & decorative prints; PETG for durable outdoor parts; ABS for heat resistance; TPU for flexible items.',
+          tip: '📌 <strong>Tip:</strong> Engineering materials require higher bed temperatures, slightly increasing energy consumption.'
+        }
+      }
+    };
+
+    const FAQS = {
+      pt: [
+        {
+          q: 'Qual a diferença entre Margem Real e Markup?',
+          a: 'Muitos precificam errado somando 30% em cima de um custo de R$ 100 (vendendo a R$ 130). Se você der 30% de desconto sobre R$ 130, o preço cai para R$ 91 e você fica no prejuízo! A <strong>Margem Real</strong> usa a fórmula correta: Preço = Custo ÷ (1 - 0,30) = R$ 142,85. Assim, exatamente 30% do valor final da venda é o seu lucro limpo.'
+        },
+        {
+          q: 'Quanto uma impressora 3D gasta de energia por hora?',
+          a: 'Impressoras FDM modernas são muito econômicas após atingirem a temperatura inicial. Em média, consomem entre 85 Watts (Bambu A1 Mini) e 145 Watts (Bambu P1S/X1C com mesa quente). Uma impressão de 5 horas consome cerca de 0,65 kWh, custando menos de R$ 0,60 de luz no Brasil ou £0.18 no Reino Unido.'
+        },
+        {
+          q: 'O que devo cobrar no campo "Custos Extras"?',
+          a: 'Tudo o que sai do seu estoque para aquela encomenda além do filamento: caixa de papelão, plástico bolha, fita adesiva, etiquetas de envio, parafusos, ímãs de neodímio, chaves de fenda ou componentes eletrônicos (LEDs e baterias).'
+        },
+        {
+          q: 'Como calcular impressões multicoloridas (AMS / Multimaterial)?',
+          a: 'No Modo Completo, clique em "+ Adicionar Outra Cor / Filamento". O fatiador (Bambu Studio) informa o peso da peça e o peso da torre de purga (waste/purge tower). Insira a purga no campo correspondente para garantir que o filamento descartado na troca de cor seja cobrado do cliente.'
+        },
+        {
+          q: 'O que é a taxa de falha (0% a 100%)?',
+          a: 'Impressões complexas, peças altas com suportes finos ou materiais difíceis (ABS/Nylon) têm risco de perda por descolamento (warping). Se a peça falhou ou é de altíssimo risco, defina 20% a 50% de taxa de falha para que o retrabalho seja coberto no orçamento.'
+        }
+      ],
+      en: [
+        {
+          q: 'What is the difference between True Margin and Markup?',
+          a: 'Markup simply multiplies cost by a percentage. True Margin calculates the selling price so that the selected percentage is genuinely retained from total sales revenue: Price = Cost ÷ (1 - Margin/100). This protects your profits even when offering discounts or handling platform fees.'
+        },
+        {
+          q: 'How much electricity does a 3D printer consume?',
+          a: 'Modern FDM printers are very power efficient once heated up. Average continuous consumption ranges between 85W (A1 Mini) and 145W (P1S/X1C with heated bed). A 5-hour job consumes ~0.65 kWh, costing around £0.18 in the UK or R$ 0.60 in Brazil.'
+        },
+        {
+          q: 'What should I include in "Extra Costs"?',
+          a: 'Any item consumed for the order other than filament: postage boxes, bubble wrap, labels, magnets, screws, brass inserts, LEDs, or batteries.'
+        },
+        {
+          q: 'How does multi-color / AMS calculation work?',
+          a: 'In Pro Mode, click "+ Add Another Color / Filament". Enter both the net part weight and the purge tower waste weight reported by your slicer so purged material is paid for by the customer.'
+        },
+        {
+          q: 'When should I use the Failure Risk Rate?',
+          a: 'For complex geometries, tall prints with delicate supports, or engineering filaments prone to warping, add a 15% to 30% buffer to cover print restarts.'
+        }
+      ]
+    };
+
     const I18N = {
       pt: {
         subtitle: 'Calculadora Profissional de Custos & Orçamentos 3D',
         author: 'Desenvolvido por Adriano Zini',
-        modeQuick: '⚡ Modo Rápido',
-        modePro: '🛠️ Modo Completo',
+        modeEasy: '🌱 Modo Fácil',
+        modeQuick: '⚡ Rápido',
+        modePro: '🛠️ Completo',
+        btnFaqNav: 'Guia & FAQ',
+        btnFeedbackNav: 'Feedback',
+        ePriceLabel: 'Preço Sugerido de Venda',
+        eCostLabel: 'Custo Real de Produção',
+        eProfitLabel: 'Lucro Limpo',
+        eDistTitle: '📊 Para onde vai o valor da peça:',
+        eLblPrinter: 'Sua Impressora 3D',
+        eLblWeight: 'Peso Total da Peça (Gramas)',
+        eWeightHelper: 'Peso líquido estimado pelo fatiador (incluindo suportes).',
+        eLblHours: 'Tempo (Horas)',
+        eLblMinutes: 'Tempo (Minutos)',
+        eLblExtras: 'Custos Extras / Embalagem / LEDs',
+        eLblMargin: 'Margem de Lucro Real (%)',
+        eMarginHelper: 'Garante que essa porcentagem exata do valor de venda seja lucro livre.',
+        eMatNote: 'Filamento Base:',
+        eBtnCustomMat: 'Alterar Preço/kg',
+        btnWaE: '💬 Enviar Orçamento no WhatsApp',
+        btnCopyE: '📋 Copiar Orçamento Formatado',
+        btnProE: '🛠️ Mudar para o Modo Completo (Avançado)',
         qPriceLabel: 'Preço Sugerido de Venda',
         qCostLabel: 'Custo Estimado',
         qProfitLabel: 'Lucro Estimado',
@@ -895,12 +1151,10 @@
         qMinLabel: 'Tempo (Minutos)',
         btnWa: '💬 Enviar Orçamento no WhatsApp',
         btnCopyQ: '📋 Copiar Texto do Orçamento',
-        btnOpenPro: '⚙️ Abrir Ajustes Avançados',
         secProj: 'Identificação do Projeto',
         badgeQuote: 'Orçamento',
         lblProjName: 'Nome do Projeto / Peça',
         lblClientName: 'Cliente / Referência',
-        projNameDef: 'Projeto Sob Encomenda',
         secFil: 'Filamentos & Cores (Multimaterial)',
         badgeMat: 'Material Direto',
         btnAddFil: '+ Adicionar Outra Cor / Filamento (AMS / Multimaterial)',
@@ -947,13 +1201,14 @@
         bdFee: 'Taxas Plataforma',
         btnCopyPro: '📋 Copiar Orçamento Detalhado',
         btnPdf: '🖨️ Salvar como PDF / Imprimir',
-        profitTag: 'de Lucro Estimado',
+        profitTag: 'de Lucro Real',
         toastCopied: 'Orçamento copiado com sucesso!',
         toastQuickCopied: 'Orçamento rápido copiado!',
-        btnFeedbackNav: '💡 Feedback / Sugestões',
         modalTitle: '💡 Enviar Feedback & Sugestões',
         modalSecure: '🔒 Enviado diretamente para Adriano Zini.',
         modalDirect: 'Abrir formulário em nova aba ↗',
+        faqModalTitle: '📚 Guia & Glossário de Impressão 3D',
+        faqFooterNote: 'Dúvidas resolvidas para orçamentos seguros.',
         ftCopyright: '© 2026 3D Print Cost Pro — Calculadora criada por Adriano Zini. Todos os direitos reservados.',
         ftDisclaimer: '<strong>AVISO DE USO E PROPRIEDADE INTELECTUAL:</strong> Este software, código-fonte e algoritmos de cálculo foram desenvolvidos exclusivamente por Adriano Zini. É expressamente proibida a cópia integral ou parcial, reprodução, redistribuição, engenharia reversa, comercialização ou disponibilização deste código ou de suas interfaces em qualquer meio sem autorização expressa e prévia por escrito do autor.',
         filItem: 'Filamento',
@@ -971,8 +1226,28 @@
       en: {
         subtitle: 'Professional 3D Printing Cost & Quoting Calculator',
         author: 'Developed by Adriano Zini',
-        modeQuick: '⚡ Quick Mode',
-        modePro: '🛠️ Pro Mode',
+        modeEasy: '🌱 Easy Mode',
+        modeQuick: '⚡ Quick',
+        modePro: '🛠️ Pro',
+        btnFaqNav: 'Guide & FAQ',
+        btnFeedbackNav: 'Feedback',
+        ePriceLabel: 'Suggested Retail Price',
+        eCostLabel: 'Real Manufacturing Cost',
+        eProfitLabel: 'Net Profit',
+        eDistTitle: '📊 Where the money goes:',
+        eLblPrinter: 'Your 3D Printer',
+        eLblWeight: 'Total Part Weight (Grams)',
+        eWeightHelper: 'Net weight estimated by your slicer (including supports).',
+        eLblHours: 'Time (Hours)',
+        eLblMinutes: 'Time (Minutes)',
+        eLblExtras: 'Extra Costs / Packaging / LEDs',
+        eLblMargin: 'True Profit Margin (%)',
+        eMarginHelper: 'Guarantees that this exact percentage of the sales price is clean profit.',
+        eMatNote: 'Base Filament:',
+        eBtnCustomMat: 'Change Price/kg',
+        btnWaE: '💬 Send Quote via WhatsApp',
+        btnCopyE: '📋 Copy Formatted Quote',
+        btnProE: '🛠️ Switch to Pro Mode (Advanced)',
         qPriceLabel: 'Suggested Retail Price',
         qCostLabel: 'Estimated Cost',
         qProfitLabel: 'Estimated Profit',
@@ -998,12 +1273,10 @@
         qMinLabel: 'Time (Minutes)',
         btnWa: '💬 Send Quote via WhatsApp',
         btnCopyQ: '📋 Copy Quote Text',
-        btnOpenPro: '⚙️ Open Advanced Settings',
         secProj: 'Project Identification',
         badgeQuote: 'Quotation',
         lblProjName: 'Project / Part Name',
         lblClientName: 'Client / Reference',
-        projNameDef: 'Custom 3D Print Project',
         secFil: 'Filaments & Colors (Multi-material)',
         badgeMat: 'Direct Material',
         btnAddFil: '+ Add Another Color / Filament (AMS / Multi-material)',
@@ -1050,13 +1323,14 @@
         bdFee: 'Platform Fees',
         btnCopyPro: '📋 Copy Detailed Quote',
         btnPdf: '🖨️ Save as PDF / Print',
-        profitTag: 'Estimated Profit',
+        profitTag: 'True Net Profit',
         toastCopied: 'Quote successfully copied to clipboard!',
         toastQuickCopied: 'Quick quote copied!',
-        btnFeedbackNav: '💡 Feedback / Suggestions',
         modalTitle: '💡 Send Feedback & Suggestions',
         modalSecure: '🔒 Directly forwarded to Adriano Zini.',
         modalDirect: 'Open form in new tab ↗',
+        faqModalTitle: '📚 3D Printing Guide & Glossary',
+        faqFooterNote: 'Clear answers for safe & profitable pricing.',
         ftCopyright: '© 2026 3D Print Cost Pro — Created by Adriano Zini. All rights reserved.',
         ftDisclaimer: '<strong>INTELLECTUAL PROPERTY & LEGAL NOTICE:</strong> This software, source code, and calculation algorithms were developed exclusively by Adriano Zini. Any unauthorized reproduction, copying, redistribution, reverse engineering, or commercial exploitation is strictly prohibited without prior written authorization.',
         filItem: 'Filament',
@@ -1076,18 +1350,141 @@
     const DEFAULTS = {
       GBP: {
         symbol: '£', kwh: 0.28, printerCost: 599, nozzleCost: 12, minOrder: 5,
+        defaultMatPrice: 16,
         materials: { 'PLA': 16, 'PETG': 18, 'ABS': 22, 'TPU': 28 }
       },
       BRL: {
         symbol: 'R$', kwh: 0.85, printerCost: 4800, nozzleCost: 80, minOrder: 25,
-        materials: { 'PLA': 110, 'PETG': 125, 'ABS': 150, 'TPU': 190 }
+        defaultMatPrice: 100,
+        materials: { 'PLA': 100, 'PETG': 125, 'ABS': 150, 'TPU': 190 }
       }
     };
 
     let filaments = [
-      { id: 1, name: 'Filamento Principal', type: 'PLA', color: '#38bdf8', priceKg: 110, netWeight: 85, purgeWeight: 0 }
+      { id: 1, name: 'Filamento Principal', type: 'PLA', color: '#38bdf8', priceKg: 100, netWeight: 85, purgeWeight: 0 }
     ];
     let extras = [];
+
+    // Easy Mode Sync & Custom Mat Price
+    function promptCustomMatPrice() {
+      const sym = DEFAULTS[currentCurrency].symbol;
+      const currentVal = customEasyMatPrice || DEFAULTS[currentCurrency].defaultMatPrice;
+      const promptMsg = (currentLang === 'en')
+        ? `Enter the standard filament price per kg (${sym}):`
+        : `Digite o preço padrão do filamento por kg (${sym}):`;
+
+      const input = prompt(promptMsg, currentVal);
+      if (input !== null) {
+        const parsed = parseFloat(input.replace(',', '.'));
+        if (!isNaN(parsed) && parsed > 0) {
+          customEasyMatPrice = parsed;
+          filaments[0].priceKg = parsed;
+          updateEasyMatDisplay();
+          calculate();
+          saveState();
+        }
+      }
+    }
+
+    function updateEasyMatDisplay() {
+      const sym = DEFAULTS[currentCurrency].symbol;
+      const price = customEasyMatPrice || DEFAULTS[currentCurrency].defaultMatPrice;
+      document.getElementById('easy-mat-price-display').textContent = `${sym} ${price.toFixed(2)}/kg`;
+    }
+
+    function syncEasyPrinter(val) {
+      const map = {
+        'bambu-p1s': '135',
+        'bambu-a1': '95',
+        'bambu-a1mini': '85',
+        'bambu-x1c': '145',
+        'creality-ender': '120',
+        'creality-k1': '160',
+        'anycubic-kobra': '125',
+        'prusa-mk': '95',
+        'snapmaker-u1': '160',
+        'custom': 'custom'
+      };
+      const wattsVal = map[val] || '135';
+      const proSelect = document.getElementById('printer-select');
+      proSelect.value = wattsVal;
+      applyPrinterPreset();
+    }
+
+    function syncEasyAndCalculate() {
+      const weight = parseFloat(document.getElementById('easy-weight').value) || 0;
+      const hours = parseFloat(document.getElementById('easy-hours').value) || 0;
+      const mins = parseFloat(document.getElementById('easy-minutes').value) || 0;
+      const extraVal = parseFloat(document.getElementById('easy-extras').value) || 0;
+      const margin = parseFloat(document.getElementById('easy-margin').value) || 30;
+
+      // Sync filaments
+      filaments[0].netWeight = weight;
+      filaments[0].priceKg = customEasyMatPrice || DEFAULTS[currentCurrency].defaultMatPrice;
+
+      // Sync Pro and Quick
+      document.getElementById('quick-weight').value = weight;
+      document.getElementById('time-hours').value = hours;
+      document.getElementById('quick-hours').value = hours;
+      document.getElementById('time-minutes').value = mins;
+      document.getElementById('quick-minutes').value = mins;
+      document.getElementById('profit-margin').value = margin;
+
+      // Sync Extras
+      if (extraVal > 0) {
+        extras = [{ id: 101, name: (currentLang === 'en' ? 'Packaging / Extras' : 'Embalagem / Extras'), cost: extraVal }];
+      } else {
+        extras = [];
+      }
+
+      calculate();
+      saveState();
+    }
+
+    // Modal Helpers
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+    function handleOverlayClick(e, id) {
+      if (e.target.id === id) closeModal(id);
+    }
+    function openFeedbackModal() { openModal('feedback-modal-overlay'); }
+    function openFaqModal() {
+      renderFaq();
+      openModal('faq-modal-overlay');
+    }
+
+    function showHint(key) {
+      const data = HINTS[currentLang][key];
+      if (!data) return;
+      document.getElementById('hint-title').innerHTML = data.title;
+      document.getElementById('hint-desc').innerHTML = data.desc;
+      document.getElementById('hint-tip').innerHTML = data.tip;
+      openModal('hint-modal-overlay');
+    }
+
+    function renderFaq() {
+      const container = document.getElementById('faq-modal-body');
+      const list = FAQS[currentLang];
+      container.innerHTML = '';
+      list.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'faq-item';
+        div.innerHTML = `
+          <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            <span>${item.q}</span>
+            <span style="font-size:1.1rem;">▾</span>
+          </div>
+          <div class="faq-answer">${item.a}</div>
+        `;
+        container.appendChild(div);
+      });
+    }
 
     function setPricingMethod(method) {
       currentPricingMethod = method;
@@ -1147,8 +1544,37 @@
       const t = I18N[lang];
       document.getElementById('t-subtitle').textContent = t.subtitle;
       document.getElementById('t-author').textContent = t.author;
+      document.getElementById('t-mode-easy').textContent = t.modeEasy;
       document.getElementById('t-mode-quick').textContent = t.modeQuick;
       document.getElementById('t-mode-pro').textContent = t.modePro;
+      document.getElementById('t-btn-faq-nav').textContent = t.btnFaqNav;
+      document.getElementById('t-btn-feedback-nav').textContent = t.btnFeedbackNav;
+
+      // Easy Mode Strings
+      document.getElementById('t-e-price-label').textContent = t.ePriceLabel;
+      document.getElementById('t-e-cost-label').textContent = t.eCostLabel;
+      document.getElementById('t-e-profit-label').textContent = t.eProfitLabel;
+      document.getElementById('t-e-dist-title').textContent = t.eDistTitle;
+      document.getElementById('t-leg-mat-e').textContent = t.legMat;
+      document.getElementById('t-leg-nrg-e').textContent = t.legNrg;
+      document.getElementById('t-leg-mac-e').textContent = t.legMac;
+      document.getElementById('t-leg-prf-e').textContent = t.legPrf;
+
+      document.getElementById('t-e-lbl-printer').textContent = t.eLblPrinter;
+      document.getElementById('t-e-lbl-weight').textContent = t.eLblWeight;
+      document.getElementById('t-e-weight-helper').textContent = t.eWeightHelper;
+      document.getElementById('t-e-lbl-hours').textContent = t.eLblHours;
+      document.getElementById('t-e-lbl-minutes').textContent = t.eLblMinutes;
+      document.getElementById('t-e-lbl-extras').textContent = t.eLblExtras;
+      document.getElementById('t-e-lbl-margin').textContent = t.eLblMargin;
+      document.getElementById('t-e-margin-helper').textContent = t.eMarginHelper;
+      document.getElementById('t-e-mat-note').textContent = t.eMatNote;
+      document.getElementById('t-e-btn-custom-mat').textContent = t.eBtnCustomMat;
+      document.getElementById('t-btn-wa-e').textContent = t.btnWaE;
+      document.getElementById('t-btn-copy-e').textContent = t.btnCopyE;
+      document.getElementById('t-btn-pro-e').textContent = t.btnProE;
+
+      // Quick Mode Strings
       document.getElementById('t-q-price-label').textContent = t.qPriceLabel;
       document.getElementById('t-q-cost-label').textContent = t.qCostLabel;
       document.getElementById('t-q-profit-label').textContent = t.qProfitLabel;
@@ -1156,15 +1582,6 @@
       document.getElementById('t-lbl-method-q').textContent = t.lblMethod;
       document.getElementById('t-pill-margin-q').textContent = t.pillMargin;
       document.getElementById('t-pill-markup-q').textContent = t.pillMarkup;
-      document.getElementById('t-lbl-method-pro').textContent = t.lblMethod;
-      document.getElementById('t-pill-margin-pro').textContent = t.pillMargin;
-      document.getElementById('t-pill-markup-pro').textContent = t.pillMarkup;
-      document.getElementById('t-q-dist-title').textContent = t.qDistTitle;
-      document.getElementById('t-leg-mat').textContent = t.legMat;
-      document.getElementById('t-leg-nrg').textContent = t.legNrg;
-      document.getElementById('t-leg-mac').textContent = t.legMac;
-      document.getElementById('t-leg-prf').textContent = t.legPrf;
-
       document.getElementById('t-q-mat-label').textContent = t.qMatLabel;
       document.getElementById('opt-q-pla').textContent = t.qMatPla;
       document.getElementById('opt-q-tpu').textContent = t.qMatTpu;
@@ -1174,17 +1591,15 @@
       document.getElementById('t-q-min-label').textContent = t.qMinLabel;
       document.getElementById('t-btn-wa-q').textContent = t.btnWa;
       document.getElementById('t-btn-copy-q').textContent = t.btnCopyQ;
-      document.getElementById('t-btn-pro-q').textContent = t.btnOpenPro;
 
+      // Pro Mode Strings
       document.getElementById('t-sec-proj').textContent = t.secProj;
       document.getElementById('t-badge-quote').textContent = t.badgeQuote;
       document.getElementById('t-lbl-projname').textContent = t.lblProjName;
       document.getElementById('t-lbl-clientname').textContent = t.lblClientName;
-
       document.getElementById('t-sec-fil').textContent = t.secFil;
       document.getElementById('t-badge-mat').textContent = t.badgeMat;
       document.getElementById('t-btn-add-fil').textContent = t.btnAddFil;
-
       document.getElementById('t-sec-mach').textContent = t.secMach;
       document.getElementById('t-badge-energy').textContent = t.badgeEnergy;
       document.getElementById('t-lbl-printer').textContent = t.lblPrinter;
@@ -1202,7 +1617,6 @@
       document.getElementById('t-sec-extras').textContent = t.secExtras;
       document.getElementById('t-badge-extras').textContent = t.badgeExtras;
       document.getElementById('t-btn-add-extra').textContent = t.btnAddExtra;
-
       document.getElementById('t-sec-labor').textContent = t.secLabor;
       document.getElementById('t-badge-labor').textContent = t.badgeLabor;
       document.getElementById('t-lbl-preptime').textContent = t.lblPrepTime;
@@ -1212,18 +1626,14 @@
 
       document.getElementById('t-sec-comm').textContent = t.secComm;
       document.getElementById('t-badge-comm').textContent = t.badgeComm;
+      document.getElementById('t-lbl-method-pro').textContent = t.lblMethod;
+      document.getElementById('t-pill-margin-pro').textContent = t.pillMargin;
+      document.getElementById('t-pill-markup-pro').textContent = t.pillMarkup;
       document.getElementById('t-lbl-fail').textContent = t.lblFail;
       document.getElementById('t-lbl-fee').textContent = t.lblFee;
       document.getElementById('t-lbl-minorder').textContent = t.lblMinOrder;
 
       document.getElementById('t-pro-price-label').textContent = t.proPriceLabel;
-      document.getElementById('t-pro-dist-title').textContent = t.proDistTitle;
-      document.getElementById('t-leg-mat-p').textContent = t.legMat;
-      document.getElementById('t-leg-nrg-p').textContent = t.legNrg;
-      document.getElementById('t-leg-mac-p').textContent = t.legMac;
-      document.getElementById('t-leg-lab-p').textContent = t.legLab;
-      document.getElementById('t-leg-prf-p').textContent = t.legPrf;
-
       document.getElementById('t-bd-fil').textContent = t.bdFil;
       document.getElementById('t-bd-energy').textContent = t.bdEnergy;
       document.getElementById('t-bd-mach').textContent = t.bdMach;
@@ -1238,13 +1648,16 @@
       document.getElementById('t-btn-copy-pro').textContent = t.btnCopyPro;
       document.getElementById('t-btn-pdf').textContent = t.btnPdf;
 
-      document.getElementById('t-ft-copyright').innerHTML = t.ftCopyright;
-      document.getElementById('t-ft-disclaimer').innerHTML = t.ftDisclaimer;
-      document.getElementById('t-btn-feedback-nav').textContent = t.btnFeedbackNav;
       document.getElementById('t-modal-title').textContent = t.modalTitle;
       document.getElementById('t-modal-secure').textContent = t.modalSecure;
       document.getElementById('t-modal-direct').textContent = t.modalDirect;
+      document.getElementById('t-faq-modal-title').textContent = t.faqModalTitle;
+      document.getElementById('t-faq-footer-note').textContent = t.faqFooterNote;
 
+      document.getElementById('t-ft-copyright').innerHTML = t.ftCopyright;
+      document.getElementById('t-ft-disclaimer').innerHTML = t.ftDisclaimer;
+
+      updateEasyMatDisplay();
       updateMethodCallouts();
       updateBrandBadge();
       renderFilaments();
@@ -1260,6 +1673,15 @@
           currentCurrency,
           currentMode,
           currentPricingMethod,
+          customEasyMatPrice,
+          easy: {
+            printer: document.getElementById('easy-printer-select')?.value || 'bambu-p1s',
+            weight: document.getElementById('easy-weight')?.value || '85',
+            hours: document.getElementById('easy-hours')?.value || '3',
+            minutes: document.getElementById('easy-minutes')?.value || '15',
+            extras: document.getElementById('easy-extras')?.value || '0',
+            margin: document.getElementById('easy-margin')?.value || '30'
+          },
           quick: {
             material: document.getElementById('quick-material')?.value || 'PLA',
             weight: document.getElementById('quick-weight')?.value || '85',
@@ -1297,13 +1719,17 @@
     function loadState() {
       try {
         const saved = localStorage.getItem(STORAGE_KEY);
-        if (!saved) return false;
+        if (!saved) {
+          currentMode = 'easy';
+          return false;
+        }
         const state = JSON.parse(saved);
 
         if (state.currentLang) currentLang = state.currentLang;
         if (state.currentCurrency) currentCurrency = state.currentCurrency;
-        if (state.currentMode) currentMode = state.currentMode;
+        currentMode = state.currentMode || 'easy';
         if (state.currentPricingMethod) currentPricingMethod = state.currentPricingMethod;
+        if (state.customEasyMatPrice) customEasyMatPrice = state.customEasyMatPrice;
 
         if (Array.isArray(state.filaments) && state.filaments.length > 0) {
           filaments = state.filaments;
@@ -1317,10 +1743,14 @@
         const sym = DEFAULTS[currentCurrency].symbol;
         document.querySelectorAll('.currency-sym').forEach(el => el.textContent = sym);
 
-        document.getElementById('mode-quick-btn')?.classList.toggle('active-mode', currentMode === 'quick');
-        document.getElementById('mode-pro-btn')?.classList.toggle('active-mode', currentMode === 'pro');
-        document.getElementById('quick-mode-container')?.classList.toggle('hidden', currentMode !== 'quick');
-        document.getElementById('pro-mode-container')?.classList.toggle('hidden', currentMode !== 'pro');
+        if (state.easy) {
+          if (document.getElementById('easy-printer-select')) document.getElementById('easy-printer-select').value = state.easy.printer;
+          if (document.getElementById('easy-weight')) document.getElementById('easy-weight').value = state.easy.weight;
+          if (document.getElementById('easy-hours')) document.getElementById('easy-hours').value = state.easy.hours;
+          if (document.getElementById('easy-minutes')) document.getElementById('easy-minutes').value = state.easy.minutes;
+          if (document.getElementById('easy-extras')) document.getElementById('easy-extras').value = state.easy.extras;
+          if (document.getElementById('easy-margin')) document.getElementById('easy-margin').value = state.easy.margin;
+        }
 
         if (state.quick) {
           if (document.getElementById('quick-material')) document.getElementById('quick-material').value = state.quick.material;
@@ -1360,8 +1790,11 @@
 
     function switchMode(mode) {
       currentMode = mode;
+      document.getElementById('mode-easy-btn').classList.toggle('active-mode', mode === 'easy');
       document.getElementById('mode-quick-btn').classList.toggle('active-mode', mode === 'quick');
       document.getElementById('mode-pro-btn').classList.toggle('active-mode', mode === 'pro');
+
+      document.getElementById('easy-mode-container').classList.toggle('hidden', mode !== 'easy');
       document.getElementById('quick-mode-container').classList.toggle('hidden', mode !== 'quick');
       document.getElementById('pro-mode-container').classList.toggle('hidden', mode !== 'pro');
 
@@ -1385,9 +1818,12 @@
       document.getElementById('nozzle-cost').value = DEFAULTS[curr].nozzleCost;
       document.getElementById('min-order-price').value = DEFAULTS[curr].minOrder;
 
+      customEasyMatPrice = null;
+      updateEasyMatDisplay();
+
       applyPrinterPreset();
       filaments.forEach(f => {
-        f.priceKg = DEFAULTS[curr].materials[f.type] || (curr === 'GBP' ? 18 : 120);
+        f.priceKg = DEFAULTS[curr].materials[f.type] || (curr === 'GBP' ? 16 : 100);
       });
 
       renderFilaments();
@@ -1415,16 +1851,16 @@
       const hours = parseFloat(document.getElementById('quick-hours').value) || 0;
       const mins = parseFloat(document.getElementById('quick-minutes').value) || 0;
 
-      if (filaments.length === 0) {
-        filaments.push({ id: 1, name: 'Filamento Principal', type: mat, color: '#38bdf8', priceKg: DEFAULTS[currentCurrency].materials[mat], netWeight: weight, purgeWeight: 0 });
-      } else {
-        filaments[0].type = mat;
-        filaments[0].netWeight = weight;
-        filaments[0].priceKg = DEFAULTS[currentCurrency].materials[mat];
-      }
+      filaments[0].type = mat;
+      filaments[0].netWeight = weight;
+      filaments[0].priceKg = DEFAULTS[currentCurrency].materials[mat];
 
+      document.getElementById('easy-weight').value = weight;
       document.getElementById('time-hours').value = hours;
+      document.getElementById('easy-hours').value = hours;
       document.getElementById('time-minutes').value = mins;
+      document.getElementById('easy-minutes').value = mins;
+
       calculate();
       saveState();
     }
@@ -1448,14 +1884,14 @@
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>${t.filDesc}</label>
+              <label><span class="label-left">${t.filDesc}</span></label>
               <div class="color-swatch-wrapper">
-                <input type="color" value="${fil.color || '#38bdf8'}" onchange="updateFilament(${fil.id}, 'color', this.value)" title="Escolher cor visual">
+                <input type="color" value="${fil.color || '#38bdf8'}" onchange="updateFilament(${fil.id}, 'color', this.value)" title="Cor Visual">
                 <input type="text" value="${fil.name}" oninput="updateFilament(${fil.id}, 'name', this.value)">
               </div>
             </div>
             <div class="form-group">
-              <label>${t.filType}</label>
+              <label><span class="label-left">${t.filType}</span></label>
               <select onchange="updateFilamentType(${fil.id}, this.value)">
                 <option value="PLA" ${fil.type === 'PLA' ? 'selected' : ''}>PLA / PLA Meta</option>
                 <option value="PETG" ${fil.type === 'PETG' ? 'selected' : ''}>PETG</option>
@@ -1466,15 +1902,15 @@
           </div>
           <div class="form-row-3">
             <div class="form-group">
-              <label>${t.filPrice} (${sym})</label>
+              <label><span class="label-left">${t.filPrice} (${sym})</span></label>
               <input type="number" step="0.5" value="${fil.priceKg}" oninput="updateFilament(${fil.id}, 'priceKg', parseFloat(this.value)||0)">
             </div>
             <div class="form-group">
-              <label>${t.filNetWeight}</label>
+              <label><span class="label-left">${t.filNetWeight}</span></label>
               <input type="number" min="0" value="${fil.netWeight}" oninput="updateFilament(${fil.id}, 'netWeight', parseFloat(this.value)||0)">
             </div>
             <div class="form-group">
-              <label>${t.filPurgeWeight}</label>
+              <label><span class="label-left">${t.filPurgeWeight}</span></label>
               <input type="number" min="0" value="${fil.purgeWeight}" oninput="updateFilament(${fil.id}, 'purgeWeight', parseFloat(this.value)||0)">
             </div>
           </div>
@@ -1604,11 +2040,17 @@
       const failureCost = directBaseCost * (failureRate / 100);
       const totalProductionCost = directBaseCost + failureCost;
 
-      const profitPercent = parseFloat(document.getElementById('profit-margin')?.value) || 30;
+      let profitPercent = 30;
+      if (currentMode === 'easy') {
+        profitPercent = parseFloat(document.getElementById('easy-margin')?.value) || 30;
+      } else {
+        profitPercent = parseFloat(document.getElementById('profit-margin')?.value) || 30;
+      }
+
       let profitValue = 0;
       let priceBeforeFees = totalProductionCost;
 
-      // IMPLEMENTAÇÃO MATEMÁTICA: MARGEM SOBRE VENDA vs MARKUP SOBRE CUSTO
+      // IMPLEMENTAÇÃO DE MARGEM REAL
       if (currentPricingMethod === 'margin') {
         const marginFactor = Math.max(0.01, 1 - (profitPercent / 100));
         priceBeforeFees = totalProductionCost / marginFactor;
@@ -1631,12 +2073,21 @@
       const finalPrice = Math.max(finalCalculatedPrice, minOrderPrice);
       const actualNetProfit = finalPrice - totalProductionCost - platformFeeValue;
 
+      // 1. ATUALIZAÇÃO DO MODO FÁCIL
+      if (document.getElementById('easy-final-price')) document.getElementById('easy-final-price').textContent = `${sym} ${finalPrice.toFixed(2)}`;
+      if (document.getElementById('easy-cost-val')) document.getElementById('easy-cost-val').textContent = `${sym} ${totalProductionCost.toFixed(2)}`;
+      if (document.getElementById('easy-profit-val')) document.getElementById('easy-profit-val').textContent = `${sym} ${actualNetProfit.toFixed(2)}`;
+      if (document.getElementById('easy-margin-pct')) document.getElementById('easy-margin-pct').textContent = `${profitPercent}%`;
+      if (document.getElementById('easy-profit-tag')) document.getElementById('easy-profit-tag').textContent = `+ ${sym} ${actualNetProfit.toFixed(2)} ${t.profitTag}`;
+
+      // 2. ATUALIZAÇÃO DO MODO RÁPIDO
       if (document.getElementById('quick-final-price')) document.getElementById('quick-final-price').textContent = `${sym} ${finalPrice.toFixed(2)}`;
       if (document.getElementById('quick-cost-val')) document.getElementById('quick-cost-val').textContent = `${sym} ${totalProductionCost.toFixed(2)}`;
       if (document.getElementById('quick-profit-val')) document.getElementById('quick-profit-val').textContent = `${sym} ${actualNetProfit.toFixed(2)}`;
       if (document.getElementById('quick-margin-pct')) document.getElementById('quick-margin-pct').textContent = `${profitPercent}%`;
       if (document.getElementById('quick-profit-tag')) document.getElementById('quick-profit-tag').textContent = `+ ${sym} ${actualNetProfit.toFixed(2)} ${t.profitTag}`;
 
+      // 3. ATUALIZAÇÃO DO MODO COMPLETO
       if (document.getElementById('res-final-price')) document.getElementById('res-final-price').textContent = `${sym} ${finalPrice.toFixed(2)}`;
       if (document.getElementById('res-profit-tag')) document.getElementById('res-profit-tag').textContent = `+ ${sym} ${actualNetProfit.toFixed(2)} ${t.profitTag}`;
       if (document.getElementById('res-filament-cost')) document.getElementById('res-filament-cost').textContent = `${sym} ${totalFilamentCost.toFixed(2)}`;
@@ -1654,6 +2105,7 @@
       if (document.getElementById('res-fee-pct')) document.getElementById('res-fee-pct').textContent = platformFeePct;
       if (document.getElementById('res-fee-value')) document.getElementById('res-fee-value').textContent = `${sym} ${platformFeeValue.toFixed(2)}`;
 
+      // BARRAS DE DISTRIBUIÇÃO VISUAL
       const baseForBars = finalPrice > 0 ? finalPrice : 1;
       const pMat = Math.round((totalFilamentCost / baseForBars) * 100);
       const pNrg = Math.round((energyCost / baseForBars) * 100);
@@ -1661,46 +2113,28 @@
       const pLab = Math.round(((laborCost + totalExtrasCost + failureCost) / baseForBars) * 100);
       const pPrf = Math.max(0, 100 - pMat - pNrg - pMac - pLab);
 
+      // Barra Fácil
+      if (document.getElementById('e-bar-mat')) {
+        document.getElementById('e-bar-mat').style.width = `${pMat}%`;
+        document.getElementById('e-bar-nrg').style.width = `${pNrg}%`;
+        document.getElementById('e-bar-mac').style.width = `${pMac + pLab}%`;
+        document.getElementById('e-bar-prf').style.width = `${pPrf}%`;
+        document.getElementById('e-pct-mat').textContent = `${pMat}%`;
+        document.getElementById('e-pct-nrg').textContent = `${pNrg}%`;
+        document.getElementById('e-pct-mac').textContent = `${pMac + pLab}%`;
+        document.getElementById('e-pct-prf').textContent = `${pPrf}%`;
+      }
+
+      // Barra Rápida
       if (document.getElementById('q-bar-mat')) {
         document.getElementById('q-bar-mat').style.width = `${pMat}%`;
         document.getElementById('q-bar-nrg').style.width = `${pNrg}%`;
         document.getElementById('q-bar-mac').style.width = `${pMac + pLab}%`;
         document.getElementById('q-bar-prf').style.width = `${pPrf}%`;
-
         document.getElementById('q-pct-mat').textContent = `${pMat}%`;
         document.getElementById('q-pct-nrg').textContent = `${pNrg}%`;
         document.getElementById('q-pct-mac').textContent = `${pMac + pLab}%`;
         document.getElementById('q-pct-prf').textContent = `${pPrf}%`;
-      }
-
-      if (document.getElementById('p-bar-mat')) {
-        document.getElementById('p-bar-mat').style.width = `${pMat}%`;
-        document.getElementById('p-bar-nrg').style.width = `${pNrg}%`;
-        document.getElementById('p-bar-mac').style.width = `${pMac}%`;
-        document.getElementById('p-bar-lab').style.width = `${pLab}%`;
-        document.getElementById('p-bar-prf').style.width = `${pPrf}%`;
-
-        document.getElementById('p-pct-mat').textContent = `${pMat}%`;
-        document.getElementById('p-pct-nrg').textContent = `${pNrg}%`;
-        document.getElementById('p-pct-mac').textContent = `${pMac}%`;
-        document.getElementById('p-pct-lab').textContent = `${pLab}%`;
-        document.getElementById('p-pct-prf').textContent = `${pPrf}%`;
-      }
-    }
-
-    function openFeedbackModal() {
-      document.getElementById('feedback-modal-overlay').classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeFeedbackModal() {
-      document.getElementById('feedback-modal-overlay').classList.remove('active');
-      document.body.style.overflow = 'auto';
-    }
-
-    function handleOverlayClick(e) {
-      if (e.target.id === 'feedback-modal-overlay') {
-        closeFeedbackModal();
       }
     }
 
@@ -1715,52 +2149,36 @@
 
     function buildQuoteText(mode) {
       const isEn = (currentLang === 'en');
-      if (mode === 'quick') {
-        const mat = document.getElementById('quick-material')?.value || 'PLA';
-        const weight = document.getElementById('quick-weight')?.value || '0';
-        const hours = document.getElementById('quick-hours')?.value || '0';
-        const mins = document.getElementById('quick-minutes')?.value || '0';
-        const price = document.getElementById('quick-final-price')?.textContent || '';
+      let weight = 0, hours = 0, mins = 0, price = '', mat = 'PLA';
 
-        if (isEn) {
-          return `📋 *3D PRINTING QUOTATION*\n` +
-                 `------------------------------\n` +
-                 `*Material:* ${mat}\n` +
-                 `*Estimated Weight:* ~${weight}g\n` +
-                 `*Print Time:* ${hours}h ${mins}m\n` +
-                 `------------------------------\n` +
-                 `💰 *Total Price: ${price}*\n` +
-                 `✓ Includes quality inspection & finishing\n` +
-                 `Valid for 15 days.`;
-        } else {
-          return `📋 *ORÇAMENTO DE IMPRESSÃO 3D*\n` +
-                 `------------------------------\n` +
-                 `*Material:* ${mat}\n` +
-                 `*Peso Estimado:* ~${weight}g\n` +
-                 `*Tempo:* ${hours}h ${mins}m\n` +
-                 `------------------------------\n` +
-                 `💰 *Valor Total: ${price}*\n` +
-                 `✓ Acabamento e inspeção de qualidade inclusos\n` +
-                 `Válido por 15 dias.`;
-        }
+      if (mode === 'easy') {
+        weight = document.getElementById('easy-weight')?.value || '0';
+        hours = document.getElementById('easy-hours')?.value || '0';
+        mins = document.getElementById('easy-minutes')?.value || '0';
+        price = document.getElementById('easy-final-price')?.textContent || '';
+      } else if (mode === 'quick') {
+        mat = document.getElementById('quick-material')?.value || 'PLA';
+        weight = document.getElementById('quick-weight')?.value || '0';
+        hours = document.getElementById('quick-hours')?.value || '0';
+        mins = document.getElementById('quick-minutes')?.value || '0';
+        price = document.getElementById('quick-final-price')?.textContent || '';
       } else {
         const projectName = document.getElementById('project-name')?.value || (isEn ? '3D Project' : 'Projeto 3D');
         const clientName = document.getElementById('client-name')?.value;
-        const finalPrice = document.getElementById('res-final-price')?.textContent || '';
-        const hours = document.getElementById('time-hours')?.value || '0';
-        const minutes = document.getElementById('time-minutes')?.value || '0';
-        let totalWeight = 0;
-        filaments.forEach(f => totalWeight += ((f.netWeight || 0) + (f.purgeWeight || 0)));
+        price = document.getElementById('res-final-price')?.textContent || '';
+        hours = document.getElementById('time-hours')?.value || '0';
+        mins = document.getElementById('time-minutes')?.value || '0';
+        filaments.forEach(f => weight += ((f.netWeight || 0) + (f.purgeWeight || 0)));
 
         if (isEn) {
           return `📋 *3D PRINTING SERVICE QUOTATION*\n` +
                  `------------------------------------\n` +
                  `*Project:* ${projectName}\n` +
                  (clientName ? `*Client / Ref:* ${clientName}\n` : '') +
-                 `*Estimated Time:* ${hours}h ${minutes}min\n` +
-                 `*Total Material Weight:* ~${totalWeight}g\n` +
+                 `*Estimated Time:* ${hours}h ${mins}min\n` +
+                 `*Material Weight:* ~${weight}g\n` +
                  `------------------------------------\n` +
-                 `💰 *Total Price: ${finalPrice}*\n` +
+                 `💰 *Total Price: ${price}*\n` +
                  `------------------------------------\n` +
                  `✓ Includes quality inspection & finishing\n` +
                  `Valid for 15 days.`;
@@ -1769,37 +2187,65 @@
                  `------------------------------------\n` +
                  `*Projeto:* ${projectName}\n` +
                  (clientName ? `*Cliente / Ref:* ${clientName}\n` : '') +
-                 `*Tempo Estimado:* ${hours}h ${minutes}min\n` +
-                 `*Peso Total Estimado:* ~${totalWeight}g\n` +
+                 `*Tempo Estimado:* ${hours}h ${mins}min\n` +
+                 `*Peso Total Estimado:* ~${weight}g\n` +
                  `------------------------------------\n` +
-                 `💰 *Valor Total: ${finalPrice}*\n` +
+                 `💰 *Valor Total: ${price}*\n` +
                  `------------------------------------\n` +
                  `✓ Inclui acabamento e inspeção de qualidade\n` +
                  `Válido por 15 dias.`;
         }
       }
+
+      if (isEn) {
+        return `📋 *3D PRINTING QUOTATION*\n` +
+               `------------------------------\n` +
+               `*Part Weight:* ~${weight}g\n` +
+               `*Print Time:* ${hours}h ${mins}m\n` +
+               `------------------------------\n` +
+               `💰 *Total Price: ${price}*\n` +
+               `✓ High quality FDM finish\n` +
+               `Valid for 15 days.`;
+      } else {
+        return `📋 *ORÇAMENTO DE IMPRESSÃO 3D*\n` +
+               `------------------------------\n` +
+               `*Peso da Peça:* ~${weight}g\n` +
+               `*Tempo de Impressão:* ${hours}h ${mins}m\n` +
+               `------------------------------\n` +
+               `💰 *Valor Total: ${price}*\n` +
+               `✓ Acabamento e inspeção de qualidade inclusos\n` +
+               `Válido por 15 dias.`;
+      }
     }
 
     function shareOnWhatsApp(mode) {
       const text = buildQuoteText(mode);
-      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text.replace(/\\n/g, '\n'))}`;
       window.open(url, '_blank');
+    }
+
+    function copyEasyQuote() {
+      const text = buildQuoteText('easy');
+      navigator.clipboard.writeText(text.replace(/\\n/g, '\n')).then(() => showToast(I18N[currentLang].toastCopied));
     }
 
     function copyQuickQuote() {
       const text = buildQuoteText('quick');
-      navigator.clipboard.writeText(text).then(() => showToast(I18N[currentLang].toastQuickCopied));
+      navigator.clipboard.writeText(text.replace(/\\n/g, '\n')).then(() => showToast(I18N[currentLang].toastQuickCopied));
     }
 
     function copyFormattedQuote() {
       const text = buildQuoteText('pro');
-      navigator.clipboard.writeText(text).then(() => showToast(I18N[currentLang].toastCopied));
+      navigator.clipboard.writeText(text.replace(/\\n/g, '\n')).then(() => showToast(I18N[currentLang].toastCopied));
     }
 
+    // Inicialização
     loadState();
+    switchMode(currentMode);
     setLanguage(currentLang);
     updateBrandBadge();
 
+    // Auto-salvar para todos inputs
     document.querySelectorAll('input, select').forEach(elem => {
       elem.addEventListener('input', () => { calculate(); saveState(); });
       elem.addEventListener('change', () => { calculate(); saveState(); });
