@@ -493,6 +493,8 @@
   <div id="toast" class="toast">Orçamento copiado com sucesso!</div>
 
   <script>
+    const STORAGE_KEY = 'calc3d_user_data_v1';
+
     let currentCurrency = 'GBP';
     let currentMode = 'quick';
 
@@ -512,6 +514,115 @@
     ];
     let extras = [];
 
+    // Salvar estado no localStorage
+    function saveState() {
+      try {
+        const state = {
+          currentCurrency,
+          currentMode,
+          quick: {
+            material: document.getElementById('quick-material')?.value || 'PLA',
+            weight: document.getElementById('quick-weight')?.value || '85',
+            hours: document.getElementById('quick-hours')?.value || '3',
+            minutes: document.getElementById('quick-minutes')?.value || '15'
+          },
+          pro: {
+            projectName: document.getElementById('project-name')?.value || '',
+            clientName: document.getElementById('client-name')?.value || '',
+            printerSelect: document.getElementById('printer-select')?.value || '135',
+            printerWatts: document.getElementById('printer-watts')?.value || '135',
+            timeHours: document.getElementById('time-hours')?.value || '3',
+            timeMinutes: document.getElementById('time-minutes')?.value || '15',
+            kwhRate: document.getElementById('kwh-rate')?.value || '0.28',
+            printerCost: document.getElementById('printer-cost')?.value || '599',
+            nozzleCost: document.getElementById('nozzle-cost')?.value || '12',
+            laborPrepTime: document.getElementById('labor-prep-time')?.value || '0',
+            laborPostTime: document.getElementById('labor-post-time')?.value || '0',
+            laborRate: document.getElementById('labor-rate')?.value || '0',
+            laborFixed: document.getElementById('labor-fixed')?.value || '0',
+            profitMargin: document.getElementById('profit-margin')?.value || '80',
+            failureRate: document.getElementById('failure-rate')?.value || '0',
+            platformFee: document.getElementById('platform-fee')?.value || '0',
+            minOrderPrice: document.getElementById('min-order-price')?.value || '5'
+          },
+          filaments,
+          extras
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.warn('Erro ao salvar no localStorage:', e);
+      }
+    }
+
+    // Carregar estado do localStorage
+    function loadState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return false;
+        const state = JSON.parse(saved);
+
+        if (state.currentCurrency) {
+          currentCurrency = state.currentCurrency;
+        }
+        if (state.currentMode) {
+          currentMode = state.currentMode;
+        }
+
+        if (Array.isArray(state.filaments) && state.filaments.length > 0) {
+          filaments = state.filaments;
+        }
+        if (Array.isArray(state.extras)) {
+          extras = state.extras;
+        }
+
+        // Atualizar botões de moeda e labels
+        document.getElementById('btn-gbp')?.classList.toggle('active', currentCurrency === 'GBP');
+        document.getElementById('btn-brl')?.classList.toggle('active', currentCurrency === 'BRL');
+        const sym = DEFAULTS[currentCurrency].symbol;
+        document.querySelectorAll('.currency-sym').forEach(el => el.textContent = sym);
+
+        // Atualizar modo
+        document.getElementById('mode-quick-btn')?.classList.toggle('active', currentMode === 'quick');
+        document.getElementById('mode-pro-btn')?.classList.toggle('active', currentMode === 'pro');
+        document.getElementById('quick-mode-container')?.classList.toggle('hidden', currentMode !== 'quick');
+        document.getElementById('pro-mode-container')?.classList.toggle('hidden', currentMode !== 'pro');
+
+        // Restaurar campos Quick
+        if (state.quick) {
+          if (document.getElementById('quick-material')) document.getElementById('quick-material').value = state.quick.material;
+          if (document.getElementById('quick-weight')) document.getElementById('quick-weight').value = state.quick.weight;
+          if (document.getElementById('quick-hours')) document.getElementById('quick-hours').value = state.quick.hours;
+          if (document.getElementById('quick-minutes')) document.getElementById('quick-minutes').value = state.quick.minutes;
+        }
+
+        // Restaurar campos Pro
+        if (state.pro) {
+          if (document.getElementById('project-name')) document.getElementById('project-name').value = state.pro.projectName;
+          if (document.getElementById('client-name')) document.getElementById('client-name').value = state.pro.clientName;
+          if (document.getElementById('printer-select')) document.getElementById('printer-select').value = state.pro.printerSelect;
+          if (document.getElementById('printer-watts')) document.getElementById('printer-watts').value = state.pro.printerWatts;
+          if (document.getElementById('time-hours')) document.getElementById('time-hours').value = state.pro.timeHours;
+          if (document.getElementById('time-minutes')) document.getElementById('time-minutes').value = state.pro.timeMinutes;
+          if (document.getElementById('kwh-rate')) document.getElementById('kwh-rate').value = state.pro.kwhRate;
+          if (document.getElementById('printer-cost')) document.getElementById('printer-cost').value = state.pro.printerCost;
+          if (document.getElementById('nozzle-cost')) document.getElementById('nozzle-cost').value = state.pro.nozzleCost;
+          if (document.getElementById('labor-prep-time')) document.getElementById('labor-prep-time').value = state.pro.laborPrepTime;
+          if (document.getElementById('labor-post-time')) document.getElementById('labor-post-time').value = state.pro.laborPostTime;
+          if (document.getElementById('labor-rate')) document.getElementById('labor-rate').value = state.pro.laborRate;
+          if (document.getElementById('labor-fixed')) document.getElementById('labor-fixed').value = state.pro.laborFixed;
+          if (document.getElementById('profit-margin')) document.getElementById('profit-margin').value = state.pro.profitMargin;
+          if (document.getElementById('failure-rate')) document.getElementById('failure-rate').value = state.pro.failureRate;
+          if (document.getElementById('platform-fee')) document.getElementById('platform-fee').value = state.pro.platformFee;
+          if (document.getElementById('min-order-price')) document.getElementById('min-order-price').value = state.pro.minOrderPrice;
+        }
+
+        return true;
+      } catch (e) {
+        console.warn('Erro ao carregar do localStorage:', e);
+        return false;
+      }
+    }
+
     function switchMode(mode) {
       currentMode = mode;
       document.getElementById('mode-quick-btn').classList.toggle('active', mode === 'quick');
@@ -524,6 +635,7 @@
         renderExtras();
       }
       calculate();
+      saveState();
     }
 
     function setCurrency(curr) {
@@ -545,6 +657,7 @@
 
       renderFilaments();
       calculate();
+      saveState();
     }
 
     function applyPrinterPreset() {
@@ -557,6 +670,7 @@
         document.getElementById('printer-cost').value = cost;
       }
       calculate();
+      saveState();
     }
 
     function syncQuickAndCalculate() {
@@ -576,6 +690,7 @@
       document.getElementById('time-hours').value = hours;
       document.getElementById('time-minutes').value = mins;
       calculate();
+      saveState();
     }
 
     function renderFilaments() {
@@ -632,17 +747,19 @@
       });
       renderFilaments();
       calculate();
+      saveState();
     }
 
     function removeFilament(id) {
       filaments = filaments.filter(f => f.id !== id);
       renderFilaments();
       calculate();
+      saveState();
     }
 
     function updateFilament(id, field, value) {
       const item = filaments.find(f => f.id === id);
-      if (item) { item[field] = value; calculate(); }
+      if (item) { item[field] = value; calculate(); saveState(); }
     }
 
     function updateFilamentType(id, type) {
@@ -652,6 +769,7 @@
         item.priceKg = DEFAULTS[currentCurrency].materials[type] || item.priceKg;
         renderFilaments();
         calculate();
+        saveState();
       }
     }
 
@@ -686,17 +804,19 @@
       extras.push({ id: Date.now(), name: 'Embalagem / LED / Ferragem', cost: 1.00 });
       renderExtras();
       calculate();
+      saveState();
     }
 
     function removeExtra(id) {
       extras = extras.filter(e => e.id !== id);
       renderExtras();
       calculate();
+      saveState();
     }
 
     function updateExtra(id, field, value) {
       const item = extras.find(e => e.id === id);
-      if (item) { item[field] = value; calculate(); }
+      if (item) { item[field] = value; calculate(); saveState(); }
     }
 
     function calculate() {
@@ -709,41 +829,41 @@
         totalFilamentCost += ((net + purge) / 1000) * (parseFloat(f.priceKg) || 0);
       });
 
-      const hours = parseFloat(document.getElementById('time-hours').value) || 0;
-      const minutes = parseFloat(document.getElementById('time-minutes').value) || 0;
+      const hours = parseFloat(document.getElementById('time-hours')?.value) || 0;
+      const minutes = parseFloat(document.getElementById('time-minutes')?.value) || 0;
       const totalHours = hours + (minutes / 60);
 
-      const watts = parseFloat(document.getElementById('printer-watts').value) || 120;
-      const kwhRate = parseFloat(document.getElementById('kwh-rate').value) || 0.28;
+      const watts = parseFloat(document.getElementById('printer-watts')?.value) || 120;
+      const kwhRate = parseFloat(document.getElementById('kwh-rate')?.value) || 0.28;
       const totalKwh = (watts / 1000) * totalHours;
       const energyCost = totalKwh * kwhRate;
 
-      const printerCost = parseFloat(document.getElementById('printer-cost').value) || 500;
+      const printerCost = parseFloat(document.getElementById('printer-cost')?.value) || 500;
       const machineCost = (printerCost / 3000) * totalHours;
 
-      const nozzleCost = parseFloat(document.getElementById('nozzle-cost').value) || 12;
+      const nozzleCost = parseFloat(document.getElementById('nozzle-cost')?.value) || 12;
       const totalNozzleWear = (nozzleCost / 2000) * totalHours;
 
       let totalExtrasCost = 0;
       extras.forEach(e => totalExtrasCost += (parseFloat(e.cost) || 0));
 
-      const prepTime = parseFloat(document.getElementById('labor-prep-time').value) || 0;
-      const postTime = parseFloat(document.getElementById('labor-post-time').value) || 0;
-      const laborRate = parseFloat(document.getElementById('labor-rate').value) || 0;
-      const laborFixed = parseFloat(document.getElementById('labor-fixed').value) || 0;
+      const prepTime = parseFloat(document.getElementById('labor-prep-time')?.value) || 0;
+      const postTime = parseFloat(document.getElementById('labor-post-time')?.value) || 0;
+      const laborRate = parseFloat(document.getElementById('labor-rate')?.value) || 0;
+      const laborFixed = parseFloat(document.getElementById('labor-fixed')?.value) || 0;
       const laborCost = ((prepTime + postTime) * laborRate) + laborFixed;
 
       const directBaseCost = totalFilamentCost + energyCost + machineCost + totalNozzleWear + totalExtrasCost + laborCost;
 
-      const failureRate = parseFloat(document.getElementById('failure-rate').value) || 0;
+      const failureRate = parseFloat(document.getElementById('failure-rate')?.value) || 0;
       const failureCost = directBaseCost * (failureRate / 100);
       const totalProductionCost = directBaseCost + failureCost;
 
-      const profitMarginPct = parseFloat(document.getElementById('profit-margin').value) || 80;
+      const profitMarginPct = parseFloat(document.getElementById('profit-margin')?.value) || 80;
       const profitValue = totalProductionCost * (profitMarginPct / 100);
       let priceBeforeFees = totalProductionCost + profitValue;
 
-      const platformFeePct = parseFloat(document.getElementById('platform-fee').value) || 0;
+      const platformFeePct = parseFloat(document.getElementById('platform-fee')?.value) || 0;
       let platformFeeValue = 0;
       let finalCalculatedPrice = priceBeforeFees;
 
@@ -752,46 +872,48 @@
         platformFeeValue = finalCalculatedPrice - priceBeforeFees;
       }
 
-      const minOrderPrice = parseFloat(document.getElementById('min-order-price').value) || 0;
+      const minOrderPrice = parseFloat(document.getElementById('min-order-price')?.value) || 0;
       const finalPrice = Math.max(finalCalculatedPrice, minOrderPrice);
       const actualNetProfit = finalPrice - totalProductionCost - platformFeeValue;
 
-      document.getElementById('quick-final-price').textContent = `${sym} ${finalPrice.toFixed(2)}`;
-      document.getElementById('quick-cost-val').textContent = `${sym} ${totalProductionCost.toFixed(2)}`;
-      document.getElementById('quick-profit-val').textContent = `${sym} ${actualNetProfit.toFixed(2)}`;
+      if (document.getElementById('quick-final-price')) document.getElementById('quick-final-price').textContent = `${sym} ${finalPrice.toFixed(2)}`;
+      if (document.getElementById('quick-cost-val')) document.getElementById('quick-cost-val').textContent = `${sym} ${totalProductionCost.toFixed(2)}`;
+      if (document.getElementById('quick-profit-val')) document.getElementById('quick-profit-val').textContent = `${sym} ${actualNetProfit.toFixed(2)}`;
 
-      document.getElementById('res-final-price').textContent = `${sym} ${finalPrice.toFixed(2)}`;
-      document.getElementById('res-profit-tag').textContent = `+ ${sym} ${actualNetProfit.toFixed(2)} de Lucro`;
-      document.getElementById('res-filament-cost').textContent = `${sym} ${totalFilamentCost.toFixed(2)}`;
-      document.getElementById('res-kwh-consumed').textContent = totalKwh.toFixed(2);
-      document.getElementById('res-energy-cost').textContent = `${sym} ${energyCost.toFixed(2)}`;
-      document.getElementById('res-depreciation-cost').textContent = `${sym} ${machineCost.toFixed(2)}`;
-      document.getElementById('res-nozzle-cost').textContent = `${sym} ${totalNozzleWear.toFixed(2)}`;
-      document.getElementById('res-extras-cost').textContent = `${sym} ${totalExtrasCost.toFixed(2)}`;
-      document.getElementById('res-labor-cost').textContent = `${sym} ${laborCost.toFixed(2)}`;
-      document.getElementById('res-failure-pct').textContent = failureRate;
-      document.getElementById('res-failure-cost').textContent = `${sym} ${failureCost.toFixed(2)}`;
-      document.getElementById('res-total-cost').textContent = `${sym} ${totalProductionCost.toFixed(2)}`;
-      document.getElementById('res-margin-pct').textContent = profitMarginPct;
-      document.getElementById('res-profit-value').textContent = `${sym} ${profitValue.toFixed(2)}`;
-      document.getElementById('res-fee-pct').textContent = platformFeePct;
-      document.getElementById('res-fee-value').textContent = `${sym} ${platformFeeValue.toFixed(2)}`;
+      if (document.getElementById('res-final-price')) document.getElementById('res-final-price').textContent = `${sym} ${finalPrice.toFixed(2)}`;
+      if (document.getElementById('res-profit-tag')) document.getElementById('res-profit-tag').textContent = `+ ${sym} ${actualNetProfit.toFixed(2)} de Lucro`;
+      if (document.getElementById('res-filament-cost')) document.getElementById('res-filament-cost').textContent = `${sym} ${totalFilamentCost.toFixed(2)}`;
+      if (document.getElementById('res-kwh-consumed')) document.getElementById('res-kwh-consumed').textContent = totalKwh.toFixed(2);
+      if (document.getElementById('res-energy-cost')) document.getElementById('res-energy-cost').textContent = `${sym} ${energyCost.toFixed(2)}`;
+      if (document.getElementById('res-depreciation-cost')) document.getElementById('res-depreciation-cost').textContent = `${sym} ${machineCost.toFixed(2)}`;
+      if (document.getElementById('res-nozzle-cost')) document.getElementById('res-nozzle-cost').textContent = `${sym} ${totalNozzleWear.toFixed(2)}`;
+      if (document.getElementById('res-extras-cost')) document.getElementById('res-extras-cost').textContent = `${sym} ${totalExtrasCost.toFixed(2)}`;
+      if (document.getElementById('res-labor-cost')) document.getElementById('res-labor-cost').textContent = `${sym} ${laborCost.toFixed(2)}`;
+      if (document.getElementById('res-failure-pct')) document.getElementById('res-failure-pct').textContent = failureRate;
+      if (document.getElementById('res-failure-cost')) document.getElementById('res-failure-cost').textContent = `${sym} ${failureCost.toFixed(2)}`;
+      if (document.getElementById('res-total-cost')) document.getElementById('res-total-cost').textContent = `${sym} ${totalProductionCost.toFixed(2)}`;
+      if (document.getElementById('res-margin-pct')) document.getElementById('res-margin-pct').textContent = profitMarginPct;
+      if (document.getElementById('res-profit-value')) document.getElementById('res-profit-value').textContent = `${sym} ${profitValue.toFixed(2)}`;
+      if (document.getElementById('res-fee-pct')) document.getElementById('res-fee-pct').textContent = platformFeePct;
+      if (document.getElementById('res-fee-value')) document.getElementById('res-fee-value').textContent = `${sym} ${platformFeeValue.toFixed(2)}`;
     }
 
     function showToast(msg) {
       const toast = document.getElementById('toast');
-      toast.textContent = msg;
-      toast.style.display = 'block';
-      setTimeout(() => { toast.style.display = 'none'; }, 2600);
+      if (toast) {
+        toast.textContent = msg;
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 2600);
+      }
     }
 
     function buildQuoteText(mode) {
       if (mode === 'quick') {
-        const mat = document.getElementById('quick-material').value;
-        const weight = document.getElementById('quick-weight').value;
-        const hours = document.getElementById('quick-hours').value;
-        const mins = document.getElementById('quick-minutes').value;
-        const price = document.getElementById('quick-final-price').textContent;
+        const mat = document.getElementById('quick-material')?.value || 'PLA';
+        const weight = document.getElementById('quick-weight')?.value || '0';
+        const hours = document.getElementById('quick-hours')?.value || '0';
+        const mins = document.getElementById('quick-minutes')?.value || '0';
+        const price = document.getElementById('quick-final-price')?.textContent || '';
 
         if (currentCurrency === 'GBP') {
           return `📋 *3D PRINT QUOTE*\n` +
@@ -815,11 +937,11 @@
                  `Válido por 15 dias.`;
         }
       } else {
-        const projectName = document.getElementById('project-name').value || 'Projeto 3D';
-        const clientName = document.getElementById('client-name').value;
-        const finalPrice = document.getElementById('res-final-price').textContent;
-        const hours = document.getElementById('time-hours').value;
-        const minutes = document.getElementById('time-minutes').value;
+        const projectName = document.getElementById('project-name')?.value || 'Projeto 3D';
+        const clientName = document.getElementById('client-name')?.value;
+        const finalPrice = document.getElementById('res-final-price')?.textContent || '';
+        const hours = document.getElementById('time-hours')?.value || '0';
+        const minutes = document.getElementById('time-minutes')?.value || '0';
         let totalWeight = 0;
         filaments.forEach(f => totalWeight += ((f.netWeight || 0) + (f.purgeWeight || 0)));
 
@@ -867,7 +989,23 @@
       navigator.clipboard.writeText(text).then(() => showToast('Orçamento detalhado copiado!'));
     }
 
+    // Inicialização com carregamento do estado persistido
+    const hasSavedData = loadState();
+    renderFilaments();
+    renderExtras();
     calculate();
+
+    // Adiciona listener automático em todos os inputs para auto-salvamento imediato
+    document.querySelectorAll('input, select').forEach(elem => {
+      elem.addEventListener('input', () => {
+        calculate();
+        saveState();
+      });
+      elem.addEventListener('change', () => {
+        calculate();
+        saveState();
+      });
+    });
   </script>
 </body>
 </html>
