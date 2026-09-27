@@ -175,7 +175,7 @@
       background: var(--primary); color: #0b1120;
     }
 
-    /* Big Inputs optimized for Smartphones */
+    /* Big Inputs & Pickers optimized for Smartphones */
     input, select {
       width: 100%; background: var(--input-bg); border: 1px solid var(--input-border);
       color: var(--text-main); padding: 12px 14px; border-radius: 10px; font-size: 16px;
@@ -473,20 +473,20 @@
     <div id="easy-mode-container">
       <div class="section-card" style="max-width: 680px; margin: 0 auto; border-color: #10b981;">
         
-        <!-- Formulário de Entrada do Modo Fácil -->
+        <!-- Formulário de Entrada do Modo Fácil (Ordem Alfabética por Marca com Anycubic como Padrão) -->
         <div class="form-group">
           <label>
             <span class="label-left"><span class="field-icon">🖨️</span> <span id="t-e-lbl-printer">Sua Impressora 3D</span></span>
             <button class="hint-btn" onclick="showHint('printer')" title="Ajuda">ℹ️</button>
           </label>
           <select id="easy-printer-select" onchange="onEasyInputChange()">
-            <option value="bambu-p1s" selected>🟢 Bambu Lab P1S / P1P (135W)</option>
+            <option value="anycubic-kobra" selected>🔷 Anycubic Kobra Series (125W)</option>
             <option value="bambu-a1">🟢 Bambu Lab A1 (95W)</option>
             <option value="bambu-a1mini">🟢 Bambu Lab A1 Mini (85W)</option>
+            <option value="bambu-p1s">🟢 Bambu Lab P1S / P1P (135W)</option>
             <option value="bambu-x1c">🟢 Bambu Lab X1-Carbon (145W)</option>
             <option value="creality-ender">🔵 Creality Ender 3 Series (120W)</option>
             <option value="creality-k1">🔵 Creality K1 / K1 Max (160W)</option>
-            <option value="anycubic-kobra">🔷 Anycubic Kobra Series (125W)</option>
             <option value="prusa-mk">🟧 Prusa MK3S+ / MK4 (95W)</option>
             <option value="snapmaker-u1">🟣 Snapmaker U1 / Voron (160W)</option>
             <option value="custom">⚙️ Outra / Personalizada</option>
@@ -503,20 +503,20 @@
           <div class="helper-text" id="t-e-weight-helper">Insira o peso final indicado no seu fatiador.</div>
         </div>
 
-        <!-- Tempo de Impressão (Inicia Zerado) -->
+        <!-- Tempo de Impressão com Rolagem Nativa (Horas: 0 a 60 | Minutos: 0 a 59) -->
         <div class="form-row">
           <div class="form-group">
             <label>
               <span class="label-left"><span class="field-icon">⏱️</span> <span id="t-e-lbl-hours">Tempo (Horas)</span> *</span>
               <button class="hint-btn" onclick="showHint('time')" title="Ajuda">ℹ️</button>
             </label>
-            <input type="number" id="easy-hours" value="0" min="0" placeholder="0" oninput="onEasyInputChange()">
+            <select id="easy-hours" onchange="onEasyInputChange()"></select>
           </div>
           <div class="form-group">
             <label>
               <span class="label-left"><span class="field-icon">⏱️</span> <span id="t-e-lbl-minutes">Tempo (Minutos)</span></span>
             </label>
-            <input type="number" id="easy-minutes" value="0" min="0" max="59" placeholder="0" oninput="onEasyInputChange()">
+            <select id="easy-minutes" onchange="onEasyInputChange()"></select>
           </div>
         </div>
 
@@ -529,13 +529,13 @@
           <input type="number" id="easy-extras" value="0" min="0" step="0.5" oninput="onEasyInputChange()">
         </div>
 
-        <!-- Margem de Lucro Real -->
+        <!-- Margem de Lucro Real (Inicia em 55% e Persiste em Cache) -->
         <div class="form-group">
           <label>
             <span class="label-left"><span class="field-icon">🚀</span> <span id="t-e-lbl-margin">Margem de Lucro Real (%)</span></span>
             <button class="hint-btn" onclick="showHint('margin')" title="Ajuda">ℹ️</button>
           </label>
-          <input type="number" id="easy-margin" value="30" min="0" max="99" oninput="onEasyInputChange()">
+          <input type="number" id="easy-margin" value="55" min="0" max="99" oninput="onEasyInputChange()">
           <div class="helper-text" id="t-e-margin-helper">Garante que essa porcentagem exata do valor de venda seja lucro livre.</div>
         </div>
 
@@ -579,7 +579,7 @@
               <div class="s-val" id="easy-cost-val" style="color: #cbd5e1;">R$ 0.00</div>
             </div>
             <div class="status-card card-profit">
-              <div class="s-lbl"><span id="t-e-profit-label">Lucro Limpo</span> (<span id="easy-margin-pct" style="color: #10b981;">30%</span>)</div>
+              <div class="s-lbl"><span id="t-e-profit-label">Lucro Limpo</span> (<span id="easy-margin-pct" style="color: #10b981;">55%</span>)</div>
               <div class="s-val" id="easy-profit-val" style="color: #10b981;">R$ 0.00</div>
             </div>
           </div>
@@ -590,10 +590,10 @@
               <span id="easy-dist-summary">Custo vs Lucro</span>
             </div>
             <div class="distribution-bar">
-              <div class="dist-segment seg-mat" id="e-bar-mat" style="width: 45%;" title="Material"></div>
-              <div class="dist-segment seg-nrg" id="e-bar-nrg" style="width: 10%;" title="Energia"></div>
-              <div class="dist-segment seg-mac" id="e-bar-mac" style="width: 15%;" title="Máquina"></div>
-              <div class="dist-segment seg-prf" id="e-bar-prf" style="width: 30%;" title="Lucro Real"></div>
+              <div class="dist-segment seg-mat" id="e-bar-mat" style="width: 35%;" title="Material"></div>
+              <div class="dist-segment seg-nrg" id="e-bar-nrg" style="width: 5%;" title="Energia"></div>
+              <div class="dist-segment seg-mac" id="e-bar-mac" style="width: 5%;" title="Máquina"></div>
+              <div class="dist-segment seg-prf" id="e-bar-prf" style="width: 55%;" title="Lucro Real"></div>
             </div>
             <div class="distribution-legend">
               <div class="leg-item"><span class="leg-dot" style="background: var(--c-mat);"></span><span id="t-leg-mat-e">Material</span> (<span id="e-pct-mat">0%</span>)</div>
@@ -649,7 +649,7 @@
             <div class="s-val" id="quick-cost-val" style="color: #cbd5e1;">R$ 0.00</div>
           </div>
           <div class="status-card card-profit">
-            <div class="s-lbl"><span id="t-q-margin-label">Margem</span>: <span id="quick-margin-pct" style="color: #10b981;">30%</span></div>
+            <div class="s-lbl"><span id="t-q-margin-label">Margem</span>: <span id="quick-margin-pct" style="color: #10b981;">55%</span></div>
             <div class="s-val" id="quick-profit-val" style="color: #10b981;">R$ 0.00</div>
           </div>
         </div>
@@ -694,14 +694,15 @@
           <div class="helper-text" id="t-q-weight-helper">Insira o peso final indicado no seu fatiador.</div>
         </div>
 
+        <!-- Tempo Modo Rápido por Rolagem -->
         <div class="form-row">
           <div class="form-group">
             <label><span class="label-left"><span class="field-icon">⏱️</span> <span id="t-q-hours-label">Tempo (Horas)</span></span></label>
-            <input type="number" id="quick-hours" value="0" min="0" oninput="syncQuickAndCalculate()">
+            <select id="quick-hours" onchange="syncQuickAndCalculate()"></select>
           </div>
           <div class="form-group">
             <label><span class="label-left"><span class="field-icon">⏱️</span> <span id="t-q-min-label">Tempo (Minutos)</span></span></label>
-            <input type="number" id="quick-minutes" value="0" min="0" max="59" oninput="syncQuickAndCalculate()">
+            <select id="quick-minutes" onchange="syncQuickAndCalculate()"></select>
           </div>
         </div>
 
@@ -760,37 +761,39 @@
                   <span class="label-left"><span class="field-icon">🏷️</span> <span id="t-lbl-printer">Modelo da Impressora</span></span>
                   <button class="hint-btn" onclick="showHint('printer')" title="Ajuda">ℹ️</button>
                 </label>
+                <!-- Ordem Alfabética por Marca com Anycubic como Padrão -->
                 <select id="printer-select" onchange="applyPrinterPreset()">
+                  <option value="125" data-brand="anycubic" data-cost-gbp="220" data-cost-brl="1800" selected>🔷 Anycubic Kobra Series (125W)</option>
                   <option value="95" data-brand="bambu" data-cost-gbp="349" data-cost-brl="2800">🟢 Bambu Lab A1 (95W)</option>
                   <option value="85" data-brand="bambu" data-cost-gbp="269" data-cost-brl="2200">🟢 Bambu Lab A1 Mini (85W)</option>
-                  <option value="135" data-brand="bambu" data-cost-gbp="599" data-cost-brl="4800" selected>🟢 Bambu Lab P1S / P1P (135W)</option>
+                  <option value="135" data-brand="bambu" data-cost-gbp="599" data-cost-brl="4800">🟢 Bambu Lab P1S / P1P (135W)</option>
                   <option value="145" data-brand="bambu" data-cost-gbp="1099" data-cost-brl="8900">🟢 Bambu Lab X1-Carbon (145W)</option>
                   <option value="120" data-brand="creality" data-cost-gbp="180" data-cost-brl="1400">🔵 Creality Ender 3 / V2 / V3 (120W)</option>
                   <option value="160" data-brand="creality" data-cost-gbp="480" data-cost-brl="3900">🔵 Creality K1 / K1 Max (160W)</option>
-                  <option value="125" data-brand="anycubic" data-cost-gbp="220" data-cost-brl="1800">🔷 Anycubic Kobra Series (125W)</option>
                   <option value="95" data-brand="prusa" data-cost-gbp="750" data-cost-brl="6200">🟧 Prusa MK3S+ / MK4 (95W)</option>
                   <option value="160" data-brand="snapmaker" data-cost-gbp="950" data-cost-brl="7500">🟣 Snapmaker U1 / Multitool (160W)</option>
                   <option value="custom" data-brand="custom" id="opt-printer-custom" data-cost-gbp="500" data-cost-brl="4000">⚙️ Personalizado / Outro</option>
                 </select>
                 <div class="brand-badge-container">
-                  <span id="printer-brand-badge" class="brand-badge brand-bambu">🟢 Bambu Lab</span>
+                  <span id="printer-brand-badge" class="brand-badge brand-anycubic">🔷 Anycubic</span>
                   <span style="font-size: 0.75rem; color: var(--text-muted);" id="t-brand-note">Perfil de consumo calibrado</span>
                 </div>
               </div>
               <div class="form-group">
                 <label><span class="label-left"><span class="field-icon">⚡</span> <span id="t-lbl-watts">Potência Média Contínua (Watts)</span></span></label>
-                <input type="number" id="printer-watts" value="135" oninput="calculate()">
+                <input type="number" id="printer-watts" value="125" oninput="calculate()">
               </div>
             </div>
 
+            <!-- Tempo Modo Pro por Rolagem -->
             <div class="form-row-3">
               <div class="form-group">
                 <label><span class="label-left"><span class="field-icon">⏱️</span> <span id="t-lbl-thours">Tempo (Horas)</span></span></label>
-                <input type="number" id="time-hours" min="0" value="0" oninput="calculate()">
+                <select id="time-hours" onchange="calculate()"></select>
               </div>
               <div class="form-group">
                 <label><span class="label-left"><span class="field-icon">⏱️</span> <span id="t-lbl-tmins">Tempo (Minutos)</span></span></label>
-                <input type="number" id="time-minutes" min="0" max="59" value="0" oninput="calculate()">
+                <select id="time-minutes" onchange="calculate()"></select>
               </div>
               <div class="form-group">
                 <label><span class="label-left"><span class="field-icon">🔌</span> <span id="t-lbl-kwh">Custo Energia</span> (<span class="currency-sym">R$</span>/kWh)</span></label>
@@ -804,7 +807,7 @@
                   <span class="label-left"><span class="field-icon">🖨️</span> <span id="t-lbl-printercost">Valor da Máquina</span> (<span class="currency-sym">R$</span>)</span>
                   <button class="hint-btn" onclick="showHint('depreciation')" title="Ajuda">ℹ️</button>
                 </label>
-                <input type="number" id="printer-cost" value="4800" oninput="calculate()">
+                <input type="number" id="printer-cost" value="1800" oninput="calculate()">
                 <div class="helper-text" id="t-help-printer">Amortização estimada em 3.000 horas úteis.</div>
               </div>
               <div class="form-group">
@@ -876,7 +879,7 @@
             <div class="form-row-3">
               <div class="form-group">
                 <label><span class="label-left"><span class="field-icon">🚀</span> <span id="t-lbl-margin">Margem de Lucro (%)</span></span></label>
-                <input type="number" id="profit-margin" min="0" max="99" value="30" oninput="calculate()">
+                <input type="number" id="profit-margin" min="0" max="99" value="55" oninput="calculate()">
               </div>
               <div class="form-group">
                 <label><span class="label-left"><span class="field-icon">⚠️</span> <span id="t-lbl-fail">Taxa Risco / Falha (%)</span></span></label>
@@ -936,7 +939,7 @@
                 <span class="mono" id="res-total-cost">R$ 0.00</span>
               </li>
               <li class="breakdown-item">
-                <span>🚀 <span id="t-bd-profit">Lucro Bruto</span> (<span id="res-margin-pct">30</span>%):</span>
+                <span>🚀 <span id="t-bd-profit">Lucro Bruto</span> (<span id="res-margin-pct">55</span>%):</span>
                 <span class="mono" id="res-profit-value">R$ 0.00</span>
               </li>
               <li class="breakdown-item">
@@ -1024,7 +1027,7 @@
   <div id="toast" class="toast">Orçamento copiado com sucesso!</div>
 
   <script>
-    const STORAGE_KEY = 'calc3d_user_data_v6';
+    const STORAGE_KEY = 'calc3d_user_data_v8';
 
     let currentLang = 'pt';
     let currentCurrency = 'BRL';
@@ -1051,7 +1054,7 @@
         },
         time: {
           title: '⏱️ Tempo de Impressão',
-          desc: 'A duração exata que a máquina levará imprimindo. Esse tempo define o custo de energia elétrica e o desgaste da máquina e do bico.',
+          desc: 'Selecione a duração exata que a máquina levará imprimindo pelas opções de rolagem. Esse tempo define o custo de energia elétrica e o desgaste da máquina e do bico.',
           tip: '📌 <strong>Dica:</strong> Em peças de mais de 10 horas, lembre-se de conferir se a mesa está bem limpa para evitar descolamentos durante a noite.'
         },
         extras: {
@@ -1062,7 +1065,7 @@
         margin: {
           title: '🚀 Margem de Lucro Real (%)',
           desc: 'A porcentagem exata do valor de venda final que fica limpo no seu bolso após pagar filamento, energia, desgaste e extras.',
-          tip: '📌 <strong>Exemplo:</strong> Com custo de R$ 40 e 30% de margem, o preço vai para R$ 57,14 (arredondado para R$ 58,00 no Brasil).'
+          tip: '📌 <strong>Padrão Calibrado:</strong> Definida em 55% para assegurar retorno saudável mesmo em peças menores.'
         },
         printer: {
           title: '🖨️ Escolha da Impressora 3D',
@@ -1098,7 +1101,7 @@
         },
         time: {
           title: '⏱️ Print Time',
-          desc: 'Total printing duration. Determines electricity costs, machine depreciation, and nozzle wear per job.',
+          desc: 'Select total printing duration using the roller picker. Determines electricity costs, machine depreciation, and nozzle wear.',
           tip: '📌 <strong>Tip:</strong> Always add 10-15 minutes if you are using auto-leveling, bed calibration, or vibration compensation.'
         },
         extras: {
@@ -1109,7 +1112,7 @@
         margin: {
           title: '🚀 Effective Profit Margin (%)',
           desc: 'The exact percentage of the final retail price that ends up cleanly in your pocket as profit.',
-          tip: '📌 <strong>Formula:</strong> Price = Cost / (1 - Margin/100). If cost is £40 and margin is 30%, retail price is £57.14.'
+          tip: '📌 <strong>Calibrated Standard:</strong> Set to 55% to guarantee a healthy return on small jobs.'
         },
         printer: {
           title: '🖨️ 3D Printer Model',
@@ -1143,7 +1146,7 @@
       pt: [
         {
           q: 'Qual a diferença entre Margem Real e Markup?',
-          a: 'Muitos precificam errado somando 30% em cima de um custo de R$ 100 (vendendo a R$ 130). Se você der 30% de desconto sobre R$ 130, o preço cai para R$ 91 e você fica no prejuízo! A <strong>Margem Real</strong> usa a fórmula correta: Preço = Custo ÷ (1 - 0,30) = R$ 142,85. Assim, exatamente 30% do valor final da venda é o seu lucro limpo.'
+          a: 'Muitos precificam errado somando 55% em cima de um custo de R$ 100 (vendendo a R$ 155). Se você der 55% de desconto sobre R$ 155, o preço cai para R$ 69,75 e você fica no prejuízo! A <strong>Margem Real</strong> usa a fórmula correta: Preço = Custo ÷ (1 - 0,55) = R$ 222,22. Assim, exatamente 55% do valor final da venda é o seu lucro limpo.'
         },
         {
           q: 'Por que o Preço Sugerido em Reais arredonda para cima?',
@@ -1449,12 +1452,12 @@
 
     const DEFAULTS = {
       GBP: {
-        symbol: '£', kwh: 0.28, printerCost: 599, nozzleCost: 12, minOrder: 0,
+        symbol: '£', kwh: 0.28, printerCost: 220, nozzleCost: 12, minOrder: 0,
         defaultMatPrice: 16,
         materials: { 'PLA': 16, 'PETG': 18, 'ABS': 22, 'TPU': 28 }
       },
       BRL: {
-        symbol: 'R$', kwh: 0.85, printerCost: 4800, nozzleCost: 80, minOrder: 0,
+        symbol: 'R$', kwh: 0.85, printerCost: 1800, nozzleCost: 80, minOrder: 0,
         defaultMatPrice: 100,
         materials: { 'PLA': 100, 'PETG': 125, 'ABS': 150, 'TPU': 190 }
       }
@@ -1464,6 +1467,42 @@
       { id: 1, name: 'Filamento Principal', type: 'PLA', color: '#38bdf8', priceKg: 100, netWeight: 0, purgeWeight: 0 }
     ];
     let extras = [];
+
+    // Preenchimento dinâmico das opções de rolagem para horas (0 a 60) e minutos (0 a 59)
+    function populateTimePickers() {
+      const hSelects = ['easy-hours', 'quick-hours', 'time-hours'];
+      const mSelects = ['easy-minutes', 'quick-minutes', 'time-minutes'];
+
+      hSelects.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          const prevVal = el.value || '0';
+          el.innerHTML = '';
+          for (let h = 0; h <= 60; h++) {
+            const opt = document.createElement('option');
+            opt.value = h;
+            opt.textContent = `${h} h`;
+            el.appendChild(opt);
+          }
+          el.value = prevVal;
+        }
+      });
+
+      mSelects.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          const prevVal = el.value || '0';
+          el.innerHTML = '';
+          for (let m = 0; m <= 59; m++) {
+            const opt = document.createElement('option');
+            opt.value = m;
+            opt.textContent = `${m.toString().padStart(2, '0')} min`;
+            el.appendChild(opt);
+          }
+          el.value = prevVal;
+        }
+      });
+    }
 
     // Dropdown "Mais / Outros"
     function toggleOthersDropdown(e) {
@@ -1515,18 +1554,18 @@
 
     function syncEasyPrinter(val) {
       const map = {
-        'bambu-p1s': '135',
+        'anycubic-kobra': '125',
         'bambu-a1': '95',
         'bambu-a1mini': '85',
+        'bambu-p1s': '135',
         'bambu-x1c': '145',
         'creality-ender': '120',
         'creality-k1': '160',
-        'anycubic-kobra': '125',
         'prusa-mk': '95',
         'snapmaker-u1': '160',
         'custom': 'custom'
       };
-      const wattsVal = map[val] || '135';
+      const wattsVal = map[val] || '125';
       const proSelect = document.getElementById('printer-select');
       proSelect.value = wattsVal;
       applyPrinterPreset();
@@ -1573,10 +1612,11 @@
 
     function resetEasyMode() {
       document.getElementById('easy-weight').value = 0;
-      document.getElementById('easy-hours').value = 0;
-      document.getElementById('easy-minutes').value = 0;
+      document.getElementById('easy-hours').value = '0';
+      document.getElementById('easy-minutes').value = '0';
       document.getElementById('easy-extras').value = 0;
-      document.getElementById('easy-margin').value = 30;
+      const currentSavedMargin = document.getElementById('easy-margin').value || 55;
+      document.getElementById('easy-margin').value = currentSavedMargin;
       
       const resultsWrapper = document.getElementById('easy-results-wrapper');
       resultsWrapper.classList.add('hidden');
@@ -1597,7 +1637,7 @@
       const hours = parseFloat(document.getElementById('easy-hours').value) || 0;
       const mins = parseFloat(document.getElementById('easy-minutes').value) || 0;
       const extraVal = parseFloat(document.getElementById('easy-extras').value) || 0;
-      const margin = parseFloat(document.getElementById('easy-margin').value) || 30;
+      const margin = parseFloat(document.getElementById('easy-margin').value) || 55;
 
       filaments[0].netWeight = weight;
       filaments[0].priceKg = customEasyMatPrice || DEFAULTS[currentCurrency].defaultMatPrice;
@@ -1675,7 +1715,7 @@
       if (marginInput) {
         if (isMargin) {
           marginInput.max = '99';
-          if (parseFloat(marginInput.value) >= 99) marginInput.value = '30';
+          if (parseFloat(marginInput.value) >= 99) marginInput.value = '55';
         } else {
           marginInput.max = '1000';
         }
@@ -1857,12 +1897,12 @@
           currentPricingMethod,
           customEasyMatPrice,
           easy: {
-            printer: document.getElementById('easy-printer-select')?.value || 'bambu-p1s',
+            printer: document.getElementById('easy-printer-select')?.value || 'anycubic-kobra',
             weight: document.getElementById('easy-weight')?.value || '0',
             hours: document.getElementById('easy-hours')?.value || '0',
             minutes: document.getElementById('easy-minutes')?.value || '0',
             extras: document.getElementById('easy-extras')?.value || '0',
-            margin: document.getElementById('easy-margin')?.value || '30'
+            margin: document.getElementById('easy-margin')?.value || '55'
           },
           quick: {
             material: document.getElementById('quick-material')?.value || 'PLA',
@@ -1873,18 +1913,18 @@
           pro: {
             projectName: document.getElementById('project-name')?.value || '',
             clientName: document.getElementById('client-name')?.value || '',
-            printerSelect: document.getElementById('printer-select')?.value || '135',
-            printerWatts: document.getElementById('printer-watts')?.value || '135',
+            printerSelect: document.getElementById('printer-select')?.value || '125',
+            printerWatts: document.getElementById('printer-watts')?.value || '125',
             timeHours: document.getElementById('time-hours')?.value || '0',
             timeMinutes: document.getElementById('time-minutes')?.value || '0',
             kwhRate: document.getElementById('kwh-rate')?.value || '0.85',
-            printerCost: document.getElementById('printer-cost')?.value || '4800',
+            printerCost: document.getElementById('printer-cost')?.value || '1800',
             nozzleCost: document.getElementById('nozzle-cost')?.value || '80',
             laborPrepTime: document.getElementById('labor-prep-time')?.value || '0',
             laborPostTime: document.getElementById('labor-post-time')?.value || '0',
             laborRate: document.getElementById('labor-rate')?.value || '0',
             laborFixed: document.getElementById('labor-fixed')?.value || '0',
-            profitMargin: document.getElementById('profit-margin')?.value || '30',
+            profitMargin: document.getElementById('profit-margin')?.value || '55',
             failureRate: document.getElementById('failure-rate')?.value || '0',
             platformFee: document.getElementById('platform-fee')?.value || '0',
             minOrderPrice: document.getElementById('min-order-price')?.value || '0'
@@ -1926,12 +1966,12 @@
         document.querySelectorAll('.currency-sym').forEach(el => el.textContent = sym);
 
         if (state.easy) {
-          if (document.getElementById('easy-printer-select')) document.getElementById('easy-printer-select').value = state.easy.printer;
+          if (document.getElementById('easy-printer-select')) document.getElementById('easy-printer-select').value = state.easy.printer || 'anycubic-kobra';
           if (document.getElementById('easy-weight')) document.getElementById('easy-weight').value = state.easy.weight;
           if (document.getElementById('easy-hours')) document.getElementById('easy-hours').value = state.easy.hours;
           if (document.getElementById('easy-minutes')) document.getElementById('easy-minutes').value = state.easy.minutes;
           if (document.getElementById('easy-extras')) document.getElementById('easy-extras').value = state.easy.extras;
-          if (document.getElementById('easy-margin')) document.getElementById('easy-margin').value = state.easy.margin;
+          if (document.getElementById('easy-margin')) document.getElementById('easy-margin').value = state.easy.margin || '55';
         }
 
         if (state.quick) {
@@ -1944,18 +1984,18 @@
         if (state.pro) {
           if (document.getElementById('project-name')) document.getElementById('project-name').value = state.pro.projectName;
           if (document.getElementById('client-name')) document.getElementById('client-name').value = state.pro.clientName;
-          if (document.getElementById('printer-select')) document.getElementById('printer-select').value = state.pro.printerSelect;
-          if (document.getElementById('printer-watts')) document.getElementById('printer-watts').value = state.pro.printerWatts;
+          if (document.getElementById('printer-select')) document.getElementById('printer-select').value = state.pro.printerSelect || '125';
+          if (document.getElementById('printer-watts')) document.getElementById('printer-watts').value = state.pro.printerWatts || '125';
           if (document.getElementById('time-hours')) document.getElementById('time-hours').value = state.pro.timeHours;
           if (document.getElementById('time-minutes')) document.getElementById('time-minutes').value = state.pro.timeMinutes;
           if (document.getElementById('kwh-rate')) document.getElementById('kwh-rate').value = state.pro.kwhRate;
-          if (document.getElementById('printer-cost')) document.getElementById('printer-cost').value = state.pro.printerCost;
+          if (document.getElementById('printer-cost')) document.getElementById('printer-cost').value = state.pro.printerCost || '1800';
           if (document.getElementById('nozzle-cost')) document.getElementById('nozzle-cost').value = state.pro.nozzleCost;
           if (document.getElementById('labor-prep-time')) document.getElementById('labor-prep-time').value = state.pro.laborPrepTime;
           if (document.getElementById('labor-post-time')) document.getElementById('labor-post-time').value = state.pro.laborPostTime;
           if (document.getElementById('labor-rate')) document.getElementById('labor-rate').value = state.pro.laborRate;
           if (document.getElementById('labor-fixed')) document.getElementById('labor-fixed').value = state.pro.laborFixed;
-          if (document.getElementById('profit-margin')) document.getElementById('profit-margin').value = state.pro.profitMargin;
+          if (document.getElementById('profit-margin')) document.getElementById('profit-margin').value = state.pro.profitMargin || '55';
           if (document.getElementById('failure-rate')) document.getElementById('failure-rate').value = state.pro.failureRate;
           if (document.getElementById('platform-fee')) document.getElementById('platform-fee').value = state.pro.platformFee;
           if (document.getElementById('min-order-price')) document.getElementById('min-order-price').value = state.pro.minOrderPrice;
@@ -2202,7 +2242,7 @@
       const totalKwh = (watts / 1000) * totalHours;
       const energyCost = totalKwh * kwhRate;
 
-      const printerCost = parseFloat(document.getElementById('printer-cost')?.value) || 4800;
+      const printerCost = parseFloat(document.getElementById('printer-cost')?.value) || 1800;
       const machineCost = (printerCost / 3000) * totalHours;
 
       const nozzleCost = parseFloat(document.getElementById('nozzle-cost')?.value) || 80;
@@ -2223,11 +2263,11 @@
       const failureCost = directBaseCost * (failureRate / 100);
       const totalProductionCost = directBaseCost + failureCost;
 
-      let profitPercent = 30;
+      let profitPercent = 55;
       if (currentMode === 'easy') {
-        profitPercent = parseFloat(document.getElementById('easy-margin')?.value) || 30;
+        profitPercent = parseFloat(document.getElementById('easy-margin')?.value) || 55;
       } else {
-        profitPercent = parseFloat(document.getElementById('profit-margin')?.value) || 30;
+        profitPercent = parseFloat(document.getElementById('profit-margin')?.value) || 55;
       }
 
       let rawCalculatedPrice = totalProductionCost;
@@ -2430,6 +2470,7 @@
     }
 
     // Inicialização
+    populateTimePickers();
     loadState();
     switchMode('easy'); // Garante que abra sempre no Modo Fácil
     setLanguage(currentLang);
