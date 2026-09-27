@@ -69,7 +69,7 @@
 
     .top-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
     .nav-toggle-group {
-      display: flex; background: var(--card-bg); padding: 4px; border-radius: 12px; border: 1px solid var(--card-border);
+      display: flex background: var(--card-bg); padding: 4px; border-radius: 12px; border: 1px solid var(--card-border);
     }
     .ctrl-btn {
       background: transparent; color: var(--text-muted); border: none; padding: 7px 12px;
@@ -241,6 +241,26 @@
     }
     input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
     input[type="number"] { font-family: var(--font-mono); }
+
+    /* Visual Method Toggle Pills */
+    .method-toggle-container {
+      display: flex; gap: 8px; margin-bottom: 12px;
+    }
+    .method-pill {
+      flex: 1; padding: 9px 12px; border-radius: 10px; cursor: pointer; text-align: center;
+      font-size: 0.82rem; font-weight: 700; border: 1px solid var(--card-border);
+      background: rgba(11, 19, 36, 0.6); color: var(--text-muted); transition: all 0.2s ease;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .method-pill.active {
+      border-color: #38bdf8; background: rgba(56, 189, 248, 0.15); color: #38bdf8;
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    .formula-callout {
+      padding: 10px 14px; border-radius: 10px; font-size: 0.78rem; line-height: 1.45;
+      background: rgba(11, 19, 36, 0.8); border-left: 3px solid #38bdf8; margin-top: 8px; color: #cbd5e1;
+    }
 
     /* Visual Manufacturer Badge */
     .brand-badge-container {
@@ -450,8 +470,24 @@
             <div class="s-val" id="quick-cost-val" style="color: #cbd5e1;">R$ 0.00</div>
           </div>
           <div class="status-card card-profit">
-            <div class="s-lbl"><span id="t-q-margin-label">Margem</span>: <span id="quick-margin-pct" style="color: #10b981;">80%</span></div>
+            <div class="s-lbl"><span id="t-q-margin-label">Margem</span>: <span id="quick-margin-pct" style="color: #10b981;">30%</span></div>
             <div class="s-val" id="quick-profit-val" style="color: #10b981;">R$ 0.00</div>
+          </div>
+        </div>
+
+        <!-- Alternador Visual de Método de Lucro: Margem vs Markup -->
+        <div class="form-group">
+          <label><span class="field-icon">⚖️</span> <span id="t-lbl-method-q">Método de Precificação:</span></label>
+          <div class="method-toggle-container">
+            <div class="method-pill active" id="q-pill-margin" onclick="setPricingMethod('margin')">
+              <span>🎯</span> <span id="t-pill-margin-q">Margem Real s/ Venda</span>
+            </div>
+            <div class="method-pill" id="q-pill-markup" onclick="setPricingMethod('markup')">
+              <span>📈</span> <span id="t-pill-markup-q">Markup s/ Custo</span>
+            </div>
+          </div>
+          <div class="formula-callout" id="quick-formula-callout">
+            <strong>Fórmula:</strong> Preço = Custo ÷ [1 - (Margem ÷ 100)]
           </div>
         </div>
 
@@ -648,16 +684,33 @@
             </div>
           </div>
 
-          <!-- Secao 6: Margens Comerciais -->
+          <!-- Secao 6: Margens Comerciais & Método -->
           <div class="section-card">
             <div class="section-title">
-              <span>📈 <span id="t-sec-comm">Margens, Risco de Falha & Taxas</span></span>
+              <span>📈 <span id="t-sec-comm">Margens, Método de Lucro & Taxas</span></span>
               <span class="badge" id="t-badge-comm">Comercial</span>
             </div>
+
+            <!-- Alternador de Método Pro -->
+            <div class="form-group">
+              <label><span class="field-icon">⚖️</span> <span id="t-lbl-method-pro">Fórmula de Formação do Preço:</span></label>
+              <div class="method-toggle-container">
+                <div class="method-pill active" id="p-pill-margin" onclick="setPricingMethod('margin')">
+                  <span>🎯</span> <span id="t-pill-margin-pro">Margem Real s/ Preço de Venda</span>
+                </div>
+                <div class="method-pill" id="p-pill-markup" onclick="setPricingMethod('markup')">
+                  <span>📈</span> <span id="t-pill-markup-pro">Markup Adicional s/ Custo</span>
+                </div>
+              </div>
+              <div class="formula-callout" id="pro-formula-callout">
+                <strong>Fórmula da Margem de Venda:</strong> Preço de Venda = Custo ÷ [1 - (Margem ÷ 100)]
+              </div>
+            </div>
+
             <div class="form-row-3">
               <div class="form-group">
                 <label><span class="field-icon">🚀</span> <span id="t-lbl-margin">Margem de Lucro (%)</span></label>
-                <input type="number" id="profit-margin" min="0" max="1000" value="80" oninput="calculate()">
+                <input type="number" id="profit-margin" min="0" max="99" value="30" oninput="calculate()">
               </div>
               <div class="form-group">
                 <label><span class="field-icon">⚠️</span> <span id="t-lbl-fail">Taxa Risco / Falha (%)</span></label>
@@ -739,7 +792,7 @@
                 <span class="mono" id="res-total-cost">R$ 0.00</span>
               </li>
               <li class="breakdown-item">
-                <span>🚀 <span id="t-bd-profit">Lucro Bruto</span> (<span id="res-margin-pct">80</span>%):</span>
+                <span>🚀 <span id="t-bd-profit">Lucro Bruto</span> (<span id="res-margin-pct">30</span>%):</span>
                 <span class="mono" id="res-profit-value">R$ 0.00</span>
               </li>
               <li class="breakdown-item">
@@ -786,8 +839,8 @@
         <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfc1wOBdfYRnoLDNsvPy-l12M3_5VNSJOM3LYUOrg8hNmDa_A/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Carregando formulário...</iframe>
       </div>
       <div class="modal-footer">
-        <span id="t-modal-secure">🔒 Enviado diretamente para Adriano Zini.</span>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfc1wOBdfYRnoLDNsvPy-l12M3_5VNSJOM3LYUOrg8hNmDa_A/viewform" target="_blank" id="t-modal-direct">Abrir formulário em nova aba ↗</a>
+        <span id="t-modal-secure">🔒 Seus dados e sugestões vão direto para o desenvolvedor.</span>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfc1wOBdfYRnoLDNsvPy-l12M3_5VNSJOM3LYUOrg8hNmDa_A/viewform" target="_blank" id="t-modal-direct">Abrir em nova aba ↗</a>
       </div>
     </div>
   </div>
@@ -795,11 +848,12 @@
   <div id="toast" class="toast">Orçamento copiado com sucesso!</div>
 
   <script>
-    const STORAGE_KEY = 'calc3d_user_data_v3';
+    const STORAGE_KEY = 'calc3d_user_data_v4';
 
     let currentLang = 'pt';
     let currentCurrency = 'BRL';
     let currentMode = 'quick';
+    let currentPricingMethod = 'margin';
 
     const BRANDS = {
       bambu: { name: 'Bambu Lab', badgeClass: 'brand-bambu', icon: '🟢' },
@@ -820,6 +874,11 @@
         qCostLabel: 'Custo Estimado',
         qProfitLabel: 'Lucro Estimado',
         qMarginLabel: 'Margem',
+        lblMethod: 'Método de Precificação:',
+        pillMargin: '🎯 Margem Real s/ Venda',
+        pillMarkup: '📈 Markup s/ Custo',
+        calloutMargin: '<strong>Fórmula:</strong> Preço = Custo ÷ [1 - (Margem ÷ 100)] (Garante a % real na venda)',
+        calloutMarkup: '<strong>Fórmula:</strong> Preço = Custo × [1 + (Markup ÷ 100)] (Adicional sobre o custo)',
         qDistTitle: '📊 Distribuição do Valor:',
         qDistSummary: 'Custo vs Lucro',
         legMat: 'Material',
@@ -867,9 +926,10 @@
         lblPostTime: 'Pós-Processamento (Horas)',
         lblLaborRate: 'Valor Hora',
         lblLaborFixed: 'Taxa Fixa Avulsa de Serviço / Projeto',
-        secComm: 'Margens, Risco de Falha & Taxas',
+        secComm: 'Margens, Método de Lucro & Taxas',
         badgeComm: 'Comercial',
         lblMargin: 'Margem de Lucro (%)',
+        lblMarkup: 'Markup Desejado (%)',
         lblFail: 'Taxa Risco / Falha (%)',
         lblFee: 'Taxa Plataforma (%)',
         lblMinOrder: 'Preço Mínimo de Pedido',
@@ -917,6 +977,11 @@
         qCostLabel: 'Estimated Cost',
         qProfitLabel: 'Estimated Profit',
         qMarginLabel: 'Margin',
+        lblMethod: 'Pricing Method:',
+        pillMargin: '🎯 Effective Profit Margin',
+        pillMarkup: '📈 Cost Markup',
+        calloutMargin: '<strong>Formula:</strong> Price = Cost ÷ [1 - (Margin ÷ 100)] (Preserves true % on sale price)',
+        calloutMarkup: '<strong>Formula:</strong> Price = Cost × [1 + (Markup ÷ 100)] (Percentage added on top of cost)',
         qDistTitle: '📊 Cost Distribution:',
         qDistSummary: 'Cost vs Profit',
         legMat: 'Material',
@@ -964,9 +1029,10 @@
         lblPostTime: 'Post-Processing (Hours)',
         lblLaborRate: 'Hourly Rate',
         lblLaborFixed: 'Fixed Project / Setup Fee',
-        secComm: 'Margins, Failure Risk & Platform Fees',
+        secComm: 'Margins, Pricing Method & Platform Fees',
         badgeComm: 'Commercial',
         lblMargin: 'Profit Margin (%)',
+        lblMarkup: 'Desired Markup (%)',
         lblFail: 'Failure / Risk Rate (%)',
         lblFee: 'Platform Fee (%)',
         lblMinOrder: 'Minimum Order Safeguard',
@@ -1023,6 +1089,44 @@
     ];
     let extras = [];
 
+    function setPricingMethod(method) {
+      currentPricingMethod = method;
+      const isMargin = (method === 'margin');
+
+      document.getElementById('q-pill-margin')?.classList.toggle('active', isMargin);
+      document.getElementById('q-pill-markup')?.classList.toggle('active', !isMargin);
+      document.getElementById('p-pill-margin')?.classList.toggle('active', isMargin);
+      document.getElementById('p-pill-markup')?.classList.toggle('active', !isMargin);
+
+      const marginInput = document.getElementById('profit-margin');
+      if (marginInput) {
+        if (isMargin) {
+          marginInput.max = '99';
+          if (parseFloat(marginInput.value) >= 99) marginInput.value = '30';
+        } else {
+          marginInput.max = '1000';
+        }
+      }
+
+      updateMethodCallouts();
+      calculate();
+      saveState();
+    }
+
+    function updateMethodCallouts() {
+      const t = I18N[currentLang];
+      const isMargin = (currentPricingMethod === 'margin');
+
+      const qCallout = document.getElementById('quick-formula-callout');
+      if (qCallout) qCallout.innerHTML = isMargin ? t.calloutMargin : t.calloutMarkup;
+
+      const pCallout = document.getElementById('pro-formula-callout');
+      if (pCallout) pCallout.innerHTML = isMargin ? t.calloutMargin : t.calloutMarkup;
+
+      const lblMargin = document.getElementById('t-lbl-margin');
+      if (lblMargin) lblMargin.textContent = isMargin ? t.lblMargin : t.lblMarkup;
+    }
+
     function updateBrandBadge() {
       const select = document.getElementById('printer-select');
       const opt = select.selectedOptions[0];
@@ -1049,6 +1153,12 @@
       document.getElementById('t-q-cost-label').textContent = t.qCostLabel;
       document.getElementById('t-q-profit-label').textContent = t.qProfitLabel;
       document.getElementById('t-q-margin-label').textContent = t.qMarginLabel;
+      document.getElementById('t-lbl-method-q').textContent = t.lblMethod;
+      document.getElementById('t-pill-margin-q').textContent = t.pillMargin;
+      document.getElementById('t-pill-markup-q').textContent = t.pillMarkup;
+      document.getElementById('t-lbl-method-pro').textContent = t.lblMethod;
+      document.getElementById('t-pill-margin-pro').textContent = t.pillMargin;
+      document.getElementById('t-pill-markup-pro').textContent = t.pillMarkup;
       document.getElementById('t-q-dist-title').textContent = t.qDistTitle;
       document.getElementById('t-leg-mat').textContent = t.legMat;
       document.getElementById('t-leg-nrg').textContent = t.legNrg;
@@ -1102,7 +1212,6 @@
 
       document.getElementById('t-sec-comm').textContent = t.secComm;
       document.getElementById('t-badge-comm').textContent = t.badgeComm;
-      document.getElementById('t-lbl-margin').textContent = t.lblMargin;
       document.getElementById('t-lbl-fail').textContent = t.lblFail;
       document.getElementById('t-lbl-fee').textContent = t.lblFee;
       document.getElementById('t-lbl-minorder').textContent = t.lblMinOrder;
@@ -1136,6 +1245,7 @@
       document.getElementById('t-modal-secure').textContent = t.modalSecure;
       document.getElementById('t-modal-direct').textContent = t.modalDirect;
 
+      updateMethodCallouts();
       updateBrandBadge();
       renderFilaments();
       renderExtras();
@@ -1149,6 +1259,7 @@
           currentLang,
           currentCurrency,
           currentMode,
+          currentPricingMethod,
           quick: {
             material: document.getElementById('quick-material')?.value || 'PLA',
             weight: document.getElementById('quick-weight')?.value || '85',
@@ -1169,7 +1280,7 @@
             laborPostTime: document.getElementById('labor-post-time')?.value || '0',
             laborRate: document.getElementById('labor-rate')?.value || '0',
             laborFixed: document.getElementById('labor-fixed')?.value || '0',
-            profitMargin: document.getElementById('profit-margin')?.value || '80',
+            profitMargin: document.getElementById('profit-margin')?.value || '30',
             failureRate: document.getElementById('failure-rate')?.value || '0',
             platformFee: document.getElementById('platform-fee')?.value || '0',
             minOrderPrice: document.getElementById('min-order-price')?.value || '25'
@@ -1192,6 +1303,7 @@
         if (state.currentLang) currentLang = state.currentLang;
         if (state.currentCurrency) currentCurrency = state.currentCurrency;
         if (state.currentMode) currentMode = state.currentMode;
+        if (state.currentPricingMethod) currentPricingMethod = state.currentPricingMethod;
 
         if (Array.isArray(state.filaments) && state.filaments.length > 0) {
           filaments = state.filaments;
@@ -1238,6 +1350,7 @@
         }
 
         updateBrandBadge();
+        setPricingMethod(currentPricingMethod);
         return true;
       } catch (e) {
         console.warn('Erro ao carregar do localStorage:', e);
@@ -1491,9 +1604,19 @@
       const failureCost = directBaseCost * (failureRate / 100);
       const totalProductionCost = directBaseCost + failureCost;
 
-      const profitMarginPct = parseFloat(document.getElementById('profit-margin')?.value) || 80;
-      const profitValue = totalProductionCost * (profitMarginPct / 100);
-      let priceBeforeFees = totalProductionCost + profitValue;
+      const profitPercent = parseFloat(document.getElementById('profit-margin')?.value) || 30;
+      let profitValue = 0;
+      let priceBeforeFees = totalProductionCost;
+
+      // IMPLEMENTAÇÃO MATEMÁTICA: MARGEM SOBRE VENDA vs MARKUP SOBRE CUSTO
+      if (currentPricingMethod === 'margin') {
+        const marginFactor = Math.max(0.01, 1 - (profitPercent / 100));
+        priceBeforeFees = totalProductionCost / marginFactor;
+        profitValue = priceBeforeFees - totalProductionCost;
+      } else {
+        profitValue = totalProductionCost * (profitPercent / 100);
+        priceBeforeFees = totalProductionCost + profitValue;
+      }
 
       const platformFeePct = parseFloat(document.getElementById('platform-fee')?.value) || 0;
       let platformFeeValue = 0;
@@ -1511,7 +1634,7 @@
       if (document.getElementById('quick-final-price')) document.getElementById('quick-final-price').textContent = `${sym} ${finalPrice.toFixed(2)}`;
       if (document.getElementById('quick-cost-val')) document.getElementById('quick-cost-val').textContent = `${sym} ${totalProductionCost.toFixed(2)}`;
       if (document.getElementById('quick-profit-val')) document.getElementById('quick-profit-val').textContent = `${sym} ${actualNetProfit.toFixed(2)}`;
-      if (document.getElementById('quick-margin-pct')) document.getElementById('quick-margin-pct').textContent = `${profitMarginPct}%`;
+      if (document.getElementById('quick-margin-pct')) document.getElementById('quick-margin-pct').textContent = `${profitPercent}%`;
       if (document.getElementById('quick-profit-tag')) document.getElementById('quick-profit-tag').textContent = `+ ${sym} ${actualNetProfit.toFixed(2)} ${t.profitTag}`;
 
       if (document.getElementById('res-final-price')) document.getElementById('res-final-price').textContent = `${sym} ${finalPrice.toFixed(2)}`;
@@ -1526,7 +1649,7 @@
       if (document.getElementById('res-failure-pct')) document.getElementById('res-failure-pct').textContent = failureRate;
       if (document.getElementById('res-failure-cost')) document.getElementById('res-failure-cost').textContent = `${sym} ${failureCost.toFixed(2)}`;
       if (document.getElementById('res-total-cost')) document.getElementById('res-total-cost').textContent = `${sym} ${totalProductionCost.toFixed(2)}`;
-      if (document.getElementById('res-margin-pct')) document.getElementById('res-margin-pct').textContent = profitMarginPct;
+      if (document.getElementById('res-margin-pct')) document.getElementById('res-margin-pct').textContent = profitPercent;
       if (document.getElementById('res-profit-value')) document.getElementById('res-profit-value').textContent = `${sym} ${profitValue.toFixed(2)}`;
       if (document.getElementById('res-fee-pct')) document.getElementById('res-fee-pct').textContent = platformFeePct;
       if (document.getElementById('res-fee-value')) document.getElementById('res-fee-value').textContent = `${sym} ${platformFeeValue.toFixed(2)}`;
