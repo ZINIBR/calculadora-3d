@@ -220,7 +220,7 @@
             </div>
             <div class="quick-metric">
               <span style="color: #94a3b8;">Margem:</span>
-              <span class="val" style="color: #38bdf8;">80%</span>
+              <span class="val" id="quick-margin-pct" style="color: #38bdf8;">80%</span>
             </div>
           </div>
         </div>
@@ -876,10 +876,13 @@
       const finalPrice = Math.max(finalCalculatedPrice, minOrderPrice);
       const actualNetProfit = finalPrice - totalProductionCost - platformFeeValue;
 
+      // Atualização dos campos no Modo Rápido (incluindo o percentual dinâmico da margem)
       if (document.getElementById('quick-final-price')) document.getElementById('quick-final-price').textContent = `${sym} ${finalPrice.toFixed(2)}`;
       if (document.getElementById('quick-cost-val')) document.getElementById('quick-cost-val').textContent = `${sym} ${totalProductionCost.toFixed(2)}`;
       if (document.getElementById('quick-profit-val')) document.getElementById('quick-profit-val').textContent = `${sym} ${actualNetProfit.toFixed(2)}`;
+      if (document.getElementById('quick-margin-pct')) document.getElementById('quick-margin-pct').textContent = `${profitMarginPct}%`;
 
+      // Atualização dos campos no Modo Completo
       if (document.getElementById('res-final-price')) document.getElementById('res-final-price').textContent = `${sym} ${finalPrice.toFixed(2)}`;
       if (document.getElementById('res-profit-tag')) document.getElementById('res-profit-tag').textContent = `+ ${sym} ${actualNetProfit.toFixed(2)} de Lucro`;
       if (document.getElementById('res-filament-cost')) document.getElementById('res-filament-cost').textContent = `${sym} ${totalFilamentCost.toFixed(2)}`;
@@ -959,14 +962,14 @@
                  `Valid for 15 days.`;
         } else {
           return `📋 *ORÇAMENTO DE IMPRESSÃO 3D*\n` +
-                 `------------------------------------\n` +
+                 `-------------------------------\n` +
                  `*Projeto:* ${projectName}\n` +
                  (clientName ? `*Cliente / Ref:* ${clientName}\n` : '') +
                  `*Tempo Estimado:* ${hours}h ${minutes}min\n` +
                  `*Peso Total:* ~${totalWeight}g\n` +
-                 `------------------------------------\n` +
+                 `-------------------------------\n` +
                  `💰 *Valor Total: ${finalPrice}*\n` +
-                 `------------------------------------\n` +
+                 `-------------------------------\n` +
                  `✓ Inclui acabamento e inspeção de qualidade\n` +
                  `Válido por 15 dias.`;
         }
