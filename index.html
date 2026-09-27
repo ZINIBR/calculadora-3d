@@ -21,6 +21,8 @@
       --primary-glow: rgba(56, 189, 248, 0.2);
       --accent: #10b981;
       --accent-hover: #059669;
+      --whatsapp: #25d366;
+      --whatsapp-hover: #1ebd5b;
       --danger: #ef4444;
       --danger-hover: #dc2626;
       --text-main: #f8fafc;
@@ -139,14 +141,38 @@
     .breakdown-item.total-cost {
       font-weight: 700; color: #f1f5f9; border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); padding: 9px 0; margin-top: 4px;
     }
+
+    .btn-group-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn-whatsapp-action {
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      color: white; border: none; padding: 13px; border-radius: 10px; font-size: 0.95rem; font-weight: 700;
+      cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.35); transition: all 0.2s;
+    }
+    .btn-whatsapp-action:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+    }
+
     .btn-main-action {
-      background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 13px; border-radius: 10px; font-size: 0.95rem; font-weight: 700; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); transition: all 0.2s;
+      background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 11px;
+      border-radius: 10px; font-size: 0.9rem; font-weight: 700; cursor: pointer; width: 100%;
+      display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;
     }
+
     .btn-secondary-action {
-      background: #334155; color: #f8fafc; border: none; padding: 10px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 8px;
+      background: #334155; color: #f8fafc; border: none; padding: 10px; border-radius: 10px;
+      font-size: 0.85rem; font-weight: 600; cursor: pointer; width: 100%;
     }
+
     .toast {
-      position: fixed; bottom: 24px; right: 24px; background: #10b981; color: white; padding: 12px 20px; border-radius: 10px; font-weight: 700; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); display: none; z-index: 1000;
+      position: fixed; bottom: 24px; right: 24px; background: #10b981; color: white; padding: 12px 20px;
+      border-radius: 10px; font-weight: 700; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); display: none; z-index: 1000;
     }
     .helper-text { font-size: 0.72rem; color: #64748b; margin-top: 3px; }
     .hidden { display: none !important; }
@@ -226,12 +252,15 @@
           </div>
         </div>
 
-        <div style="margin-top: 18px;">
+        <div class="btn-group-actions" style="margin-top: 18px;">
+          <button class="btn-whatsapp-action" onclick="shareOnWhatsApp('quick')">
+            💬 Enviar Orçamento no WhatsApp
+          </button>
           <button class="btn-main-action" onclick="copyQuickQuote()">
-            📋 Copiar Orçamento Rápido (WhatsApp / E-mail)
+            📋 Copiar Texto do Orçamento
           </button>
           <button class="btn-secondary-action" onclick="switchMode('pro')">
-            ⚙️ Abrir Ajustes Avançados (Depreciação, Bico, Mão de Obra, Falha)
+            ⚙️ Abrir Ajustes Avançados
           </button>
         </div>
       </div>
@@ -434,12 +463,17 @@
               </li>
             </ul>
 
-            <button class="btn-main-action" onclick="copyFormattedQuote()">
-              📋 Copiar Orçamento Detalhado
-            </button>
-            <button class="btn-secondary-action" onclick="window.print()">
-              🖨️ Salvar como PDF / Imprimir
-            </button>
+            <div class="btn-group-actions">
+              <button class="btn-whatsapp-action" onclick="shareOnWhatsApp('pro')">
+                💬 Enviar Orçamento no WhatsApp
+              </button>
+              <button class="btn-main-action" onclick="copyFormattedQuote()">
+                📋 Copiar Orçamento Detalhado
+              </button>
+              <button class="btn-secondary-action" onclick="window.print()">
+                🖨️ Salvar como PDF / Imprimir
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -751,34 +785,86 @@
       setTimeout(() => { toast.style.display = 'none'; }, 2600);
     }
 
+    function buildQuoteText(mode) {
+      if (mode === 'quick') {
+        const mat = document.getElementById('quick-material').value;
+        const weight = document.getElementById('quick-weight').value;
+        const hours = document.getElementById('quick-hours').value;
+        const mins = document.getElementById('quick-minutes').value;
+        const price = document.getElementById('quick-final-price').textContent;
+
+        if (currentCurrency === 'GBP') {
+          return `📋 *3D PRINT QUOTE*\n` +
+                 `------------------------------\n` +
+                 `*Material:* ${mat}\n` +
+                 `*Weight:* ~${weight}g\n` +
+                 `*Print Time:* ${hours}h ${mins}m\n` +
+                 `------------------------------\n` +
+                 `💰 *Total Price: ${price}*\n` +
+                 `✓ High quality finish\n` +
+                 `Valid for 15 days.`;
+        } else {
+          return `📋 *ORÇAMENTO DE IMPRESSÃO 3D*\n` +
+                 `------------------------------\n` +
+                 `*Material:* ${mat}\n` +
+                 `*Peso:* ~${weight}g\n` +
+                 `*Tempo:* ${hours}h ${mins}m\n` +
+                 `------------------------------\n` +
+                 `💰 *Valor Total: ${price}*\n` +
+                 `✓ Acabamento e inspeção de qualidade inclusos\n` +
+                 `Válido por 15 dias.`;
+        }
+      } else {
+        const projectName = document.getElementById('project-name').value || 'Projeto 3D';
+        const clientName = document.getElementById('client-name').value;
+        const finalPrice = document.getElementById('res-final-price').textContent;
+        const hours = document.getElementById('time-hours').value;
+        const minutes = document.getElementById('time-minutes').value;
+        let totalWeight = 0;
+        filaments.forEach(f => totalWeight += ((f.netWeight || 0) + (f.purgeWeight || 0)));
+
+        if (currentCurrency === 'GBP') {
+          return `📋 *3D PRINTING SERVICE QUOTATION*\n` +
+                 `------------------------------------\n` +
+                 `*Project:* ${projectName}\n` +
+                 (clientName ? `*Client / Ref:* ${clientName}\n` : '') +
+                 `*Estimated Time:* ${hours}h ${minutes}min\n` +
+                 `*Material Weight:* ~${totalWeight}g\n` +
+                 `------------------------------------\n` +
+                 `💰 *Total Price: ${finalPrice}*\n` +
+                 `------------------------------------\n` +
+                 `✓ Includes quality inspection & finishing\n` +
+                 `Valid for 15 days.`;
+        } else {
+          return `📋 *ORÇAMENTO DE IMPRESSÃO 3D*\n` +
+                 `------------------------------------\n` +
+                 `*Projeto:* ${projectName}\n` +
+                 (clientName ? `*Cliente / Ref:* ${clientName}\n` : '') +
+                 `*Tempo Estimado:* ${hours}h ${minutes}min\n` +
+                 `*Peso Total:* ~${totalWeight}g\n` +
+                 `------------------------------------\n` +
+                 `💰 *Valor Total: ${finalPrice}*\n` +
+                 `------------------------------------\n` +
+                 `✓ Inclui acabamento e inspeção de qualidade\n` +
+                 `Válido por 15 dias.`;
+        }
+      }
+    }
+
+    function shareOnWhatsApp(mode) {
+      const text = buildQuoteText(mode);
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    }
+
     function copyQuickQuote() {
-      const mat = document.getElementById('quick-material').value;
-      const weight = document.getElementById('quick-weight').value;
-      const hours = document.getElementById('quick-hours').value;
-      const mins = document.getElementById('quick-minutes').value;
-      const price = document.getElementById('quick-final-price').textContent;
-
-      let text = (currentCurrency === 'GBP') ?
-        `📋 *3D PRINT QUOTE*\n------------------------------\n*Material:* ${mat}\n*Weight:* ~${weight}g\n*Print Time:* ${hours}h ${mins}m\n------------------------------\n💰 *Total Price: ${price}*\n✓ Quality checked & finished\nValid for 15 days.` :
-        `📋 *ORÇAMENTO DE IMPRESSÃO 3D*\n------------------------------\n*Material:* ${mat}\n*Peso:* ~${weight}g\n*Tempo:* ${hours}h ${mins}m\n------------------------------\n💰 *Valor Total: ${price}*\n✓ Acabamento e inspeção inclusos\nVálido por 15 dias.`;
-
+      const text = buildQuoteText('quick');
       navigator.clipboard.writeText(text).then(() => showToast('Orçamento rápido copiado!'));
     }
 
     function copyFormattedQuote() {
-      const projectName = document.getElementById('project-name').value || 'Projeto 3D';
-      const clientName = document.getElementById('client-name').value;
-      const finalPrice = document.getElementById('res-final-price').textContent;
-      const hours = document.getElementById('time-hours').value;
-      const minutes = document.getElementById('time-minutes').value;
-      let totalWeight = 0;
-      filaments.forEach(f => totalWeight += ((f.netWeight || 0) + (f.purgeWeight || 0)));
-
-      let quoteText = (currentCurrency === 'GBP') ?
-        `📋 *3D PRINTING SERVICE QUOTATION*\n------------------------------------\n*Project:* ${projectName}\n` + (clientName ? `*Client / Ref:* ${clientName}\n` : '') + `*Estimated Time:* ${hours}h ${minutes}min\n*Material Weight:* ~${totalWeight}g\n------------------------------------\n💰 *Total Price: ${finalPrice}*\n------------------------------------\n✓ Includes quality inspection & finishing\nValid for 15 days.` :
-        `📋 *ORÇAMENTO DE IMPRESSÃO 3D*\n------------------------------------\n*Projeto:* ${projectName}\n` + (clientName ? `*Cliente / Ref:* ${clientName}\n` : '') + `*Tempo Estimado:* ${hours}h ${minutes}min\n*Peso Total:* ~${totalWeight}g\n------------------------------------\n💰 *Valor Total: ${finalPrice}*\n------------------------------------\n✓ Inclui acabamento e inspeção\nVálido por 15 dias.`;
-
-      navigator.clipboard.writeText(quoteText).then(() => showToast('Orçamento detalhado copiado!'));
+      const text = buildQuoteText('pro');
+      navigator.clipboard.writeText(text).then(() => showToast('Orçamento detalhado copiado!'));
     }
 
     calculate();
