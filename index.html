@@ -55,17 +55,24 @@
       letter-spacing: 0.02em;
     }
 
-    .top-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .top-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
     .nav-toggle-group {
       display: flex; background: var(--card-bg); padding: 4px; border-radius: 12px; border: 1px solid var(--card-border);
     }
-    .mode-btn, .currency-btn {
-      background: transparent; color: var(--text-muted); border: none; padding: 8px 14px;
-      font-size: 0.85rem; font-weight: 700; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;
-      display: flex; align-items: center; gap: 6px;
+    .ctrl-btn {
+      background: transparent; color: var(--text-muted); border: none; padding: 7px 12px;
+      font-size: 0.82rem; font-weight: 700; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;
+      display: flex; align-items: center; gap: 5px;
     }
-    .mode-btn.active { background: #6366f1; color: #ffffff; box-shadow: 0 0 12px rgba(99, 102, 241, 0.35); }
-    .currency-btn.active { background: var(--primary); color: #0f172a; box-shadow: 0 0 12px var(--primary-glow); }
+    .ctrl-btn.active-lang {
+      background: #0284c7; color: #ffffff; box-shadow: 0 0 10px rgba(2, 132, 199, 0.4);
+    }
+    .ctrl-btn.active-mode {
+      background: #6366f1; color: #ffffff; box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+    }
+    .ctrl-btn.active-curr {
+      background: var(--primary); color: #0f172a; box-shadow: 0 0 10px var(--primary-glow);
+    }
 
     .section-card {
       background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
@@ -184,18 +191,27 @@
     <header>
       <div class="logo-area">
         <h1>⚙️ 3D Print Cost Pro</h1>
-        <p>Calculadora Profissional de Custos & Orçamentos 3D</p>
-        <span class="author-badge">Desenvolvido por Adriano Zini</span>
+        <p id="t-subtitle">Calculadora Profissional de Custos & Orçamentos 3D</p>
+        <span class="author-badge" id="t-author">Desenvolvido por Adriano Zini</span>
       </div>
 
       <div class="top-controls">
+        <!-- Idioma (UK / BR) -->
         <div class="nav-toggle-group">
-          <button id="mode-quick-btn" class="mode-btn active" onclick="switchMode('quick')">⚡ Modo Rápido</button>
-          <button id="mode-pro-btn" class="mode-btn" onclick="switchMode('pro')">🛠️ Modo Completo</button>
+          <button id="btn-lang-en" class="ctrl-btn" onclick="setLanguage('en')">🇬🇧 English</button>
+          <button id="btn-lang-pt" class="ctrl-btn active-lang" onclick="setLanguage('pt')">🇧🇷 Português</button>
         </div>
+
+        <!-- Modo -->
         <div class="nav-toggle-group">
-          <button id="btn-gbp" class="currency-btn active" onclick="setCurrency('GBP')">🇬🇧 GBP (£)</button>
-          <button id="btn-brl" class="currency-btn" onclick="setCurrency('BRL')">🇧🇷 BRL (R$)</button>
+          <button id="mode-quick-btn" class="ctrl-btn active-mode" onclick="switchMode('quick')"><span id="t-mode-quick">⚡ Modo Rápido</span></button>
+          <button id="mode-pro-btn" class="ctrl-btn" onclick="switchMode('pro')"><span id="t-mode-pro">🛠️ Modo Completo</span></button>
+        </div>
+
+        <!-- Moeda -->
+        <div class="nav-toggle-group">
+          <button id="btn-gbp" class="ctrl-btn" onclick="setCurrency('GBP')">🇬🇧 GBP (£)</button>
+          <button id="btn-brl" class="ctrl-btn active-curr" onclick="setCurrency('BRL')">🇧🇷 BRL (R$)</button>
         </div>
       </div>
     </header>
@@ -204,63 +220,63 @@
     <div id="quick-mode-container">
       <div class="quick-card">
         <div class="quick-result-box">
-          <span style="font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);">
+          <span style="font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);" id="t-q-price-label">
             Preço Sugerido de Venda
           </span>
-          <div class="quick-price-val" id="quick-final-price">£ 0.00</div>
+          <div class="quick-price-val" id="quick-final-price">R$ 0.00</div>
           
           <div class="quick-metrics-row">
             <div class="quick-metric">
-              <span style="color: #94a3b8;">Custo Estimado:</span>
-              <span class="val" id="quick-cost-val" style="color: #cbd5e1;">£ 0.00</span>
+              <span style="color: #94a3b8;" id="t-q-cost-label">Custo Estimado:</span>
+              <span class="val" id="quick-cost-val" style="color: #cbd5e1;">R$ 0.00</span>
             </div>
             <div class="quick-metric">
-              <span style="color: #94a3b8;">Lucro Estimado:</span>
-              <span class="val" id="quick-profit-val" style="color: #10b981;">£ 0.00</span>
+              <span style="color: #94a3b8;" id="t-q-profit-label">Lucro Estimado:</span>
+              <span class="val" id="quick-profit-val" style="color: #10b981;">R$ 0.00</span>
             </div>
             <div class="quick-metric">
-              <span style="color: #94a3b8;">Margem:</span>
+              <span style="color: #94a3b8;" id="t-q-margin-label">Margem:</span>
               <span class="val" id="quick-margin-pct" style="color: #38bdf8;">80%</span>
             </div>
           </div>
         </div>
 
         <div class="form-group">
-          <label>Material do Filamento</label>
+          <label id="t-q-mat-label">Material do Filamento</label>
           <select id="quick-material" onchange="syncQuickAndCalculate()">
-            <option value="PLA" selected>PLA / PLA Meta (Padrão)</option>
+            <option value="PLA" id="opt-q-pla" selected>PLA / PLA Meta (Padrão)</option>
             <option value="PETG">PETG</option>
             <option value="ABS">ABS / ASA</option>
-            <option value="TPU">TPU Flexível</option>
+            <option value="TPU" id="opt-q-tpu">TPU Flexível</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label>Peso Total da Peça + Suportes (Gramas)</label>
+          <label id="t-q-weight-label">Peso Total da Peça + Suportes (Gramas)</label>
           <input type="number" id="quick-weight" value="85" min="1" oninput="syncQuickAndCalculate()">
-          <div class="helper-text">Insira o peso final indicado no seu fatiador.</div>
+          <div class="helper-text" id="t-q-weight-helper">Insira o peso final indicado no seu fatiador.</div>
         </div>
 
         <div class="form-row">
           <div class="form-group">
-            <label>Tempo (Horas)</label>
+            <label id="t-q-hours-label">Tempo (Horas)</label>
             <input type="number" id="quick-hours" value="3" min="0" oninput="syncQuickAndCalculate()">
           </div>
           <div class="form-group">
-            <label>Tempo (Minutos)</label>
+            <label id="t-q-min-label">Tempo (Minutos)</label>
             <input type="number" id="quick-minutes" value="15" min="0" max="59" oninput="syncQuickAndCalculate()">
           </div>
         </div>
 
         <div class="btn-group-actions" style="margin-top: 18px;">
           <button class="btn-whatsapp-action" onclick="shareOnWhatsApp('quick')">
-            💬 Enviar Orçamento no WhatsApp
+            <span id="t-btn-wa-q">💬 Enviar Orçamento no WhatsApp</span>
           </button>
           <button class="btn-main-action" onclick="copyQuickQuote()">
-            📋 Copiar Texto do Orçamento
+            <span id="t-btn-copy-q">📋 Copiar Texto do Orçamento</span>
           </button>
           <button class="btn-secondary-action" onclick="switchMode('pro')">
-            ⚙️ Abrir Ajustes Avançados
+            <span id="t-btn-pro-q">⚙️ Abrir Ajustes Avançados</span>
           </button>
         </div>
       </div>
@@ -270,18 +286,19 @@
     <div id="pro-mode-container" class="hidden">
       <div class="pro-grid">
         <div class="inputs-column">
+          
           <div class="section-card">
             <div class="section-title">
-              <span>Identificação do Projeto</span>
-              <span class="badge">Orçamento</span>
+              <span id="t-sec-proj">Identificação do Projeto</span>
+              <span class="badge" id="t-badge-quote">Orçamento</span>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label>Nome do Projeto / Peça</label>
+                <label id="t-lbl-projname">Nome do Projeto / Peça</label>
                 <input type="text" id="project-name" placeholder="Ex: Suporte Articulado V2" value="Projeto Sob Encomenda">
               </div>
               <div class="form-group">
-                <label>Cliente / Referência</label>
+                <label id="t-lbl-clientname">Cliente / Referência</label>
                 <input type="text" id="client-name" placeholder="Ex: Pedido #102">
               </div>
             </div>
@@ -289,21 +306,21 @@
 
           <div class="section-card">
             <div class="section-title">
-              <span>Filamentos & Cores (Multimaterial)</span>
-              <span class="badge">Material Direto</span>
+              <span id="t-sec-fil">Filamentos & Cores (Multimaterial)</span>
+              <span class="badge" id="t-badge-mat">Material Direto</span>
             </div>
             <div id="filaments-container"></div>
-            <button type="button" class="btn-add" onclick="addFilament()">+ Adicionar Outra Cor / Filamento (AMS / Multimaterial)</button>
+            <button type="button" class="btn-add" id="t-btn-add-fil" onclick="addFilament()">+ Adicionar Outra Cor / Filamento (AMS / Multimaterial)</button>
           </div>
 
           <div class="section-card">
             <div class="section-title">
-              <span>Impressora & Consumo Elétrico</span>
-              <span class="badge">Energia & Máquina</span>
+              <span id="t-sec-mach">Impressora & Consumo Elétrico</span>
+              <span class="badge" id="t-badge-energy">Energia & Máquina</span>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label>Modelo da Impressora</label>
+                <label id="t-lbl-printer">Modelo da Impressora</label>
                 <select id="printer-select" onchange="applyPrinterPreset()">
                   <option value="95" data-cost-gbp="349" data-cost-brl="2800">Bambu Lab A1 (95W)</option>
                   <option value="85" data-cost-gbp="269" data-cost-brl="2200">Bambu Lab A1 Mini (85W)</option>
@@ -314,100 +331,100 @@
                   <option value="125" data-cost-gbp="220" data-cost-brl="1800">Anycubic Kobra Series (125W)</option>
                   <option value="95" data-cost-gbp="750" data-cost-brl="6200">Prusa MK3S+ / MK4 (95W)</option>
                   <option value="160" data-cost-gbp="950" data-cost-brl="7500">Snapmaker U1 / Multitool (160W)</option>
-                  <option value="custom" data-cost-gbp="500" data-cost-brl="4000">Personalizado / Outro</option>
+                  <option value="custom" id="opt-printer-custom" data-cost-gbp="500" data-cost-brl="4000">Personalizado / Outro</option>
                 </select>
               </div>
               <div class="form-group">
-                <label>Potência Média Contínua (Watts)</label>
+                <label id="t-lbl-watts">Potência Média Contínua (Watts)</label>
                 <input type="number" id="printer-watts" value="135" oninput="calculate()">
               </div>
             </div>
 
             <div class="form-row-3">
               <div class="form-group">
-                <label>Tempo (Horas)</label>
+                <label id="t-lbl-thours">Tempo (Horas)</label>
                 <input type="number" id="time-hours" min="0" value="3" oninput="calculate()">
               </div>
               <div class="form-group">
-                <label>Tempo (Minutos)</label>
+                <label id="t-lbl-tmins">Tempo (Minutos)</label>
                 <input type="number" id="time-minutes" min="0" max="59" value="15" oninput="calculate()">
               </div>
               <div class="form-group">
-                <label>Custo Energia (<span class="currency-sym">£</span>/kWh)</label>
-                <input type="number" id="kwh-rate" step="0.01" value="0.28" oninput="calculate()">
+                <label><span id="t-lbl-kwh">Custo Energia</span> (<span class="currency-sym">R$</span>/kWh)</label>
+                <input type="number" id="kwh-rate" step="0.01" value="0.85" oninput="calculate()">
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label>Valor da Máquina (<span class="currency-sym">£</span>)</label>
-                <input type="number" id="printer-cost" value="599" oninput="calculate()">
-                <div class="helper-text">Amortização estimada em 3.000 horas úteis.</div>
+                <label><span id="t-lbl-printercost">Valor da Máquina</span> (<span class="currency-sym">R$</span>)</label>
+                <input type="number" id="printer-cost" value="4800" oninput="calculate()">
+                <div class="helper-text" id="t-help-printer">Amortização estimada em 3.000 horas úteis.</div>
               </div>
               <div class="form-group">
-                <label>Valor Bico Reserva (<span class="currency-sym">£</span>)</label>
-                <input type="number" id="nozzle-cost" value="12" oninput="calculate()">
-                <div class="helper-text">Desgaste calculado para troca a cada 2.000 horas.</div>
+                <label><span id="t-lbl-nozzlecost">Valor Bico Reserva</span> (<span class="currency-sym">R$</span>)</label>
+                <input type="number" id="nozzle-cost" value="80" oninput="calculate()">
+                <div class="helper-text" id="t-help-nozzle">Desgaste calculado para troca a cada 2.000 horas.</div>
               </div>
             </div>
           </div>
 
           <div class="section-card">
             <div class="section-title">
-              <span>Acessórios Extras & Embalagens</span>
-              <span class="badge">LEDs, Caixas, Hardware</span>
+              <span id="t-sec-extras">Acessórios Extras & Embalagens</span>
+              <span class="badge" id="t-badge-extras">LEDs, Caixas, Hardware</span>
             </div>
             <div id="extras-container"></div>
-            <button type="button" class="btn-add" onclick="addExtra()">+ Adicionar Acessório / Embalagem / Peça</button>
+            <button type="button" class="btn-add" id="t-btn-add-extra" onclick="addExtra()">+ Adicionar Acessório / Embalagem / Peça</button>
           </div>
 
           <div class="section-card">
             <div class="section-title">
-              <span>Mão de Obra & Pós-processamento</span>
-              <span class="badge">Operacional (Padrão 0)</span>
+              <span id="t-sec-labor">Mão de Obra & Pós-processamento</span>
+              <span class="badge" id="t-badge-labor">Operacional (Padrão 0)</span>
             </div>
             <div class="form-row-3">
               <div class="form-group">
-                <label>Fatiamento/Setup (Horas)</label>
+                <label id="t-lbl-preptime">Fatiamento/Setup (Horas)</label>
                 <input type="number" id="labor-prep-time" step="0.1" value="0" min="0" oninput="calculate()">
               </div>
               <div class="form-group">
-                <label>Pós-Processamento (Horas)</label>
+                <label id="t-lbl-posttime">Pós-Processamento (Horas)</label>
                 <input type="number" id="labor-post-time" step="0.1" value="0" min="0" oninput="calculate()">
               </div>
               <div class="form-group">
-                <label>Valor Hora (<span class="currency-sym">£</span>)</label>
+                <label><span id="t-lbl-laborrate">Valor Hora</span> (<span class="currency-sym">R$</span>)</label>
                 <input type="number" id="labor-rate" step="0.5" value="0" min="0" oninput="calculate()">
               </div>
             </div>
             <div class="form-group">
-              <label>Taxa Fixa Avulsa de Serviço / Projeto (<span class="currency-sym">£</span>)</label>
+              <label><span id="t-lbl-laborfixed">Taxa Fixa Avulsa de Serviço / Projeto</span> (<span class="currency-sym">R$</span>)</label>
               <input type="number" id="labor-fixed" value="0" min="0" oninput="calculate()">
             </div>
           </div>
 
           <div class="section-card">
             <div class="section-title">
-              <span>Margens, Risco de Falha & Taxas</span>
-              <span class="badge">Comercial</span>
+              <span id="t-sec-comm">Margens, Risco de Falha & Taxas</span>
+              <span class="badge" id="t-badge-comm">Comercial</span>
             </div>
             <div class="form-row-3">
               <div class="form-group">
-                <label>Margem de Lucro (%)</label>
+                <label id="t-lbl-margin">Margem de Lucro (%)</label>
                 <input type="number" id="profit-margin" min="0" max="1000" value="80" oninput="calculate()">
               </div>
               <div class="form-group">
-                <label>Taxa Risco / Falha (%)</label>
+                <label id="t-lbl-fail">Taxa Risco / Falha (%)</label>
                 <input type="number" id="failure-rate" min="0" max="100" value="0" oninput="calculate()">
               </div>
               <div class="form-group">
-                <label>Taxa Plataforma (%)</label>
+                <label id="t-lbl-fee">Taxa Plataforma (%)</label>
                 <input type="number" id="platform-fee" min="0" max="50" value="0" oninput="calculate()">
               </div>
             </div>
             <div class="form-group">
-              <label>Preço Mínimo de Pedido (<span class="currency-sym">£</span>)</label>
-              <input type="number" id="min-order-price" value="5" min="0" oninput="calculate()">
+              <label><span id="t-lbl-minorder">Preço Mínimo de Pedido</span> (<span class="currency-sym">R$</span>)</label>
+              <input type="number" id="min-order-price" value="25" min="0" oninput="calculate()">
             </div>
           </div>
         </div>
@@ -415,63 +432,63 @@
         <div class="results-column">
           <div class="results-card">
             <div style="text-align:center; padding: 14px 10px; background: rgba(15, 23, 42, 0.7); border-radius: 12px; margin-bottom: 16px; border: 1px solid rgba(56, 189, 248, 0.3);">
-              <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Preço Sugerido de Venda</div>
-              <div style="font-size: 2.5rem; font-weight: 800; color: var(--primary); font-family: var(--font-mono); margin: 4px 0;" id="res-final-price">£ 0.00</div>
-              <div style="font-size: 0.82rem; color: #10b981; font-weight: 600;" id="res-profit-tag">+ £ 0.00 de Lucro</div>
+              <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;" id="t-pro-price-label">Preço Sugerido de Venda</div>
+              <div style="font-size: 2.5rem; font-weight: 800; color: var(--primary); font-family: var(--font-mono); margin: 4px 0;" id="res-final-price">R$ 0.00</div>
+              <div style="font-size: 0.82rem; color: #10b981; font-weight: 600;" id="res-profit-tag">+ R$ 0.00 de Lucro</div>
             </div>
 
             <ul class="breakdown-list">
               <li class="breakdown-item">
-                <span>Filamento (Peça + Purga):</span>
-                <span class="mono" id="res-filament-cost">£ 0.00</span>
+                <span id="t-bd-fil">Filamento (Peça + Purga):</span>
+                <span class="mono" id="res-filament-cost">R$ 0.00</span>
               </li>
               <li class="breakdown-item">
-                <span>Energia (<span id="res-kwh-consumed">0.00</span> kWh):</span>
-                <span class="mono" id="res-energy-cost">£ 0.00</span>
+                <span><span id="t-bd-energy">Energia</span> (<span id="res-kwh-consumed">0.00</span> kWh):</span>
+                <span class="mono" id="res-energy-cost">R$ 0.00</span>
               </li>
               <li class="breakdown-item">
-                <span>Depreciação de Máquina:</span>
-                <span class="mono" id="res-depreciation-cost">£ 0.00</span>
+                <span id="t-bd-mach">Depreciação de Máquina:</span>
+                <span class="mono" id="res-depreciation-cost">R$ 0.00</span>
               </li>
               <li class="breakdown-item">
-                <span>Desgaste Bico (2000h):</span>
-                <span class="mono" id="res-nozzle-cost">£ 0.00</span>
+                <span id="t-bd-nozzle">Desgaste Bico (2000h):</span>
+                <span class="mono" id="res-nozzle-cost">R$ 0.00</span>
               </li>
               <li class="breakdown-item">
-                <span>Acessórios / Extras:</span>
-                <span class="mono" id="res-extras-cost">£ 0.00</span>
+                <span id="t-bd-extras">Acessórios / Extras:</span>
+                <span class="mono" id="res-extras-cost">R$ 0.00</span>
               </li>
               <li class="breakdown-item">
-                <span>Mão de Obra & Setup:</span>
-                <span class="mono" id="res-labor-cost">£ 0.00</span>
+                <span id="t-bd-labor">Mão de Obra & Setup:</span>
+                <span class="mono" id="res-labor-cost">R$ 0.00</span>
               </li>
               <li class="breakdown-item">
-                <span>Taxa Falha (<span id="res-failure-pct">0</span>%):</span>
-                <span class="mono" id="res-failure-cost">£ 0.00</span>
+                <span><span id="t-bd-fail">Taxa Falha</span> (<span id="res-failure-pct">0</span>%):</span>
+                <span class="mono" id="res-failure-cost">R$ 0.00</span>
               </li>
               <li class="breakdown-item total-cost">
-                <span>CUSTO TOTAL DIRETO:</span>
-                <span class="mono" id="res-total-cost">£ 0.00</span>
+                <span id="t-bd-total">CUSTO TOTAL DIRETO:</span>
+                <span class="mono" id="res-total-cost">R$ 0.00</span>
               </li>
               <li class="breakdown-item">
-                <span>Lucro Bruto (<span id="res-margin-pct">0</span>%):</span>
-                <span class="mono" id="res-profit-value">£ 0.00</span>
+                <span><span id="t-bd-profit">Lucro Bruto</span> (<span id="res-margin-pct">80</span>%):</span>
+                <span class="mono" id="res-profit-value">R$ 0.00</span>
               </li>
               <li class="breakdown-item">
-                <span>Taxas Plataforma (<span id="res-fee-pct">0</span>%):</span>
-                <span class="mono" id="res-fee-value">£ 0.00</span>
+                <span><span id="t-bd-fee">Taxas Plataforma</span> (<span id="res-fee-pct">0</span>%):</span>
+                <span class="mono" id="res-fee-value">R$ 0.00</span>
               </li>
             </ul>
 
             <div class="btn-group-actions">
               <button class="btn-whatsapp-action" onclick="shareOnWhatsApp('pro')">
-                💬 Enviar Orçamento no WhatsApp
+                <span id="t-btn-wa-pro">💬 Enviar Orçamento no WhatsApp</span>
               </button>
               <button class="btn-main-action" onclick="copyFormattedQuote()">
-                📋 Copiar Orçamento Detalhado
+                <span id="t-btn-copy-pro">📋 Copiar Orçamento Detalhado</span>
               </button>
               <button class="btn-secondary-action" onclick="window.print()">
-                🖨️ Salvar como PDF / Imprimir
+                <span id="t-btn-pdf">🖨️ Salvar como PDF / Imprimir</span>
               </button>
             </div>
           </div>
@@ -479,12 +496,11 @@
       </div>
     </div>
 
-    <!-- RODAPÉ DE DIREITOS E AVISO LEGAL -->
     <footer style="margin-top: 40px; padding: 24px 16px; border-top: 1px solid var(--card-border); text-align: center; color: var(--text-muted); font-size: 0.8rem; line-height: 1.6;">
-      <p style="font-weight: 700; color: #e2e8f0; font-size: 0.9rem; margin-bottom: 6px;">
+      <p style="font-weight: 700; color: #e2e8f0; font-size: 0.9rem; margin-bottom: 6px;" id="t-ft-copyright">
         © 2026 3D Print Cost Pro — Calculadora criada por Adriano Zini. Todos os direitos reservados.
       </p>
-      <p style="max-width: 800px; margin: 0 auto; color: #64748b; font-size: 0.75rem;">
+      <p style="max-width: 800px; margin: 0 auto; color: #64748b; font-size: 0.75rem;" id="t-ft-disclaimer">
         <strong>AVISO DE USO E PROPRIEDADE INTELECTUAL:</strong> Este software, código-fonte e algoritmos de cálculo foram desenvolvidos exclusivamente por Adriano Zini. É expressamente proibida a cópia integral ou parcial, reprodução, redistribuição, engenharia reversa, comercialização ou disponibilização deste código ou de suas interfaces em qualquer meio sem autorização expressa e prévia por escrito do autor.
       </p>
     </footer>
@@ -493,10 +509,182 @@
   <div id="toast" class="toast">Orçamento copiado com sucesso!</div>
 
   <script>
-    const STORAGE_KEY = 'calc3d_user_data_v1';
+    const STORAGE_KEY = 'calc3d_user_data_v2';
 
-    let currentCurrency = 'GBP';
+    let currentLang = 'pt';
+    let currentCurrency = 'BRL';
     let currentMode = 'quick';
+
+    const I18N = {
+      pt: {
+        subtitle: 'Calculadora Profissional de Custos & Orçamentos 3D',
+        author: 'Desenvolvido por Adriano Zini',
+        modeQuick: '⚡ Modo Rápido',
+        modePro: '🛠️ Modo Completo',
+        qPriceLabel: 'Preço Sugerido de Venda',
+        qCostLabel: 'Custo Estimado:',
+        qProfitLabel: 'Lucro Estimado:',
+        qMarginLabel: 'Margem:',
+        qMatLabel: 'Material do Filamento',
+        qMatPla: 'PLA / PLA Meta (Padrão)',
+        qMatTpu: 'TPU Flexível',
+        qWeightLabel: 'Peso Total da Peça + Suportes (Gramas)',
+        qWeightHelper: 'Insira o peso final indicado no seu fatiador.',
+        qHoursLabel: 'Tempo (Horas)',
+        qMinLabel: 'Tempo (Minutos)',
+        btnWa: '💬 Enviar Orçamento no WhatsApp',
+        btnCopyQ: '📋 Copiar Texto do Orçamento',
+        btnOpenPro: '⚙️ Abrir Ajustes Avançados',
+        secProj: 'Identificação do Projeto',
+        badgeQuote: 'Orçamento',
+        lblProjName: 'Nome do Projeto / Peça',
+        lblClientName: 'Cliente / Referência',
+        projNameDef: 'Projeto Sob Encomenda',
+        secFil: 'Filamentos & Cores (Multimaterial)',
+        badgeMat: 'Material Direto',
+        btnAddFil: '+ Adicionar Outra Cor / Filamento (AMS / Multimaterial)',
+        secMach: 'Impressora & Consumo Elétrico',
+        badgeEnergy: 'Energia & Máquina',
+        lblPrinter: 'Modelo da Impressora',
+        printerCustom: 'Personalizado / Outro',
+        lblWatts: 'Potência Média Contínua (Watts)',
+        lblTHours: 'Tempo (Horas)',
+        lblTMins: 'Tempo (Minutos)',
+        lblKwh: 'Custo Energia',
+        lblPrinterCost: 'Valor da Máquina',
+        helpPrinter: 'Amortização estimada em 3.000 horas úteis.',
+        lblNozzleCost: 'Valor Bico Reserva',
+        helpNozzle: 'Desgaste calculado para troca a cada 2.000 horas.',
+        secExtras: 'Acessórios Extras & Embalagens',
+        badgeExtras: 'LEDs, Caixas, Hardware',
+        btnAddExtra: '+ Adicionar Acessório / Embalagem / Peça',
+        secLabor: 'Mão de Obra & Pós-processamento',
+        badgeLabor: 'Operacional (Padrão 0)',
+        lblPrepTime: 'Fatiamento/Setup (Horas)',
+        lblPostTime: 'Pós-Processamento (Horas)',
+        lblLaborRate: 'Valor Hora',
+        lblLaborFixed: 'Taxa Fixa Avulsa de Serviço / Projeto',
+        secComm: 'Margens, Risco de Falha & Taxas',
+        badgeComm: 'Comercial',
+        lblMargin: 'Margem de Lucro (%)',
+        lblFail: 'Taxa Risco / Falha (%)',
+        lblFee: 'Taxa Plataforma (%)',
+        lblMinOrder: 'Preço Mínimo de Pedido',
+        proPriceLabel: 'Preço Sugerido de Venda',
+        bdFil: 'Filamento (Peça + Purga):',
+        bdEnergy: 'Energia',
+        bdMach: 'Depreciação de Máquina:',
+        bdNozzle: 'Desgaste Bico (2000h):',
+        bdExtras: 'Acessórios / Extras:',
+        bdLabor: 'Mão de Obra & Setup:',
+        bdFail: 'Taxa Falha',
+        bdTotal: 'CUSTO TOTAL DIRETO:',
+        bdProfit: 'Lucro Bruto',
+        bdFee: 'Taxas Plataforma',
+        btnCopyPro: '📋 Copiar Orçamento Detalhado',
+        btnPdf: '🖨️ Salvar como PDF / Imprimir',
+        profitTag: 'de Lucro',
+        toastCopied: 'Orçamento copiado com sucesso!',
+        toastQuickCopied: 'Orçamento rápido copiado!',
+        ftCopyright: '© 2026 3D Print Cost Pro — Calculadora criada por Adriano Zini. Todos os direitos reservados.',
+        ftDisclaimer: '<strong>AVISO DE USO E PROPRIEDADE INTELECTUAL:</strong> Este software, código-fonte e algoritmos de cálculo foram desenvolvidos exclusivamente por Adriano Zini. É expressamente proibida a cópia integral ou parcial, reprodução, redistribuição, engenharia reversa, comercialização ou disponibilização deste código ou de suas interfaces em qualquer meio sem autorização expressa e prévia por escrito do autor.',
+        filItem: 'Filamento',
+        filDesc: 'Descrição / Cor',
+        filType: 'Tipo de Material',
+        filPrice: 'Preço/kg',
+        filNetWeight: 'Peso Peça (g)',
+        filPurgeWeight: 'Purga/Torre (g)',
+        btnRemove: 'Remover',
+        extraItem: 'Item',
+        extraDesc: 'Descrição',
+        extraCost: 'Custo',
+        extraDefName: 'Embalagem / LED / Ferragem'
+      },
+      en: {
+        subtitle: 'Professional 3D Printing Cost & Quoting Calculator',
+        author: 'Developed by Adriano Zini',
+        modeQuick: '⚡ Quick Mode',
+        modePro: '🛠️ Pro Mode',
+        qPriceLabel: 'Suggested Retail Price',
+        qCostLabel: 'Estimated Cost:',
+        qProfitLabel: 'Estimated Profit:',
+        qMarginLabel: 'Margin:',
+        qMatLabel: 'Filament Material',
+        qMatPla: 'PLA / PLA Meta (Default)',
+        qMatTpu: 'TPU Flexible',
+        qWeightLabel: 'Total Weight Piece + Supports (Grams)',
+        qWeightHelper: 'Enter the final weight estimated by your slicer.',
+        qHoursLabel: 'Time (Hours)',
+        qMinLabel: 'Time (Minutes)',
+        btnWa: '💬 Send Quote via WhatsApp',
+        btnCopyQ: '📋 Copy Quote Text',
+        btnOpenPro: '⚙️ Open Advanced Settings',
+        secProj: 'Project Identification',
+        badgeQuote: 'Quotation',
+        lblProjName: 'Project / Part Name',
+        lblClientName: 'Client / Reference',
+        projNameDef: 'Custom 3D Print Project',
+        secFil: 'Filaments & Colors (Multi-material)',
+        badgeMat: 'Direct Material',
+        btnAddFil: '+ Add Another Color / Filament (AMS / Multi-material)',
+        secMach: 'Printer & Power Consumption',
+        badgeEnergy: 'Power & Machine',
+        lblPrinter: 'Printer Model',
+        printerCustom: 'Custom / Other',
+        lblWatts: 'Average Continuous Power (Watts)',
+        lblTHours: 'Time (Hours)',
+        lblTMins: 'Time (Minutes)',
+        lblKwh: 'Electricity Rate',
+        lblPrinterCost: 'Machine Purchase Value',
+        helpPrinter: 'Depreciation estimated over 3,000 working hours.',
+        lblNozzleCost: 'Spare Nozzle Cost',
+        helpNozzle: 'Nozzle wear calculated over 2,000h replacement cycle.',
+        secExtras: 'Extra Accessories & Packaging',
+        badgeExtras: 'LEDs, Boxes, Hardware',
+        btnAddExtra: '+ Add Accessory / Packaging / Hardware',
+        secLabor: 'Labor & Post-Processing',
+        badgeLabor: 'Operational (Default 0)',
+        lblPrepTime: 'Slicing / Setup (Hours)',
+        lblPostTime: 'Post-Processing (Hours)',
+        lblLaborRate: 'Hourly Rate',
+        lblLaborFixed: 'Fixed Project / Setup Fee',
+        secComm: 'Margins, Failure Risk & Platform Fees',
+        badgeComm: 'Commercial',
+        lblMargin: 'Profit Margin (%)',
+        lblFail: 'Failure / Risk Rate (%)',
+        lblFee: 'Platform Fee (%)',
+        lblMinOrder: 'Minimum Order Safeguard',
+        proPriceLabel: 'Suggested Retail Price',
+        bdFil: 'Filament (Part + Purge):',
+        bdEnergy: 'Electricity',
+        bdMach: 'Machine Depreciation:',
+        bdNozzle: 'Nozzle Wear (2000h):',
+        bdExtras: 'Accessories / Extras:',
+        bdLabor: 'Labor & Setup:',
+        bdFail: 'Failure Risk',
+        bdTotal: 'TOTAL DIRECT COST:',
+        bdProfit: 'Gross Profit',
+        bdFee: 'Platform Fees',
+        btnCopyPro: '📋 Copy Detailed Quote',
+        btnPdf: '🖨️ Save as PDF / Print',
+        profitTag: 'Profit',
+        toastCopied: 'Quote successfully copied to clipboard!',
+        toastQuickCopied: 'Quick quote copied!',
+        ftCopyright: '© 2026 3D Print Cost Pro — Created by Adriano Zini. All rights reserved.',
+        ftDisclaimer: '<strong>INTELLECTUAL PROPERTY & LEGAL NOTICE:</strong> This software, source code, and calculation algorithms were developed exclusively by Adriano Zini. Any unauthorized reproduction, copying, redistribution, reverse engineering, or commercial exploitation is strictly prohibited without prior written authorization.',
+        filItem: 'Filament',
+        filDesc: 'Description / Color',
+        filType: 'Material Type',
+        filPrice: 'Price/kg',
+        filNetWeight: 'Part Weight (g)',
+        filPurgeWeight: 'Purge/Tower (g)',
+        btnRemove: 'Remove',
+        extraItem: 'Item',
+        extraDesc: 'Description',
+        extraCost: 'Cost',
+        extraDefName: 'Packaging / LED / Hardware'
+      }
+    };
 
     const DEFAULTS = {
       GBP: {
@@ -510,14 +698,104 @@
     };
 
     let filaments = [
-      { id: 1, name: 'Filamento Principal', type: 'PLA', priceKg: 16, netWeight: 85, purgeWeight: 0 }
+      { id: 1, name: 'Filamento Principal', type: 'PLA', priceKg: 110, netWeight: 85, purgeWeight: 0 }
     ];
     let extras = [];
 
-    // Salvar estado no localStorage
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.getElementById('btn-lang-en').classList.toggle('active-lang', lang === 'en');
+      document.getElementById('btn-lang-pt').classList.toggle('active-lang', lang === 'pt');
+      document.documentElement.lang = lang === 'en' ? 'en' : 'pt-BR';
+
+      const t = I18N[lang];
+      document.getElementById('t-subtitle').textContent = t.subtitle;
+      document.getElementById('t-author').textContent = t.author;
+      document.getElementById('t-mode-quick').textContent = t.modeQuick;
+      document.getElementById('t-mode-pro').textContent = t.modePro;
+      document.getElementById('t-q-price-label').textContent = t.qPriceLabel;
+      document.getElementById('t-q-cost-label').textContent = t.qCostLabel;
+      document.getElementById('t-q-profit-label').textContent = t.qProfitLabel;
+      document.getElementById('t-q-margin-label').textContent = t.qMarginLabel;
+      document.getElementById('t-q-mat-label').textContent = t.qMatLabel;
+      document.getElementById('opt-q-pla').textContent = t.qMatPla;
+      document.getElementById('opt-q-tpu').textContent = t.qMatTpu;
+      document.getElementById('t-q-weight-label').textContent = t.qWeightLabel;
+      document.getElementById('t-q-weight-helper').textContent = t.qWeightHelper;
+      document.getElementById('t-q-hours-label').textContent = t.qHoursLabel;
+      document.getElementById('t-q-min-label').textContent = t.qMinLabel;
+      document.getElementById('t-btn-wa-q').textContent = t.btnWa;
+      document.getElementById('t-btn-copy-q').textContent = t.btnCopyQ;
+      document.getElementById('t-btn-pro-q').textContent = t.btnOpenPro;
+
+      document.getElementById('t-sec-proj').textContent = t.secProj;
+      document.getElementById('t-badge-quote').textContent = t.badgeQuote;
+      document.getElementById('t-lbl-projname').textContent = t.lblProjName;
+      document.getElementById('t-lbl-clientname').textContent = t.lblClientName;
+
+      document.getElementById('t-sec-fil').textContent = t.secFil;
+      document.getElementById('t-badge-mat').textContent = t.badgeMat;
+      document.getElementById('t-btn-add-fil').textContent = t.btnAddFil;
+
+      document.getElementById('t-sec-mach').textContent = t.secMach;
+      document.getElementById('t-badge-energy').textContent = t.badgeEnergy;
+      document.getElementById('t-lbl-printer').textContent = t.lblPrinter;
+      document.getElementById('opt-printer-custom').textContent = t.printerCustom;
+      document.getElementById('t-lbl-watts').textContent = t.lblWatts;
+      document.getElementById('t-lbl-thours').textContent = t.lblTHours;
+      document.getElementById('t-lbl-tmins').textContent = t.lblTMins;
+      document.getElementById('t-lbl-kwh').textContent = t.lblKwh;
+      document.getElementById('t-lbl-printercost').textContent = t.lblPrinterCost;
+      document.getElementById('t-help-printer').textContent = t.helpPrinter;
+      document.getElementById('t-lbl-nozzlecost').textContent = t.lblNozzleCost;
+      document.getElementById('t-help-nozzle').textContent = t.helpNozzle;
+
+      document.getElementById('t-sec-extras').textContent = t.secExtras;
+      document.getElementById('t-badge-extras').textContent = t.badgeExtras;
+      document.getElementById('t-btn-add-extra').textContent = t.btnAddExtra;
+
+      document.getElementById('t-sec-labor').textContent = t.secLabor;
+      document.getElementById('t-badge-labor').textContent = t.badgeLabor;
+      document.getElementById('t-lbl-preptime').textContent = t.lblPrepTime;
+      document.getElementById('t-lbl-posttime').textContent = t.lblPostTime;
+      document.getElementById('t-lbl-laborrate').textContent = t.lblLaborRate;
+      document.getElementById('t-lbl-laborfixed').textContent = t.lblLaborFixed;
+
+      document.getElementById('t-sec-comm').textContent = t.secComm;
+      document.getElementById('t-badge-comm').textContent = t.badgeComm;
+      document.getElementById('t-lbl-margin').textContent = t.lblMargin;
+      document.getElementById('t-lbl-fail').textContent = t.lblFail;
+      document.getElementById('t-lbl-fee').textContent = t.lblFee;
+      document.getElementById('t-lbl-minorder').textContent = t.lblMinOrder;
+
+      document.getElementById('t-pro-price-label').textContent = t.proPriceLabel;
+      document.getElementById('t-bd-fil').textContent = t.bdFil;
+      document.getElementById('t-bd-energy').textContent = t.bdEnergy;
+      document.getElementById('t-bd-mach').textContent = t.bdMach;
+      document.getElementById('t-bd-nozzle').textContent = t.bdNozzle;
+      document.getElementById('t-bd-extras').textContent = t.bdExtras;
+      document.getElementById('t-bd-labor').textContent = t.bdLabor;
+      document.getElementById('t-bd-fail').textContent = t.bdFail;
+      document.getElementById('t-bd-total').textContent = t.bdTotal;
+      document.getElementById('t-bd-profit').textContent = t.bdProfit;
+      document.getElementById('t-bd-fee').textContent = t.bdFee;
+      document.getElementById('t-btn-wa-pro').textContent = t.btnWa;
+      document.getElementById('t-btn-copy-pro').textContent = t.btnCopyPro;
+      document.getElementById('t-btn-pdf').textContent = t.btnPdf;
+
+      document.getElementById('t-ft-copyright').innerHTML = t.ftCopyright;
+      document.getElementById('t-ft-disclaimer').innerHTML = t.ftDisclaimer;
+
+      renderFilaments();
+      renderExtras();
+      calculate();
+      saveState();
+    }
+
     function saveState() {
       try {
         const state = {
+          currentLang,
           currentCurrency,
           currentMode,
           quick: {
@@ -533,9 +811,9 @@
             printerWatts: document.getElementById('printer-watts')?.value || '135',
             timeHours: document.getElementById('time-hours')?.value || '3',
             timeMinutes: document.getElementById('time-minutes')?.value || '15',
-            kwhRate: document.getElementById('kwh-rate')?.value || '0.28',
-            printerCost: document.getElementById('printer-cost')?.value || '599',
-            nozzleCost: document.getElementById('nozzle-cost')?.value || '12',
+            kwhRate: document.getElementById('kwh-rate')?.value || '0.85',
+            printerCost: document.getElementById('printer-cost')?.value || '4800',
+            nozzleCost: document.getElementById('nozzle-cost')?.value || '80',
             laborPrepTime: document.getElementById('labor-prep-time')?.value || '0',
             laborPostTime: document.getElementById('labor-post-time')?.value || '0',
             laborRate: document.getElementById('labor-rate')?.value || '0',
@@ -543,7 +821,7 @@
             profitMargin: document.getElementById('profit-margin')?.value || '80',
             failureRate: document.getElementById('failure-rate')?.value || '0',
             platformFee: document.getElementById('platform-fee')?.value || '0',
-            minOrderPrice: document.getElementById('min-order-price')?.value || '5'
+            minOrderPrice: document.getElementById('min-order-price')?.value || '25'
           },
           filaments,
           extras
@@ -554,19 +832,15 @@
       }
     }
 
-    // Carregar estado do localStorage
     function loadState() {
       try {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (!saved) return false;
         const state = JSON.parse(saved);
 
-        if (state.currentCurrency) {
-          currentCurrency = state.currentCurrency;
-        }
-        if (state.currentMode) {
-          currentMode = state.currentMode;
-        }
+        if (state.currentLang) currentLang = state.currentLang;
+        if (state.currentCurrency) currentCurrency = state.currentCurrency;
+        if (state.currentMode) currentMode = state.currentMode;
 
         if (Array.isArray(state.filaments) && state.filaments.length > 0) {
           filaments = state.filaments;
@@ -575,19 +849,16 @@
           extras = state.extras;
         }
 
-        // Atualizar botões de moeda e labels
-        document.getElementById('btn-gbp')?.classList.toggle('active', currentCurrency === 'GBP');
-        document.getElementById('btn-brl')?.classList.toggle('active', currentCurrency === 'BRL');
+        document.getElementById('btn-gbp')?.classList.toggle('active-curr', currentCurrency === 'GBP');
+        document.getElementById('btn-brl')?.classList.toggle('active-curr', currentCurrency === 'BRL');
         const sym = DEFAULTS[currentCurrency].symbol;
         document.querySelectorAll('.currency-sym').forEach(el => el.textContent = sym);
 
-        // Atualizar modo
-        document.getElementById('mode-quick-btn')?.classList.toggle('active', currentMode === 'quick');
-        document.getElementById('mode-pro-btn')?.classList.toggle('active', currentMode === 'pro');
+        document.getElementById('mode-quick-btn')?.classList.toggle('active-mode', currentMode === 'quick');
+        document.getElementById('mode-pro-btn')?.classList.toggle('active-mode', currentMode === 'pro');
         document.getElementById('quick-mode-container')?.classList.toggle('hidden', currentMode !== 'quick');
         document.getElementById('pro-mode-container')?.classList.toggle('hidden', currentMode !== 'pro');
 
-        // Restaurar campos Quick
         if (state.quick) {
           if (document.getElementById('quick-material')) document.getElementById('quick-material').value = state.quick.material;
           if (document.getElementById('quick-weight')) document.getElementById('quick-weight').value = state.quick.weight;
@@ -595,7 +866,6 @@
           if (document.getElementById('quick-minutes')) document.getElementById('quick-minutes').value = state.quick.minutes;
         }
 
-        // Restaurar campos Pro
         if (state.pro) {
           if (document.getElementById('project-name')) document.getElementById('project-name').value = state.pro.projectName;
           if (document.getElementById('client-name')) document.getElementById('client-name').value = state.pro.clientName;
@@ -625,8 +895,8 @@
 
     function switchMode(mode) {
       currentMode = mode;
-      document.getElementById('mode-quick-btn').classList.toggle('active', mode === 'quick');
-      document.getElementById('mode-pro-btn').classList.toggle('active', mode === 'pro');
+      document.getElementById('mode-quick-btn').classList.toggle('active-mode', mode === 'quick');
+      document.getElementById('mode-pro-btn').classList.toggle('active-mode', mode === 'pro');
       document.getElementById('quick-mode-container').classList.toggle('hidden', mode !== 'quick');
       document.getElementById('pro-mode-container').classList.toggle('hidden', mode !== 'pro');
 
@@ -640,8 +910,8 @@
 
     function setCurrency(curr) {
       currentCurrency = curr;
-      document.getElementById('btn-gbp').classList.toggle('active', curr === 'GBP');
-      document.getElementById('btn-brl').classList.toggle('active', curr === 'BRL');
+      document.getElementById('btn-gbp').classList.toggle('active-curr', curr === 'GBP');
+      document.getElementById('btn-brl').classList.toggle('active-curr', curr === 'BRL');
       
       const sym = DEFAULTS[curr].symbol;
       document.querySelectorAll('.currency-sym').forEach(el => el.textContent = sym);
@@ -696,6 +966,7 @@
     function renderFilaments() {
       const container = document.getElementById('filaments-container');
       const sym = DEFAULTS[currentCurrency].symbol;
+      const t = I18N[currentLang];
       container.innerHTML = '';
 
       filaments.forEach((fil, idx) => {
@@ -703,16 +974,16 @@
         div.className = 'filament-item';
         div.innerHTML = `
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <strong style="font-size:0.85rem; color:#38bdf8;">Filamento #${idx + 1}</strong>
-            ${filaments.length > 1 ? `<button type="button" class="btn-remove" onclick="removeFilament(${fil.id})">Remover</button>` : ''}
+            <strong style="font-size:0.85rem; color:#38bdf8;">${t.filItem} #${idx + 1}</strong>
+            ${filaments.length > 1 ? `<button type="button" class="btn-remove" onclick="removeFilament(${fil.id})">${t.btnRemove}</button>` : ''}
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>Descrição / Cor</label>
+              <label>${t.filDesc}</label>
               <input type="text" value="${fil.name}" oninput="updateFilament(${fil.id}, 'name', this.value)">
             </div>
             <div class="form-group">
-              <label>Tipo de Material</label>
+              <label>${t.filType}</label>
               <select onchange="updateFilamentType(${fil.id}, this.value)">
                 <option value="PLA" ${fil.type === 'PLA' ? 'selected' : ''}>PLA / PLA Meta</option>
                 <option value="PETG" ${fil.type === 'PETG' ? 'selected' : ''}>PETG</option>
@@ -723,15 +994,15 @@
           </div>
           <div class="form-row-3">
             <div class="form-group">
-              <label>Preço/kg (${sym})</label>
+              <label>${t.filPrice} (${sym})</label>
               <input type="number" step="0.5" value="${fil.priceKg}" oninput="updateFilament(${fil.id}, 'priceKg', parseFloat(this.value)||0)">
             </div>
             <div class="form-group">
-              <label>Peso Peça (g)</label>
+              <label>${t.filNetWeight}</label>
               <input type="number" min="0" value="${fil.netWeight}" oninput="updateFilament(${fil.id}, 'netWeight', parseFloat(this.value)||0)">
             </div>
             <div class="form-group">
-              <label>Purga/Torre (g)</label>
+              <label>${t.filPurgeWeight}</label>
               <input type="number" min="0" value="${fil.purgeWeight}" oninput="updateFilament(${fil.id}, 'purgeWeight', parseFloat(this.value)||0)">
             </div>
           </div>
@@ -742,7 +1013,7 @@
 
     function addFilament() {
       filaments.push({
-        id: Date.now(), name: `Filamento ${filaments.length + 1}`, type: 'PLA',
+        id: Date.now(), name: `${I18N[currentLang].filItem} ${filaments.length + 1}`, type: 'PLA',
         priceKg: DEFAULTS[currentCurrency].materials['PLA'], netWeight: 20, purgeWeight: 10
       });
       renderFilaments();
@@ -776,22 +1047,23 @@
     function renderExtras() {
       const container = document.getElementById('extras-container');
       const sym = DEFAULTS[currentCurrency].symbol;
+      const t = I18N[currentLang];
       container.innerHTML = '';
       extras.forEach((ext, idx) => {
         const div = document.createElement('div');
         div.className = 'extra-item';
         div.innerHTML = `
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <strong style="font-size:0.82rem; color:#cbd5e1;">Item #${idx + 1}</strong>
-            <button type="button" class="btn-remove" onclick="removeExtra(${ext.id})">Remover</button>
+            <strong style="font-size:0.82rem; color:#cbd5e1;">${t.extraItem} #${idx + 1}</strong>
+            <button type="button" class="btn-remove" onclick="removeExtra(${ext.id})">${t.btnRemove}</button>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>Descrição</label>
+              <label>${t.extraDesc}</label>
               <input type="text" value="${ext.name}" oninput="updateExtra(${ext.id}, 'name', this.value)">
             </div>
             <div class="form-group">
-              <label>Custo (${sym})</label>
+              <label>${t.extraCost} (${sym})</label>
               <input type="number" step="0.1" value="${ext.cost}" oninput="updateExtra(${ext.id}, 'cost', parseFloat(this.value)||0)">
             </div>
           </div>
@@ -801,7 +1073,7 @@
     }
 
     function addExtra() {
-      extras.push({ id: Date.now(), name: 'Embalagem / LED / Ferragem', cost: 1.00 });
+      extras.push({ id: Date.now(), name: I18N[currentLang].extraDefName, cost: 1.00 });
       renderExtras();
       calculate();
       saveState();
@@ -821,6 +1093,7 @@
 
     function calculate() {
       const sym = DEFAULTS[currentCurrency].symbol;
+      const t = I18N[currentLang];
 
       let totalFilamentCost = 0;
       filaments.forEach(f => {
@@ -834,14 +1107,14 @@
       const totalHours = hours + (minutes / 60);
 
       const watts = parseFloat(document.getElementById('printer-watts')?.value) || 120;
-      const kwhRate = parseFloat(document.getElementById('kwh-rate')?.value) || 0.28;
+      const kwhRate = parseFloat(document.getElementById('kwh-rate')?.value) || 0.85;
       const totalKwh = (watts / 1000) * totalHours;
       const energyCost = totalKwh * kwhRate;
 
-      const printerCost = parseFloat(document.getElementById('printer-cost')?.value) || 500;
+      const printerCost = parseFloat(document.getElementById('printer-cost')?.value) || 4800;
       const machineCost = (printerCost / 3000) * totalHours;
 
-      const nozzleCost = parseFloat(document.getElementById('nozzle-cost')?.value) || 12;
+      const nozzleCost = parseFloat(document.getElementById('nozzle-cost')?.value) || 80;
       const totalNozzleWear = (nozzleCost / 2000) * totalHours;
 
       let totalExtrasCost = 0;
@@ -876,15 +1149,13 @@
       const finalPrice = Math.max(finalCalculatedPrice, minOrderPrice);
       const actualNetProfit = finalPrice - totalProductionCost - platformFeeValue;
 
-      // Atualização dos campos no Modo Rápido (incluindo o percentual dinâmico da margem)
       if (document.getElementById('quick-final-price')) document.getElementById('quick-final-price').textContent = `${sym} ${finalPrice.toFixed(2)}`;
       if (document.getElementById('quick-cost-val')) document.getElementById('quick-cost-val').textContent = `${sym} ${totalProductionCost.toFixed(2)}`;
       if (document.getElementById('quick-profit-val')) document.getElementById('quick-profit-val').textContent = `${sym} ${actualNetProfit.toFixed(2)}`;
       if (document.getElementById('quick-margin-pct')) document.getElementById('quick-margin-pct').textContent = `${profitMarginPct}%`;
 
-      // Atualização dos campos no Modo Completo
       if (document.getElementById('res-final-price')) document.getElementById('res-final-price').textContent = `${sym} ${finalPrice.toFixed(2)}`;
-      if (document.getElementById('res-profit-tag')) document.getElementById('res-profit-tag').textContent = `+ ${sym} ${actualNetProfit.toFixed(2)} de Lucro`;
+      if (document.getElementById('res-profit-tag')) document.getElementById('res-profit-tag').textContent = `+ ${sym} ${actualNetProfit.toFixed(2)} ${t.profitTag}`;
       if (document.getElementById('res-filament-cost')) document.getElementById('res-filament-cost').textContent = `${sym} ${totalFilamentCost.toFixed(2)}`;
       if (document.getElementById('res-kwh-consumed')) document.getElementById('res-kwh-consumed').textContent = totalKwh.toFixed(2);
       if (document.getElementById('res-energy-cost')) document.getElementById('res-energy-cost').textContent = `${sym} ${energyCost.toFixed(2)}`;
@@ -911,6 +1182,7 @@
     }
 
     function buildQuoteText(mode) {
+      const isEn = (currentLang === 'en');
       if (mode === 'quick') {
         const mat = document.getElementById('quick-material')?.value || 'PLA';
         const weight = document.getElementById('quick-weight')?.value || '0';
@@ -918,21 +1190,21 @@
         const mins = document.getElementById('quick-minutes')?.value || '0';
         const price = document.getElementById('quick-final-price')?.textContent || '';
 
-        if (currentCurrency === 'GBP') {
-          return `📋 *3D PRINT QUOTE*\n` +
+        if (isEn) {
+          return `📋 *3D PRINTING QUOTATION*\n` +
                  `------------------------------\n` +
                  `*Material:* ${mat}\n` +
-                 `*Weight:* ~${weight}g\n` +
+                 `*Estimated Weight:* ~${weight}g\n` +
                  `*Print Time:* ${hours}h ${mins}m\n` +
                  `------------------------------\n` +
                  `💰 *Total Price: ${price}*\n` +
-                 `✓ High quality finish\n` +
+                 `✓ Includes quality inspection & finishing\n` +
                  `Valid for 15 days.`;
         } else {
           return `📋 *ORÇAMENTO DE IMPRESSÃO 3D*\n` +
                  `------------------------------\n` +
                  `*Material:* ${mat}\n` +
-                 `*Peso:* ~${weight}g\n` +
+                 `*Peso Estimado:* ~${weight}g\n` +
                  `*Tempo:* ${hours}h ${mins}m\n` +
                  `------------------------------\n` +
                  `💰 *Valor Total: ${price}*\n` +
@@ -940,7 +1212,7 @@
                  `Válido por 15 dias.`;
         }
       } else {
-        const projectName = document.getElementById('project-name')?.value || 'Projeto 3D';
+        const projectName = document.getElementById('project-name')?.value || (isEn ? '3D Project' : 'Projeto 3D');
         const clientName = document.getElementById('client-name')?.value;
         const finalPrice = document.getElementById('res-final-price')?.textContent || '';
         const hours = document.getElementById('time-hours')?.value || '0';
@@ -948,13 +1220,13 @@
         let totalWeight = 0;
         filaments.forEach(f => totalWeight += ((f.netWeight || 0) + (f.purgeWeight || 0)));
 
-        if (currentCurrency === 'GBP') {
+        if (isEn) {
           return `📋 *3D PRINTING SERVICE QUOTATION*\n` +
                  `------------------------------------\n` +
                  `*Project:* ${projectName}\n` +
                  (clientName ? `*Client / Ref:* ${clientName}\n` : '') +
                  `*Estimated Time:* ${hours}h ${minutes}min\n` +
-                 `*Material Weight:* ~${totalWeight}g\n` +
+                 `*Total Material Weight:* ~${totalWeight}g\n` +
                  `------------------------------------\n` +
                  `💰 *Total Price: ${finalPrice}*\n` +
                  `------------------------------------\n` +
@@ -962,14 +1234,14 @@
                  `Valid for 15 days.`;
         } else {
           return `📋 *ORÇAMENTO DE IMPRESSÃO 3D*\n` +
-                 `-------------------------------\n` +
+                 `------------------------------------\n` +
                  `*Projeto:* ${projectName}\n` +
                  (clientName ? `*Cliente / Ref:* ${clientName}\n` : '') +
                  `*Tempo Estimado:* ${hours}h ${minutes}min\n` +
-                 `*Peso Total:* ~${totalWeight}g\n` +
-                 `-------------------------------\n` +
+                 `*Peso Total Estimado:* ~${totalWeight}g\n` +
+                 `------------------------------------\n` +
                  `💰 *Valor Total: ${finalPrice}*\n` +
-                 `-------------------------------\n` +
+                 `------------------------------------\n` +
                  `✓ Inclui acabamento e inspeção de qualidade\n` +
                  `Válido por 15 dias.`;
         }
@@ -984,30 +1256,20 @@
 
     function copyQuickQuote() {
       const text = buildQuoteText('quick');
-      navigator.clipboard.writeText(text).then(() => showToast('Orçamento rápido copiado!'));
+      navigator.clipboard.writeText(text).then(() => showToast(I18N[currentLang].toastQuickCopied));
     }
 
     function copyFormattedQuote() {
       const text = buildQuoteText('pro');
-      navigator.clipboard.writeText(text).then(() => showToast('Orçamento detalhado copiado!'));
+      navigator.clipboard.writeText(text).then(() => showToast(I18N[currentLang].toastCopied));
     }
 
-    // Inicialização com carregamento do estado persistido
-    const hasSavedData = loadState();
-    renderFilaments();
-    renderExtras();
-    calculate();
+    loadState();
+    setLanguage(currentLang);
 
-    // Adiciona listener automático em todos os inputs para auto-salvamento imediato
     document.querySelectorAll('input, select').forEach(elem => {
-      elem.addEventListener('input', () => {
-        calculate();
-        saveState();
-      });
-      elem.addEventListener('change', () => {
-        calculate();
-        saveState();
-      });
+      elem.addEventListener('input', () => { calculate(); saveState(); });
+      elem.addEventListener('change', () => { calculate(); saveState(); });
     });
   </script>
 </body>
