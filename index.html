@@ -176,13 +176,39 @@
     }
 
     /* Big Inputs & Pickers optimized for Smartphones */
-    input, select {
+    input, select, textarea {
       width: 100%; background: var(--input-bg); border: 1px solid var(--input-border);
       color: var(--text-main); padding: 12px 14px; border-radius: 10px; font-size: 16px;
       font-family: inherit; outline: none; transition: border-color 0.2s; min-height: 48px;
     }
-    input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+    textarea { min-height: 70px; resize: vertical; line-height: 1.4; }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
     input[type="number"] { font-family: var(--font-mono); }
+
+    /* Easy Mode Extras Tag Pills */
+    .tags-container {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
+    }
+    .cost-tag-btn {
+      background: rgba(56, 189, 248, 0.1); border: 1px dashed rgba(56, 189, 248, 0.4);
+      color: var(--primary); border-radius: 16px; padding: 5px 12px; font-size: 0.78rem;
+      font-weight: 700; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 4px;
+    }
+    .cost-tag-btn:hover {
+      background: rgba(56, 189, 248, 0.25); border-color: var(--primary);
+    }
+
+    .easy-extra-row {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+      background: rgba(11, 19, 36, 0.5); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--card-border);
+    }
+    .easy-extra-row input[type="text"] { flex: 2; padding: 8px 10px; min-height: 38px; font-size: 0.88rem; }
+    .easy-extra-row input[type="number"] { flex: 1; padding: 8px 10px; min-height: 38px; font-size: 0.88rem; }
+    .btn-remove-extra {
+      background: rgba(239, 68, 68, 0.15); color: var(--danger); border: none; border-radius: 6px;
+      width: 34px; height: 34px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .btn-remove-extra:hover { background: var(--danger); color: white; }
 
     .method-toggle-container {
       display: flex; gap: 8px; margin-bottom: 12px;
@@ -473,7 +499,16 @@
     <div id="easy-mode-container">
       <div class="section-card" style="max-width: 680px; margin: 0 auto; border-color: #10b981;">
         
-        <!-- Formulário de Entrada do Modo Fácil (Ordem Alfabética por Marca com Anycubic como Padrão) -->
+        <!-- Identificação Opcional da Peça / Projeto -->
+        <div class="form-group">
+          <label>
+            <span class="label-left"><span class="field-icon">🏷️</span> <span id="t-e-lbl-name">Nome da Peça / Objeto (Opcional)</span></span>
+            <button class="hint-btn" onclick="showHint('itemname')" title="Ajuda">ℹ️</button>
+          </label>
+          <input type="text" id="easy-project-name" placeholder="Ex: Chaveiro com Logo, Peça de Encaixe..." oninput="onEasyInputChange()">
+        </div>
+
+        <!-- 1. Impressora (Ordem Alfabética por Marca com Anycubic como Padrão) -->
         <div class="form-group">
           <label>
             <span class="label-left"><span class="field-icon">🖨️</span> <span id="t-e-lbl-printer">Sua Impressora 3D</span></span>
@@ -493,21 +528,30 @@
           </select>
         </div>
 
-        <!-- Peso em Gramas (Inicia Zerado) -->
-        <div class="form-group">
-          <label>
-            <span class="label-left"><span class="field-icon">⚖️</span> <span id="t-e-lbl-weight">Peso Total da Peça (Gramas)</span> *</span>
-            <button class="hint-btn" onclick="showHint('weight')" title="Ajuda">ℹ️</button>
-          </label>
-          <input type="number" id="easy-weight" value="0" min="0" placeholder="0" oninput="onEasyInputChange()">
-          <div class="helper-text" id="t-e-weight-helper">Insira o peso final indicado no seu fatiador.</div>
+        <!-- Quantidade de Peças e Peso da Peça -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>
+              <span class="label-left"><span class="field-icon">🔢</span> <span id="t-e-lbl-qty">Quantidade de Peças</span> *</span>
+              <button class="hint-btn" onclick="showHint('qty')" title="Ajuda">ℹ️</button>
+            </label>
+            <input type="number" id="easy-qty" value="1" min="1" step="1" oninput="onEasyInputChange()">
+          </div>
+
+          <div class="form-group">
+            <label>
+              <span class="label-left"><span class="field-icon">⚖️</span> <span id="t-e-lbl-weight">Peso por Peça (g)</span> *</span>
+              <button class="hint-btn" onclick="showHint('weight')" title="Ajuda">ℹ️</button>
+            </label>
+            <input type="number" id="easy-weight" value="0" min="0" step="0.1" placeholder="0" oninput="onEasyInputChange()">
+          </div>
         </div>
 
         <!-- Tempo de Impressão com Rolagem Nativa (Horas: 0 a 60 | Minutos: 0 a 59) -->
         <div class="form-row">
           <div class="form-group">
             <label>
-              <span class="label-left"><span class="field-icon">⏱️</span> <span id="t-e-lbl-hours">Tempo (Horas)</span> *</span>
+              <span class="label-left"><span class="field-icon">⏱️</span> <span id="t-e-lbl-hours">Tempo por Peça (Horas)</span> *</span>
               <button class="hint-btn" onclick="showHint('time')" title="Ajuda">ℹ️</button>
             </label>
             <select id="easy-hours" onchange="onEasyInputChange()"></select>
@@ -520,23 +564,40 @@
           </div>
         </div>
 
-        <!-- Custos Extras (Padrão 0) -->
+        <!-- Custos Adicionais Inteligentes com Lista de Sugestões Rápidas -->
         <div class="form-group">
           <label>
-            <span class="label-left"><span class="field-icon">📦</span> <span id="t-e-lbl-extras">Custos Extras / Embalagem / LEDs</span> (<span class="currency-sym">R$</span>)</span>
+            <span class="label-left"><span class="field-icon">📦</span> <span id="t-e-lbl-addcosts">Custos Adicionais & Montagem</span></span>
             <button class="hint-btn" onclick="showHint('extras')" title="Ajuda">ℹ️</button>
           </label>
-          <input type="number" id="easy-extras" value="0" min="0" step="0.5" oninput="onEasyInputChange()">
+          <div class="tags-container" id="easy-tag-suggestions">
+            <!-- Chips gerados dinamicamente por JS -->
+          </div>
+          <div id="easy-extra-rows-container">
+            <!-- Linhas dinâmicas de custos adicionais -->
+          </div>
+          <button type="button" class="btn-add" onclick="addEasyExtraRow('Outros', 0)" style="margin-top:4px;">
+            + <span id="t-btn-add-custom-cost">Adicionar outro custo avulso</span>
+          </button>
         </div>
 
-        <!-- Margem de Lucro Real (Inicia em 55% e Persiste em Cache) -->
+        <!-- Margem de Lucro Real -->
         <div class="form-group">
           <label>
-            <span class="label-left"><span class="field-icon">🚀</span> <span id="t-e-lbl-margin">Margem de Lucro Real (%)</span></span>
+            <span class="label-left"><span class="field-icon">🚀</span> <span id="t-e-lbl-margin">Margem Real (%)</span></span>
             <button class="hint-btn" onclick="showHint('margin')" title="Ajuda">ℹ️</button>
           </label>
           <input type="number" id="easy-margin" value="55" min="0" max="99" oninput="onEasyInputChange()">
           <div class="helper-text" id="t-e-margin-helper">Garante que essa porcentagem exata do valor de venda seja lucro livre.</div>
+        </div>
+
+        <!-- Campo Opcional de Observações -->
+        <div class="form-group">
+          <label>
+            <span class="label-left"><span class="field-icon">📝</span> <span id="t-e-lbl-notes">Observações / Detalhes (Opcional)</span></span>
+            <button class="hint-btn" onclick="showHint('notes')" title="Ajuda">ℹ️</button>
+          </label>
+          <textarea id="easy-notes" placeholder="Ex: Argola inclusa, acabamento lixado, prazo de 3 dias úteis..." oninput="onEasyInputChange()"></textarea>
         </div>
 
         <!-- Linha Discreta para Ajustar Preço Base do Filamento -->
@@ -568,9 +629,10 @@
           </div>
 
           <div class="hero-price-card">
-            <div class="s-lbl" id="t-e-price-label">Preço Sugerido de Venda</div>
+            <div class="s-lbl" id="t-e-price-label">Preço Sugerido Total</div>
             <div class="hero-price-val" id="easy-final-price">R$ 0.00</div>
             <div class="hero-price-sub" id="easy-profit-tag">+ R$ 0.00 de Lucro Real Garantido</div>
+            <div id="easy-unit-price-tag" style="font-size: 0.88rem; color: #38bdf8; font-weight: 700; margin-top: 4px; display: none;"></div>
           </div>
 
           <div class="status-cards-grid">
@@ -649,7 +711,7 @@
             <div class="s-val" id="quick-cost-val" style="color: #cbd5e1;">R$ 0.00</div>
           </div>
           <div class="status-card card-profit">
-            <div class="s-lbl"><span id="t-q-margin-label">Margem</span>: <span id="quick-margin-pct" style="color: #10b981;">55%</span></div>
+            <div class="s-lbl"><span id="t-q-margin-label">Margem</span>: <span id="quick-margin-pct" style="color: #10b981;">30%</span></div>
             <div class="s-val" id="quick-profit-val" style="color: #10b981;">R$ 0.00</div>
           </div>
         </div>
@@ -694,7 +756,6 @@
           <div class="helper-text" id="t-q-weight-helper">Insira o peso final indicado no seu fatiador.</div>
         </div>
 
-        <!-- Tempo Modo Rápido por Rolagem -->
         <div class="form-row">
           <div class="form-group">
             <label><span class="label-left"><span class="field-icon">⏱️</span> <span id="t-q-hours-label">Tempo (Horas)</span></span></label>
@@ -761,7 +822,6 @@
                   <span class="label-left"><span class="field-icon">🏷️</span> <span id="t-lbl-printer">Modelo da Impressora</span></span>
                   <button class="hint-btn" onclick="showHint('printer')" title="Ajuda">ℹ️</button>
                 </label>
-                <!-- Ordem Alfabética por Marca com Anycubic como Padrão -->
                 <select id="printer-select" onchange="applyPrinterPreset()">
                   <option value="125" data-brand="anycubic" data-cost-gbp="220" data-cost-brl="1800" selected>🔷 Anycubic Kobra Series (125W)</option>
                   <option value="95" data-brand="bambu" data-cost-gbp="349" data-cost-brl="2800">🟢 Bambu Lab A1 (95W)</option>
@@ -785,7 +845,6 @@
               </div>
             </div>
 
-            <!-- Tempo Modo Pro por Rolagem -->
             <div class="form-row-3">
               <div class="form-group">
                 <label><span class="label-left"><span class="field-icon">⏱️</span> <span id="t-lbl-thours">Tempo (Horas)</span></span></label>
@@ -1027,7 +1086,7 @@
   <div id="toast" class="toast">Orçamento copiado com sucesso!</div>
 
   <script>
-    const STORAGE_KEY = 'calc3d_user_data_v8';
+    const STORAGE_KEY = 'calc3d_user_data_v10';
 
     let currentLang = 'pt';
     let currentCurrency = 'BRL';
@@ -1035,42 +1094,72 @@
     let currentPricingMethod = 'margin'; // Margem real s/ venda
 
     let customEasyMatPrice = null;
+    let easyExtrasList = []; // Lista estruturada de custos adicionais no Modo Fácil
+
+    const EASY_COST_SUGGESTIONS = [
+      "LED",
+      "Argola / Corrente - Chaveiro",
+      "Cabo USB",
+      "Fonte de alimentação",
+      "Fita / Tecido decorativo",
+      "Embalagem",
+      "Envio",
+      "Taxas de venda",
+      "Parafusos",
+      "Pintura",
+      "Outros"
+    ];
 
     const BRANDS = {
+      anycubic: { name: 'Anycubic', badgeClass: 'brand-anycubic', icon: '🔷' },
       bambu: { name: 'Bambu Lab', badgeClass: 'brand-bambu', icon: '🟢' },
       creality: { name: 'Creality', badgeClass: 'brand-creality', icon: '🔵' },
       prusa: { name: 'Prusa Research', badgeClass: 'brand-prusa', icon: '🟧' },
-      anycubic: { name: 'Anycubic', badgeClass: 'brand-anycubic', icon: '🔷' },
       snapmaker: { name: 'Snapmaker', badgeClass: 'brand-snapmaker', icon: '🟣' },
       custom: { name: 'Custom / Other', badgeClass: 'brand-custom', icon: '⚙️' }
     };
 
     const HINTS = {
       pt: {
+        itemname: {
+          title: '🏷️ Nome da Peça ou Objeto',
+          desc: 'Identifique o que está sendo cotado (ex: "Chaveiro Logo Empresa", "Suporte Celular"). Esse nome aparece em destaque no orçamento do WhatsApp.',
+          tip: '📌 <strong>Opcional:</strong> Se deixar em branco, o orçamento será gerado com o título padrão.'
+        },
+        qty: {
+          title: '🔢 Quantidade de Peças',
+          desc: 'Indique quantas unidades serão fabricadas. A calculadora multiplica o filamento, energia e extras automaticamente pelo lote.',
+          tip: '📌 <strong>Dica para Chaveiros:</strong> Brindes pequenos com peso de 6g tornam-se viáveis comercialmente quando vendidos em lotes de 10 ou 20 unidades.'
+        },
         weight: {
-          title: '⚖️ Peso Total (Gramas)',
-          desc: 'É a quantidade total de filamento que sua impressora vai gastar para produzir a peça, incluindo paredes, preenchimento (infill) e suportes.',
-          tip: '📌 <strong>Onde achar:</strong> No Bambu Studio, Orca Slicer ou Cura, clique em "Fatiar" (Slice) e veja o peso em gramas (g) indicado na tela.'
+          title: '⚖️ Peso por Peça (Gramas)',
+          desc: 'O peso unitário de filamento consumido para produzir uma única unidade (incluindo suportes), indicado no fatiador.',
+          tip: '📌 <strong>Onde achar:</strong> No Bambu Studio, Orca Slicer ou Cura, clique em "Fatiar" e veja as gramas (g) indicadas.'
         },
         time: {
-          title: '⏱️ Tempo de Impressão',
-          desc: 'Selecione a duração exata que a máquina levará imprimindo pelas opções de rolagem. Esse tempo define o custo de energia elétrica e o desgaste da máquina e do bico.',
-          tip: '📌 <strong>Dica:</strong> Em peças de mais de 10 horas, lembre-se de conferir se a mesa está bem limpa para evitar descolamentos durante a noite.'
+          title: '⏱️ Tempo de Impressão por Peça',
+          desc: 'Selecione a duração que a impressora levará para imprimir uma unidade nas opções de rolagem.',
+          tip: '📌 <strong>Prático:</strong> Basta rolar com o polegar para escolher as horas e minutos sem precisar digitar.'
         },
         extras: {
-          title: '📦 Custos Extras / Embalagens',
-          desc: 'Qualquer item físico adicional para entregar a peça: caixas, plástico bolha, etiquetas, LEDs, baterias, ímãs ou parafusos.',
-          tip: '📌 <strong>Dica:</strong> Se gastar R$ 3,00 de caixa e R$ 1,00 de fita, coloque R$ 4,00 aqui para não pagar embalagem do próprio bolso.'
+          title: '📦 Custos Adicionais & Montagem',
+          desc: 'Clique nos botões rápidos sugeridos para adicionar argolas de chaveiro, LEDs, embalagens, parafusos ou pintura. Cada item possui seu respectivo valor.',
+          tip: '📌 <strong>Opcional:</strong> Se não houver nenhum custo extra, deixe a lista vazia e a calculadora opera normalmente.'
         },
         margin: {
           title: '🚀 Margem de Lucro Real (%)',
           desc: 'A porcentagem exata do valor de venda final que fica limpo no seu bolso após pagar filamento, energia, desgaste e extras.',
-          tip: '📌 <strong>Padrão Calibrado:</strong> Definida em 55% para assegurar retorno saudável mesmo em peças menores.'
+          tip: '📌 <strong>Padrão 55%:</strong> Garante margem sustentável para peças pequenas e cobertura de tempo operacional.'
+        },
+        notes: {
+          title: '📝 Observações e Detalhes',
+          desc: 'Notas adicionais que você queira anexar ao orçamento (ex: cor escolhida, inclusão de correntinha, prazo de entrega, forma de pagamento).',
+          tip: '📌 <strong>Automático:</strong> Se preenchido, o texto aparece formatado no final da mensagem enviada ao cliente.'
         },
         printer: {
           title: '🖨️ Escolha da Impressora 3D',
-          desc: 'Cada modelo consome uma potência média diferente. A Bambu P1S consome ~135W, enquanto uma A1 Mini consome ~85W.',
-          tip: '📌 <strong>Automatizado:</strong> O sistema já calibra a energia e o desgaste ideal por hora automaticamente de acordo com o modelo selecionado.'
+          desc: 'A Anycubic Kobra consome ~125W médios, enquanto a Bambu A1 consome ~95W e a P1S ~135W.',
+          tip: '📌 <strong>Automatizado:</strong> O consumo de luz e o desgaste por hora são ajustados automaticamente pelo modelo.'
         },
         depreciation: {
           title: '🖨️ Depreciação de Máquina',
@@ -1084,8 +1173,8 @@
         },
         method: {
           title: '⚖️ Margem Real vs. Markup',
-          desc: 'A <strong>Margem Real</strong> divide pelo fator (1 - Margem%), garantindo que a % escolhida seja real sobre o total recebido. O <strong>Markup</strong> apenas multiplica um percentual sobre o custo.',
-          tip: '📌 <strong>Recomendação:</strong> Use sempre a Margem Real para garantir que se oferecer um desconto de 20%, ainda preserve seu lucro.'
+          desc: 'A <strong>Margem Real</strong> divide pelo fator (1 - Margem%), garantindo que a % escolhida seja real sobre o total recebido.',
+          tip: '📌 <strong>Recomendação:</strong> Use sempre a Margem Real para assegurar seu lucro.'
         },
         materials: {
           title: '🧵 Tipos de Material',
@@ -1094,44 +1183,59 @@
         }
       },
       en: {
+        itemname: {
+          title: '🏷️ Part / Object Name',
+          desc: 'Identify what is being quoted (e.g. "Logo Keychain", "Phone Stand"). Displayed clearly at the top of the WhatsApp quotation.',
+          tip: '📌 <strong>Optional:</strong> If left empty, default label will be used.'
+        },
+        qty: {
+          title: '🔢 Batch Quantity',
+          desc: 'Number of units to produce. Costs and profit multiply automatically.',
+          tip: '📌 <strong>Tip for Small Prints:</strong> For keychains or small items, selling in batches of 10 or 20 units makes orders viable.'
+        },
         weight: {
-          title: '⚖️ Total Weight (Grams)',
-          desc: 'The total amount of filament your printer uses to produce the object, including walls, infill, and supports.',
-          tip: '📌 <strong>Where to find:</strong> In Bambu Studio, Orca Slicer, or Cura, click "Slice" and read the estimated grams (g) displayed.'
+          title: '⚖️ Weight per Unit (Grams)',
+          desc: 'Estimated net filament weight required for one unit (including supports) as shown in the slicer.',
+          tip: '📌 <strong>Where to find:</strong> In Bambu Studio, Orca Slicer, or Cura, check grams (g) after slicing.'
         },
         time: {
-          title: '⏱️ Print Time',
-          desc: 'Select total printing duration using the roller picker. Determines electricity costs, machine depreciation, and nozzle wear.',
-          tip: '📌 <strong>Tip:</strong> Always add 10-15 minutes if you are using auto-leveling, bed calibration, or vibration compensation.'
+          title: '⏱️ Print Time per Unit',
+          desc: 'Select duration per part using the roller picker.',
+          tip: '📌 <strong>Ergonomic:</strong> Roller controls make it easy to select on mobile without opening the keyboard.'
         },
         extras: {
-          title: '📦 Extra Accessories & Packaging',
-          desc: 'Any physical add-on: cardboard box, bubble wrap, postal labels, LEDs, batteries, magnets, or screws.',
-          tip: '📌 <strong>Tip:</strong> Putting exact packaging costs here prevents logistics from eroding your profit margins.'
+          title: '📦 Additional Costs & Assembly',
+          desc: 'Click on the quick tags to add key rings, LEDs, packaging, screws, or painting. Each item has its own cost value.',
+          tip: '📌 <strong>Optional:</strong> If there are no extra costs, leave the list empty.'
         },
         margin: {
           title: '🚀 Effective Profit Margin (%)',
           desc: 'The exact percentage of the final retail price that ends up cleanly in your pocket as profit.',
-          tip: '📌 <strong>Calibrated Standard:</strong> Set to 55% to guarantee a healthy return on small jobs.'
+          tip: '📌 <strong>55% Default:</strong> Protects margins on small parts and covers design/setup time.'
+        },
+        notes: {
+          title: '📝 Notes & Specifications',
+          desc: 'Additional details for the quotation (e.g. chosen color, key ring included, delivery lead time).',
+          tip: '📌 <strong>Automatic:</strong> Appended cleanly to the generated customer message.'
         },
         printer: {
           title: '🖨️ 3D Printer Model',
-          desc: 'Each model operates at different continuous wattage. Bambu P1S runs at ~135W, while A1 Mini runs at ~85W.',
-          tip: '📌 <strong>Automated:</strong> The system pre-calibrates average power draw and hourly amortization automatically.'
+          desc: 'Anycubic Kobra draws ~125W continuous, Bambu A1 ~95W, and P1S ~135W.',
+          tip: '📌 <strong>Automated:</strong> Power and hourly wear are calibrated automatically based on selection.'
         },
         depreciation: {
           title: '🖨️ Machine Depreciation',
-          desc: 'Hourly cost allocation so that after 3,000 working hours, you have accumulated funds to purchase a brand new printer.',
+          desc: 'Hourly cost allocation to recover machine replacement value after 3,000 working hours.',
           tip: '📌 <strong>Formula:</strong> Printer purchase price divided by 3,000 estimated lifetime hours.'
         },
         nozzle: {
           title: '🛠️ Nozzle Wear (2,000h replacement)',
-          desc: 'Hourly wear allocation to replace hotends/nozzles every 2,000 hours of continuous printing.',
+          desc: 'Hourly wear allocation to replace nozzles every 2,000 hours of continuous printing.',
           tip: '📌 <strong>Calculation:</strong> £12 / R$ 80 amortized over 2,000 printing hours.'
         },
         method: {
           title: '⚖️ True Margin vs. Markup',
-          desc: '<strong>True Margin</strong> divides by (1 - Margin%), ensuring the selected % is genuinely preserved in sales revenue. <strong>Markup</strong> only adds a multiplier on top of cost.',
+          desc: '<strong>True Margin</strong> divides by (1 - Margin%), ensuring the selected % is genuinely preserved in sales revenue.',
           tip: '📌 <strong>Recommendation:</strong> Always use True Margin to avoid undercharging.'
         },
         materials: {
@@ -1145,6 +1249,10 @@
     const FAQS = {
       pt: [
         {
+          q: 'Por que peças pequenas como chaveiros não devem custar R$ 1,00?',
+          a: 'O custo de matéria-prima de um chaveiro de 6g pode ser de centavos, mas fabricar e vender 1 unidade envolve aquecer a mesa da máquina, preparar o arquivo, inspecionar a peça, embalar e atender no WhatsApp. Se for vender peças avulsas pequenas, adote um piso mínimo ou exija um lote mínimo de 10 a 20 unidades no campo "Quantidade de Peças".'
+        },
+        {
           q: 'Qual a diferença entre Margem Real e Markup?',
           a: 'Muitos precificam errado somando 55% em cima de um custo de R$ 100 (vendendo a R$ 155). Se você der 55% de desconto sobre R$ 155, o preço cai para R$ 69,75 e você fica no prejuízo! A <strong>Margem Real</strong> usa a fórmula correta: Preço = Custo ÷ (1 - 0,55) = R$ 222,22. Assim, exatamente 55% do valor final da venda é o seu lucro limpo.'
         },
@@ -1157,15 +1265,15 @@
           a: 'Impressoras FDM modernas consomem em média entre 85W (A1 Mini) e 145W (P1S/X1C com mesa quente). Uma impressão de 5 horas consome ~0,65 kWh, custando menos de R$ 0,60 de luz no Brasil ou £0.18 no Reino Unido.'
         },
         {
-          q: 'O que devo cobrar no campo "Custos Extras"?',
-          a: 'Tudo o que sai do seu estoque para aquela encomenda além do filamento: caixa de papelão, plástico bolha, fita adesiva, etiquetas de envio, parafusos, ímãs de neodímio ou componentes eletrônicos.'
-        },
-        {
-          q: 'Como calcular impressões multicoloridas (AMS / Multimaterial)?',
-          a: 'No Modo Completo, clique em "+ Adicionar Outra Cor / Filamento". Insira o peso da peça e o peso da torre de purga (purge tower) indicado no fatiador para garantir que a perda de material na troca de cor seja cobrada.'
+          q: 'O que devo cobrar no campo "Custos Adicionais"?',
+          a: 'Tudo o que sai do seu estoque para aquela encomenda além do filamento: argolas de chaveiro, caixas de papelão, plástico bolha, fita adesiva, etiquetas de envio, parafusos, ímãs de neodímio ou componentes eletrônicos.'
         }
       ],
       en: [
+        {
+          q: 'Why should small keychains not be sold for $0.20 / £0.20?',
+          a: 'Raw filament for a 6g keychain costs pennies, but processing an order involves heating the bed, bed preparation, file slicing, inspection, packaging, and customer service. For small single prints, require a minimum quantity of 10 to 20 units.'
+        },
         {
           q: 'What is the difference between True Margin and Markup?',
           a: 'Markup simply multiplies cost by a percentage. True Margin calculates the selling price so that the selected percentage is genuinely retained from total sales revenue: Price = Cost ÷ (1 - Margin/100).'
@@ -1177,10 +1285,6 @@
         {
           q: 'How much electricity does a 3D printer consume?',
           a: 'Modern FDM printers consume between 85W and 145W on average. A 5-hour job consumes ~0.65 kWh, costing around £0.18 in the UK or R$ 0.60 in Brazil.'
-        },
-        {
-          q: 'What should I include in "Extra Costs"?',
-          a: 'Any item consumed for the order other than filament: packaging boxes, bubble wrap, labels, magnets, screws, brass inserts, LEDs, or batteries.'
         }
       ]
     };
@@ -1207,14 +1311,17 @@
         eCostLabel: 'Custo Real de Produção',
         eProfitLabel: 'Lucro Limpo',
         eDistTitle: '📊 Para onde vai o valor da peça:',
+        eLblName: 'Nome da Peça / Objeto (Opcional)',
         eLblPrinter: 'Sua Impressora 3D',
-        eLblWeight: 'Peso Total da Peça (Gramas)',
+        eLblQty: 'Quantidade de Peças',
+        eLblWeight: 'Peso por Peça (g)',
         eWeightHelper: 'Insira o peso final indicado no seu fatiador.',
-        eLblHours: 'Tempo (Horas)',
+        eLblHours: 'Tempo por Peça (Horas)',
         eLblMinutes: 'Tempo (Minutos)',
-        eLblExtras: 'Custos Extras / Embalagem / LEDs',
-        eLblMargin: 'Margem de Lucro Real (%)',
+        eLblExtras: 'Custos Adicionais & Montagem',
+        eLblMargin: 'Margem Real (%)',
         eMarginHelper: 'Garante que essa porcentagem exata do valor de venda seja lucro livre.',
+        eLblNotes: 'Observações / Detalhes (Opcional)',
         eMatNote: 'Filamento Base:',
         eBtnCustomMat: 'Alterar Preço/kg',
         btnWaE: '💬 Enviar Orçamento no WhatsApp',
@@ -1315,7 +1422,7 @@
         extraItem: 'Item',
         extraDesc: 'Descrição',
         extraCost: 'Custo',
-        extraDefName: 'Embalagem / LED / Ferragem'
+        extraDefName: 'Adicional'
       },
       en: {
         subtitle: 'Professional 3D Printing Cost & Quoting Calculator',
@@ -1338,14 +1445,17 @@
         eCostLabel: 'Real Manufacturing Cost',
         eProfitLabel: 'Net Profit',
         eDistTitle: '📊 Where the money goes:',
+        eLblName: 'Part / Object Name (Optional)',
         eLblPrinter: 'Your 3D Printer',
-        eLblWeight: 'Total Part Weight (Grams)',
+        eLblQty: 'Batch Quantity',
+        eLblWeight: 'Weight per Unit (g)',
         eWeightHelper: 'Enter the final weight estimated by your slicer.',
-        eLblHours: 'Time (Hours)',
+        eLblHours: 'Time per Unit (Hours)',
         eLblMinutes: 'Time (Minutes)',
-        eLblExtras: 'Extra Costs / Packaging / LEDs',
-        eLblMargin: 'True Profit Margin (%)',
+        eLblExtras: 'Additional Costs & Assembly',
+        eLblMargin: 'True Margin (%)',
         eMarginHelper: 'Guarantees that this exact percentage of the sales price is clean profit.',
+        eLblNotes: 'Notes / Specifications (Optional)',
         eMatNote: 'Base Filament:',
         eBtnCustomMat: 'Change Price/kg',
         btnWaE: '💬 Send Quote via WhatsApp',
@@ -1382,7 +1492,7 @@
         lblClientName: 'Client / Reference',
         secFil: 'Filaments & Colors (Multi-material)',
         badgeMat: 'Direct Material',
-        btnAddFil: '+ Add Another Color / Filament (AMS / Multi-material)',
+        btnAddFil: '+ Add Another Color / Filament (AMS / Multimaterial)',
         secMach: 'Printer & Power Consumption',
         badgeEnergy: 'Power & Machine',
         lblPrinter: 'Printer Model',
@@ -1446,7 +1556,7 @@
         extraItem: 'Item',
         extraDesc: 'Description',
         extraCost: 'Cost',
-        extraDefName: 'Packaging / LED / Hardware'
+        extraDefName: 'Additional Cost'
       }
     };
 
@@ -1467,6 +1577,58 @@
       { id: 1, name: 'Filamento Principal', type: 'PLA', color: '#38bdf8', priceKg: 100, netWeight: 0, purgeWeight: 0 }
     ];
     let extras = [];
+
+    // Renderizar tags de sugestão de custos adicionais no Modo Fácil
+    function renderEasyTagSuggestions() {
+      const container = document.getElementById('easy-tag-suggestions');
+      if (!container) return;
+      container.innerHTML = '';
+      EASY_COST_SUGGESTIONS.forEach(item => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cost-tag-btn';
+        btn.textContent = `+ ${item}`;
+        btn.onclick = () => addEasyExtraRow(item, 0);
+        container.appendChild(btn);
+      });
+    }
+
+    function addEasyExtraRow(name, cost) {
+      const id = Date.now() + Math.random();
+      easyExtrasList.push({ id, name, cost });
+      renderEasyExtraRows();
+      onEasyInputChange();
+    }
+
+    function removeEasyExtraRow(id) {
+      easyExtrasList = easyExtrasList.filter(item => item.id !== id);
+      renderEasyExtraRows();
+      onEasyInputChange();
+    }
+
+    function updateEasyExtraItem(id, field, value) {
+      const item = easyExtrasList.find(i => i.id === id);
+      if (item) {
+        item[field] = value;
+        onEasyInputChange();
+      }
+    }
+
+    function renderEasyExtraRows() {
+      const container = document.getElementById('easy-extra-rows-container');
+      if (!container) return;
+      container.innerHTML = '';
+      easyExtrasList.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'easy-extra-row';
+        row.innerHTML = `
+          <input type="text" value="${item.name}" placeholder="Nome do custo..." oninput="updateEasyExtraItem(${item.id}, 'name', this.value)">
+          <input type="number" step="0.5" min="0" value="${item.cost}" placeholder="Valor" oninput="updateEasyExtraItem(${item.id}, 'cost', parseFloat(this.value)||0)">
+          <button type="button" class="btn-remove-extra" onclick="removeEasyExtraRow(${item.id})" title="Remover">✕</button>
+        `;
+        container.appendChild(row);
+      });
+    }
 
     // Preenchimento dinâmico das opções de rolagem para horas (0 a 60) e minutos (0 a 59)
     function populateTimePickers() {
@@ -1554,13 +1716,13 @@
 
     function syncEasyPrinter(val) {
       const map = {
-        'anycubic-kobra': '125',
+        'bambu-p1s': '135',
         'bambu-a1': '95',
         'bambu-a1mini': '85',
-        'bambu-p1s': '135',
         'bambu-x1c': '145',
         'creality-ender': '120',
         'creality-k1': '160',
+        'anycubic-kobra': '125',
         'prusa-mk': '95',
         'snapmaker-u1': '160',
         'custom': 'custom'
@@ -1589,9 +1751,10 @@
       const weight = parseFloat(document.getElementById('easy-weight').value) || 0;
       const hours = parseFloat(document.getElementById('easy-hours').value) || 0;
       const mins = parseFloat(document.getElementById('easy-minutes').value) || 0;
+      const qty = parseInt(document.getElementById('easy-qty').value, 10) || 1;
       const calcBtn = document.getElementById('btn-easy-calculate');
 
-      const isReady = (weight > 0 && (hours > 0 || mins > 0));
+      const isReady = (weight > 0 && (hours > 0 || mins > 0) && qty >= 1);
       calcBtn.disabled = !isReady;
       if (!isReady) calcBtn.style.animation = 'none';
     }
@@ -1611,10 +1774,15 @@
     }
 
     function resetEasyMode() {
+      document.getElementById('easy-project-name').value = '';
+      document.getElementById('easy-qty').value = '1';
       document.getElementById('easy-weight').value = 0;
       document.getElementById('easy-hours').value = '0';
       document.getElementById('easy-minutes').value = '0';
-      document.getElementById('easy-extras').value = 0;
+      document.getElementById('easy-notes').value = '';
+      easyExtrasList = [];
+      renderEasyExtraRows();
+
       const currentSavedMargin = document.getElementById('easy-margin').value || 55;
       document.getElementById('easy-margin').value = currentSavedMargin;
       
@@ -1633,26 +1801,36 @@
     }
 
     function syncEasyInputs() {
-      const weight = parseFloat(document.getElementById('easy-weight').value) || 0;
-      const hours = parseFloat(document.getElementById('easy-hours').value) || 0;
-      const mins = parseFloat(document.getElementById('easy-minutes').value) || 0;
-      const extraVal = parseFloat(document.getElementById('easy-extras').value) || 0;
+      const weightUnit = parseFloat(document.getElementById('easy-weight').value) || 0;
+      const hoursUnit = parseFloat(document.getElementById('easy-hours').value) || 0;
+      const minsUnit = parseFloat(document.getElementById('easy-minutes').value) || 0;
       const margin = parseFloat(document.getElementById('easy-margin').value) || 55;
+      const qty = parseInt(document.getElementById('easy-qty').value, 10) || 1;
 
-      filaments[0].netWeight = weight;
+      const totalWeight = weightUnit * qty;
+      const totalMinutesOverall = (hoursUnit * 60 + minsUnit) * qty;
+      const calcHours = Math.floor(totalMinutesOverall / 60);
+      const calcMins = totalMinutesOverall % 60;
+
+      let totalEasyExtras = 0;
+      easyExtrasList.forEach(item => {
+        totalEasyExtras += (parseFloat(item.cost) || 0) * qty;
+      });
+
+      filaments[0].netWeight = totalWeight;
       filaments[0].priceKg = customEasyMatPrice || DEFAULTS[currentCurrency].defaultMatPrice;
 
       syncEasyPrinter(document.getElementById('easy-printer-select').value);
 
-      document.getElementById('quick-weight').value = weight;
-      document.getElementById('time-hours').value = hours;
-      document.getElementById('quick-hours').value = hours;
-      document.getElementById('time-minutes').value = mins;
-      document.getElementById('quick-minutes').value = mins;
+      document.getElementById('quick-weight').value = totalWeight;
+      document.getElementById('time-hours').value = Math.min(60, calcHours);
+      document.getElementById('quick-hours').value = Math.min(60, calcHours);
+      document.getElementById('time-minutes').value = calcMins;
+      document.getElementById('quick-minutes').value = calcMins;
       document.getElementById('profit-margin').value = margin;
 
-      if (extraVal > 0) {
-        extras = [{ id: 101, name: (currentLang === 'en' ? 'Packaging / Extras' : 'Embalagem / Extras'), cost: extraVal }];
+      if (totalEasyExtras > 0) {
+        extras = [{ id: 101, name: (currentLang === 'en' ? 'Additional Costs & Assembly' : 'Custos Adicionais & Montagem'), cost: totalEasyExtras }];
       } else {
         extras = [];
       }
@@ -1715,7 +1893,7 @@
       if (marginInput) {
         if (isMargin) {
           marginInput.max = '99';
-          if (parseFloat(marginInput.value) >= 99) marginInput.value = '55';
+          if (parseFloat(marginInput.value) >= 99) marginInput.value = '30';
         } else {
           marginInput.max = '1000';
         }
@@ -1747,7 +1925,7 @@
       const brand = BRANDS[brandKey] || BRANDS.custom;
 
       const badge = document.getElementById('printer-brand-badge');
-      badge.className = `brand-badge ${brand.badgeClass}`;
+      badge.className = `brand-badge ${brand.brandBadge || brand.badgeClass}`;
       badge.textContent = `${brand.icon} ${brand.name}`;
     }
 
@@ -1783,7 +1961,9 @@
       document.getElementById('t-leg-mac-e').textContent = t.legMac;
       document.getElementById('t-leg-prf-e').textContent = t.legPrf;
 
+      document.getElementById('t-e-lbl-name').textContent = t.eLblName;
       document.getElementById('t-e-lbl-printer').textContent = t.eLblPrinter;
+      document.getElementById('t-e-lbl-qty').textContent = t.eLblQty;
       document.getElementById('t-e-lbl-weight').textContent = t.eLblWeight;
       document.getElementById('t-e-weight-helper').textContent = t.eWeightHelper;
       document.getElementById('t-e-lbl-hours').textContent = t.eLblHours;
@@ -1791,11 +1971,13 @@
       document.getElementById('t-e-lbl-extras').textContent = t.eLblExtras;
       document.getElementById('t-e-lbl-margin').textContent = t.eLblMargin;
       document.getElementById('t-e-margin-helper').textContent = t.eMarginHelper;
+      document.getElementById('t-e-lbl-notes').textContent = t.eLblNotes;
       document.getElementById('t-e-mat-note').textContent = t.eMatNote;
       document.getElementById('t-e-btn-custom-mat').textContent = t.eBtnCustomMat;
       document.getElementById('t-btn-wa-e').textContent = t.btnWaE;
       document.getElementById('t-btn-copy-e').textContent = t.btnCopyE;
       document.getElementById('t-btn-pro-e').textContent = t.btnProE;
+      document.getElementById('t-btn-add-custom-cost').textContent = t.currentLang === 'en' ? 'Add custom extra cost' : 'Adicionar outro custo avulso';
 
       document.getElementById('t-q-price-label').textContent = t.qPriceLabel;
       document.getElementById('t-q-cost-label').textContent = t.qCostLabel;
@@ -1832,8 +2014,7 @@
       document.getElementById('t-lbl-kwh').textContent = t.lblKwh;
       document.getElementById('t-lbl-printercost').textContent = t.lblPrinterCost;
       document.getElementById('t-help-printer').textContent = t.helpPrinter;
-      document.getElementById('t-lbl-nozzlecost').textContent = t.lblNozzleCost;
-      document.getElementById('t-help-nozzle').textContent = t.helpNozzle;
+      document.getElementById('t-lbl-nozzlecost').textContent = t.helpNozzle;
 
       document.getElementById('t-sec-extras').textContent = t.secExtras;
       document.getElementById('t-badge-extras').textContent = t.badgeExtras;
@@ -1878,6 +2059,8 @@
       document.getElementById('t-ft-copyright').innerHTML = t.ftCopyright;
       document.getElementById('t-ft-disclaimer').innerHTML = t.ftDisclaimer;
 
+      renderEasyTagSuggestions();
+      renderEasyExtraRows();
       updateEasyMatDisplay();
       updateMethodCallouts();
       updateBrandBadge();
@@ -1896,13 +2079,16 @@
           currentMode,
           currentPricingMethod,
           customEasyMatPrice,
+          easyExtrasList,
           easy: {
+            projectName: document.getElementById('easy-project-name')?.value || '',
+            qty: document.getElementById('easy-qty')?.value || '1',
             printer: document.getElementById('easy-printer-select')?.value || 'anycubic-kobra',
             weight: document.getElementById('easy-weight')?.value || '0',
             hours: document.getElementById('easy-hours')?.value || '0',
             minutes: document.getElementById('easy-minutes')?.value || '0',
-            extras: document.getElementById('easy-extras')?.value || '0',
-            margin: document.getElementById('easy-margin')?.value || '55'
+            margin: document.getElementById('easy-margin')?.value || '55',
+            notes: document.getElementById('easy-notes')?.value || ''
           },
           quick: {
             material: document.getElementById('quick-material')?.value || 'PLA',
@@ -1943,6 +2129,8 @@
         const saved = localStorage.getItem(STORAGE_KEY);
         if (!saved) {
           currentMode = 'easy';
+          renderEasyTagSuggestions();
+          renderEasyExtraRows();
           return false;
         }
         const state = JSON.parse(saved);
@@ -1952,6 +2140,7 @@
         currentMode = state.currentMode || 'easy';
         if (state.currentPricingMethod) currentPricingMethod = state.currentPricingMethod;
         if (state.customEasyMatPrice) customEasyMatPrice = state.customEasyMatPrice;
+        if (Array.isArray(state.easyExtrasList)) easyExtrasList = state.easyExtrasList;
 
         if (Array.isArray(state.filaments) && state.filaments.length > 0) {
           filaments = state.filaments;
@@ -1966,19 +2155,21 @@
         document.querySelectorAll('.currency-sym').forEach(el => el.textContent = sym);
 
         if (state.easy) {
-          if (document.getElementById('easy-printer-select')) document.getElementById('easy-printer-select').value = state.easy.printer || 'anycubic-kobra';
+          if (document.getElementById('easy-project-name')) document.getElementById('easy-project-name').value = state.easy.projectName || '';
+          if (document.getElementById('easy-qty')) document.getElementById('easy-qty').value = state.easy.qty || '1';
+          if (document.getElementById('easy-printer-select')) document.getElementById('easy-printer-select').value = state.easy.printer;
           if (document.getElementById('easy-weight')) document.getElementById('easy-weight').value = state.easy.weight;
-          if (document.getElementById('easy-hours')) document.getElementById('easy-hours').value = state.easy.hours;
-          if (document.getElementById('easy-minutes')) document.getElementById('easy-minutes').value = state.easy.minutes;
-          if (document.getElementById('easy-extras')) document.getElementById('easy-extras').value = state.easy.extras;
+          if (document.getElementById('easy-hours')) document.getElementById('easy-hours').value = state.easy.hours || '0';
+          if (document.getElementById('easy-minutes')) document.getElementById('easy-minutes').value = state.easy.minutes || '0';
           if (document.getElementById('easy-margin')) document.getElementById('easy-margin').value = state.easy.margin || '55';
+          if (document.getElementById('easy-notes')) document.getElementById('easy-notes').value = state.easy.notes || '';
         }
 
         if (state.quick) {
           if (document.getElementById('quick-material')) document.getElementById('quick-material').value = state.quick.material;
           if (document.getElementById('quick-weight')) document.getElementById('quick-weight').value = state.quick.weight;
-          if (document.getElementById('quick-hours')) document.getElementById('quick-hours').value = state.quick.hours;
-          if (document.getElementById('quick-minutes')) document.getElementById('quick-minutes').value = state.quick.minutes;
+          if (document.getElementById('quick-hours')) document.getElementById('quick-hours').value = state.quick.hours || '0';
+          if (document.getElementById('quick-minutes')) document.getElementById('quick-minutes').value = state.quick.minutes || '0';
         }
 
         if (state.pro) {
@@ -1986,8 +2177,8 @@
           if (document.getElementById('client-name')) document.getElementById('client-name').value = state.pro.clientName;
           if (document.getElementById('printer-select')) document.getElementById('printer-select').value = state.pro.printerSelect || '125';
           if (document.getElementById('printer-watts')) document.getElementById('printer-watts').value = state.pro.printerWatts || '125';
-          if (document.getElementById('time-hours')) document.getElementById('time-hours').value = state.pro.timeHours;
-          if (document.getElementById('time-minutes')) document.getElementById('time-minutes').value = state.pro.timeMinutes;
+          if (document.getElementById('time-hours')) document.getElementById('time-hours').value = state.pro.timeHours || '0';
+          if (document.getElementById('time-minutes')) document.getElementById('time-minutes').value = state.pro.timeMinutes || '0';
           if (document.getElementById('kwh-rate')) document.getElementById('kwh-rate').value = state.pro.kwhRate;
           if (document.getElementById('printer-cost')) document.getElementById('printer-cost').value = state.pro.printerCost || '1800';
           if (document.getElementById('nozzle-cost')) document.getElementById('nozzle-cost').value = state.pro.nozzleCost;
@@ -2001,11 +2192,15 @@
           if (document.getElementById('min-order-price')) document.getElementById('min-order-price').value = state.pro.minOrderPrice;
         }
 
+        renderEasyTagSuggestions();
+        renderEasyExtraRows();
         updateBrandBadge();
         setPricingMethod(currentPricingMethod);
         return true;
       } catch (e) {
         console.warn('Erro ao carregar do localStorage:', e);
+        renderEasyTagSuggestions();
+        renderEasyExtraRows();
         return false;
       }
     }
@@ -2080,9 +2275,9 @@
 
       document.getElementById('easy-weight').value = weight;
       document.getElementById('time-hours').value = hours;
-      document.getElementById('easy-hours').value = hours;
+      document.getElementById('easy-hours').value = '0';
       document.getElementById('time-minutes').value = mins;
-      document.getElementById('easy-minutes').value = mins;
+      document.getElementById('easy-minutes').value = '0';
 
       calculate();
       saveState();
@@ -2242,7 +2437,7 @@
       const totalKwh = (watts / 1000) * totalHours;
       const energyCost = totalKwh * kwhRate;
 
-      const printerCost = parseFloat(document.getElementById('printer-cost')?.value) || 1800;
+      const printerCost = parseFloat(document.getElementById('printer-cost')?.value) || 4800;
       const machineCost = (printerCost / 3000) * totalHours;
 
       const nozzleCost = parseFloat(document.getElementById('nozzle-cost')?.value) || 80;
@@ -2291,9 +2486,6 @@
       const minOrderPrice = parseFloat(document.getElementById('min-order-price')?.value) || 0;
       const rawFinalPrice = Math.max(priceBeforeFees, minOrderPrice);
 
-      // ARREDONDAMENTO INTELIGENTE POR MOEDA:
-      // BRL (R$): Arredonda sempre para cima no próximo inteiro (Math.ceil)
-      // GBP (£): Mantém 2 casas decimais normais (£ 2.15)
       let finalPrice = 0;
       if (rawFinalPrice > 0) {
         if (currentCurrency === 'BRL') {
@@ -2304,6 +2496,17 @@
       }
       
       const actualNetProfit = Math.max(0, finalPrice - totalProductionCost - platformFeeValue);
+      const easyQty = parseInt(document.getElementById('easy-qty')?.value, 10) || 1;
+      const unitPrice = easyQty > 1 ? (finalPrice / easyQty) : finalPrice;
+      const unitTagEl = document.getElementById('easy-unit-price-tag');
+      if (unitTagEl) {
+        if (easyQty > 1 && finalPrice > 0) {
+          unitTagEl.style.display = 'block';
+          unitTagEl.textContent = `(${easyQty}x de ${sym} ${unitPrice.toFixed(2)} por unidade)`;
+        } else {
+          unitTagEl.style.display = 'none';
+        }
+      }
 
       // 1. ATUALIZAÇÃO DO MODO FÁCIL
       if (document.getElementById('easy-final-price')) document.getElementById('easy-final-price').textContent = `${sym} ${finalPrice.toFixed(2)}`;
@@ -2380,12 +2583,16 @@
     function buildQuoteText(mode) {
       const isEn = (currentLang === 'en');
       let weight = 0, hours = 0, mins = 0, price = '', mat = 'PLA';
+      let itemName = '', qty = 1, notes = '';
 
       if (mode === 'easy') {
+        itemName = document.getElementById('easy-project-name')?.value.trim() || '';
+        qty = parseInt(document.getElementById('easy-qty')?.value, 10) || 1;
         weight = document.getElementById('easy-weight')?.value || '0';
         hours = document.getElementById('easy-hours')?.value || '0';
         mins = document.getElementById('easy-minutes')?.value || '0';
         price = document.getElementById('easy-final-price')?.textContent || '';
+        notes = document.getElementById('easy-notes')?.value.trim() || '';
       } else if (mode === 'quick') {
         mat = document.getElementById('quick-material')?.value || 'PLA';
         weight = document.getElementById('quick-weight')?.value || '0';
@@ -2393,7 +2600,7 @@
         mins = document.getElementById('quick-minutes')?.value || '0';
         price = document.getElementById('quick-final-price')?.textContent || '';
       } else {
-        const projectName = document.getElementById('project-name')?.value || (isEn ? '3D Project' : 'Projeto 3D');
+        itemName = document.getElementById('project-name')?.value.trim() || '';
         const clientName = document.getElementById('client-name')?.value;
         price = document.getElementById('res-final-price')?.textContent || '';
         hours = document.getElementById('time-hours')?.value || '0';
@@ -2403,7 +2610,7 @@
         if (isEn) {
           return `📋 *3D PRINTING SERVICE QUOTATION*\n` +
                  `------------------------------------\n` +
-                 `*Project:* ${projectName}\n` +
+                 (itemName ? `*Project:* ${itemName}\n` : `*Project:* Custom 3D Part\n`) +
                  (clientName ? `*Client / Ref:* ${clientName}\n` : '') +
                  `*Estimated Time:* ${hours}h ${mins}min\n` +
                  `*Material Weight:* ~${weight}g\n` +
@@ -2415,7 +2622,7 @@
         } else {
           return `📋 *ORÇAMENTO DE IMPRESSÃO 3D*\n` +
                  `------------------------------------\n` +
-                 `*Projeto:* ${projectName}\n` +
+                 (itemName ? `*Projeto:* ${itemName}\n` : `*Projeto:* Peça Sob Encomenda\n`) +
                  (clientName ? `*Cliente / Ref:* ${clientName}\n` : '') +
                  `*Tempo Estimado:* ${hours}h ${mins}min\n` +
                  `*Peso Total Estimado:* ~${weight}g\n` +
@@ -2428,23 +2635,39 @@
       }
 
       if (isEn) {
-        return `📋 *3D PRINTING QUOTATION*\n` +
+        let msg = `📋 *3D PRINTING QUOTATION*\n` +
+                  `------------------------------\n`;
+        if (itemName) msg += `*Item / Project:* ${itemName}\n`;
+        if (qty > 1) msg += `*Quantity:* ${qty} units\n`;
+        msg += `*Weight:* ~${weight}g per unit\n` +
+               `*Print Time:* ${hours}h ${mins}m per unit\n` +
                `------------------------------\n` +
-               `*Part Weight:* ~${weight}g\n` +
-               `*Print Time:* ${hours}h ${mins}m\n` +
-               `------------------------------\n` +
-               `💰 *Total Price: ${price}*\n` +
-               `✓ High quality FDM finish\n` +
-               `Valid for 15 days.`;
+               `💰 *Total Price: ${price}*`;
+        if (qty > 1) {
+          const rawNum = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
+          if (rawNum > 0) msg += ` (${qty}x of £${(rawNum / qty).toFixed(2)})`;
+        }
+        msg += `\n------------------------------\n`;
+        if (notes) msg += `📌 *Notes:* ${notes}\n------------------------------\n`;
+        msg += `✓ High quality FDM finish\nValid for 15 days.`;
+        return msg;
       } else {
-        return `📋 *ORÇAMENTO DE IMPRESSÃO 3D*\n` +
+        let msg = `📋 *ORÇAMENTO DE IMPRESSÃO 3D*\n` +
+                  `------------------------------\n`;
+        if (itemName) msg += `*Item / Projeto:* ${itemName}\n`;
+        if (qty > 1) msg += `*Quantidade:* ${qty} unidades\n`;
+        msg += `*Peso:* ~${weight}g por peça\n` +
+               `*Tempo de Impressão:* ${hours}h ${mins}m por peça\n` +
                `------------------------------\n` +
-               `*Peso da Peça:* ~${weight}g\n` +
-               `*Tempo de Impressão:* ${hours}h ${mins}m\n` +
-               `------------------------------\n` +
-               `💰 *Valor Total: ${price}*\n` +
-               `✓ Acabamento e inspeção de qualidade inclusos\n` +
-               `Válido por 15 dias.`;
+               `💰 *Valor Total: ${price}*`;
+        if (qty > 1) {
+          const rawNum = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
+          if (rawNum > 0) msg += ` (${qty}x de R$ ${(rawNum / qty).toFixed(2)})`;
+        }
+        msg += `\n------------------------------\n`;
+        if (notes) msg += `📌 *Observações:* ${notes}\n------------------------------\n`;
+        msg += `✓ Acabamento e inspeção de qualidade inclusos\nVálido por 15 dias.`;
+        return msg;
       }
     }
 
@@ -2471,8 +2694,10 @@
 
     // Inicialização
     populateTimePickers();
+    renderEasyTagSuggestions();
+    renderEasyExtraRows();
     loadState();
-    switchMode('easy'); // Garante que abra sempre no Modo Fácil
+    switchMode(currentMode);
     setLanguage(currentLang);
     updateBrandBadge();
     validateEasyForm();
